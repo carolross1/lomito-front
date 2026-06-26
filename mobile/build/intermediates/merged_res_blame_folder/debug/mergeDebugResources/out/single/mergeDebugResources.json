@@ -1,0 +1,82 @@
+[
+    {
+        "merged": "com.lomito.seguro.mobile-debug-53:/layout_fragment_refugios.xml.flat",
+        "source": "com.lomito.seguro.mobile-main-55:/layout/fragment_refugios.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-debug-53:/layout_fragment_register.xml.flat",
+        "source": "com.lomito.seguro.mobile-main-55:/layout/fragment_register.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-debug-53:/layout_fragment_mascota_detail.xml.flat",
+        "source": "com.lomito.seguro.mobile-main-55:/layout/fragment_mascota_detail.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-debug-53:/layout_fragment_home.xml.flat",
+        "source": "com.lomito.seguro.mobile-main-55:/layout/fragment_home.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-debug-53:/drawable_ic_pet_placeholder.xml.flat",
+        "source": "com.lomito.seguro.mobile-main-55:/drawable/ic_pet_placeholder.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-debug-53:/layout_activity_main.xml.flat",
+        "source": "com.lomito.seguro.mobile-main-55:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-debug-53:/drawable_badge_bg.xml.flat",
+        "source": "com.lomito.seguro.mobile-main-55:/drawable/badge_bg.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-debug-53:/layout_fragment_simulator.xml.flat",
+        "source": "com.lomito.seguro.mobile-main-55:/layout/fragment_simulator.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-debug-53:/drawable_ic_dog.xml.flat",
+        "source": "com.lomito.seguro.mobile-main-55:/drawable/ic_dog.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-debug-53:/layout_fragment_crear_mascota.xml.flat",
+        "source": "com.lomito.seguro.mobile-main-55:/layout/fragment_crear_mascota.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-debug-53:/drawable_circle_bg.xml.flat",
+        "source": "com.lomito.seguro.mobile-main-55:/drawable/circle_bg.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-debug-53:/layout_fragment_alertas.xml.flat",
+        "source": "com.lomito.seguro.mobile-main-55:/layout/fragment_alertas.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-debug-53:/layout_item_alerta.xml.flat",
+        "source": "com.lomito.seguro.mobile-main-55:/layout/item_alerta.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-debug-53:/drawable_ic_cat.xml.flat",
+        "source": "com.lomito.seguro.mobile-main-55:/drawable/ic_cat.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-debug-53:/menu_home_menu.xml.flat",
+        "source": "com.lomito.seguro.mobile-main-55:/menu/home_menu.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-debug-53:/layout_fragment_login.xml.flat",
+        "source": "com.lomito.seguro.mobile-main-55:/layout/fragment_login.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-debug-53:/layout_item_mascota_card.xml.flat",
+        "source": "com.lomito.seguro.mobile-main-55:/layout/item_mascota_card.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-debug-53:/navigation_nav_graph.xml.flat",
+        "source": "com.lomito.seguro.mobile-main-55:/navigation/nav_graph.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-debug-53:/layout_item_refugio.xml.flat",
+        "source": "com.lomito.seguro.mobile-main-55:/layout/item_refugio.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-debug-53:/menu_mascota_menu.xml.flat",
+        "source": "com.lomito.seguro.mobile-main-55:/menu/mascota_menu.xml"
+    }
+]

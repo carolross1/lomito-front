@@ -1,0 +1,7 @@
+R_DEF: Internal format may change without notice
+local
+color alerta_rojo
+color primary
+color verde_ok
+string app_name
+xml network_security_config

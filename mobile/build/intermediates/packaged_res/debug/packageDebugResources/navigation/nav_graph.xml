@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragment">
+
+    <fragment android:id="@+id/loginFragment"
+        android:name="com.lomito.seguro.ui.auth.LoginFragment"
+        android:label="Iniciar sesión">
+        <action android:id="@+id/action_login_to_home" app:destination="@id/homeFragment"
+            app:popUpTo="@id/loginFragment" app:popUpToInclusive="true"/>
+        <action android:id="@+id/action_login_to_register" app:destination="@id/registerFragment"/>
+    </fragment>
+
+    <fragment android:id="@+id/registerFragment"
+        android:name="com.lomito.seguro.ui.auth.RegisterFragment"
+        android:label="Crear cuenta">
+        <action android:id="@+id/action_register_to_home" app:destination="@id/homeFragment"
+            app:popUpTo="@id/loginFragment" app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment android:id="@+id/homeFragment"
+        android:name="com.lomito.seguro.ui.home.HomeFragment"
+        android:label="Lomito Seguro">
+        <action android:id="@+id/action_home_to_login" app:destination="@id/loginFragment"
+            app:popUpTo="@id/homeFragment" app:popUpToInclusive="true"/>
+        <action android:id="@+id/action_home_to_mascota_detail" app:destination="@id/mascotaDetailFragment"/>
+        <action android:id="@+id/action_home_to_crear_mascota" app:destination="@id/crearMascotaFragment"/>
+        <action android:id="@+id/action_home_to_alertas" app:destination="@id/alertasFragment"/>
+        <action android:id="@+id/action_home_to_refugios" app:destination="@id/refugiosFragment"/>
+        <action android:id="@+id/action_home_to_simulator" app:destination="@id/simulatorFragment"/>
+    </fragment>
+
+    <fragment android:id="@+id/mascotaDetailFragment"
+        android:name="com.lomito.seguro.ui.mascota.MascotaDetailFragment"
+        android:label="Detalle">
+        <argument android:name="mascotaId" app:argType="string"/>
+    </fragment>
+
+    <fragment android:id="@+id/crearMascotaFragment"
+        android:name="com.lomito.seguro.ui.mascota.CrearMascotaFragment"
+        android:label="Nueva mascota"/>
+
+    <fragment android:id="@+id/alertasFragment"
+        android:name="com.lomito.seguro.ui.alertas.AlertasFragment"
+        android:label="Alertas"/>
+
+    <fragment android:id="@+id/refugiosFragment"
+        android:name="com.lomito.seguro.ui.refugios.RefugiosFragment"
+        android:label="Refugios"/>
+
+    <fragment android:id="@+id/simulatorFragment"
+        android:name="com.lomito.seguro.ui.simulator.SimulatorFragment"
+        android:label="Simulador BLE"/>
+</navigation>

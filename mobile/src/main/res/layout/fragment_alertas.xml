@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:padding="16dp" android:background="@color/background">
+    <com.google.android.material.button.MaterialButton android:id="@+id/btnMarcarTodas"
+        android:layout_width="match_parent" android:layout_height="48dp"
+        android:text="Marcar todas como leídas" android:backgroundTint="@color/secondary"
+        android:textColor="@android:color/white" android:layout_marginBottom="12dp"/>
+    <TextView android:id="@+id/tvEmpty" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:text="No tienes alertas"
+        android:gravity="center" android:textColor="@color/text_secondary"
+        android:layout_marginTop="32dp" android:visibility="gone"/>
+    <androidx.recyclerview.widget.RecyclerView android:id="@+id/rvAlertas"
+        android:layout_width="match_parent" android:layout_height="match_parent"/>
+</LinearLayout>

@@ -1,0 +1,193 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.lomito.seguro"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="26"
+9        android:targetSdkVersion="34" />
+10
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:4:5-66
+11-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:4:22-64
+12    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+12-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:5:5-78
+12-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:5:22-76
+13    <uses-permission android:name="android.permission.BLUETOOTH" />
+13-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:6:5-67
+13-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:6:22-65
+14    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+14-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:7:5-73
+14-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:7:22-71
+15    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+15-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:8:5-72
+15-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:8:22-70
+16    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+16-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:9:5-75
+16-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:9:22-73
+17
+18    <permission
+18-->[androidx.core:core:1.13.1] C:\Users\carol\.gradle\caches\transforms-4\3611863fe91a427ad21ab78f9cad0532\transformed\core-1.13.1\AndroidManifest.xml:22:5-24:47
+19        android:name="com.lomito.seguro.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+19-->[androidx.core:core:1.13.1] C:\Users\carol\.gradle\caches\transforms-4\3611863fe91a427ad21ab78f9cad0532\transformed\core-1.13.1\AndroidManifest.xml:23:9-81
+20        android:protectionLevel="signature" />
+20-->[androidx.core:core:1.13.1] C:\Users\carol\.gradle\caches\transforms-4\3611863fe91a427ad21ab78f9cad0532\transformed\core-1.13.1\AndroidManifest.xml:24:9-44
+21
+22    <uses-permission android:name="com.lomito.seguro.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+22-->[androidx.core:core:1.13.1] C:\Users\carol\.gradle\caches\transforms-4\3611863fe91a427ad21ab78f9cad0532\transformed\core-1.13.1\AndroidManifest.xml:26:5-97
+22-->[androidx.core:core:1.13.1] C:\Users\carol\.gradle\caches\transforms-4\3611863fe91a427ad21ab78f9cad0532\transformed\core-1.13.1\AndroidManifest.xml:26:22-94
+23
+24    <application
+24-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:11:5-32:19
+25        android:allowBackup="true"
+25-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:12:9-35
+26        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+26-->[androidx.core:core:1.13.1] C:\Users\carol\.gradle\caches\transforms-4\3611863fe91a427ad21ab78f9cad0532\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
+27        android:debuggable="true"
+28        android:extractNativeLibs="false"
+29        android:label="@string/app_name"
+29-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:13:9-41
+30        android:testOnly="true"
+31        android:theme="@style/Theme.LomitoSeguro"
+31-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:14:9-50
+32        android:usesCleartextTraffic="true" >
+32-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:15:9-44
+33        <activity
+33-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:17:9-23:20
+34            android:name="com.lomito.seguro.MainActivity"
+34-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:17:19-47
+35            android:exported="true" >
+35-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:18:13-36
+36            <intent-filter>
+36-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:19:13-22:29
+37                <action android:name="android.intent.action.MAIN" />
+37-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:20:17-68
+37-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:20:25-66
+38
+39                <category android:name="android.intent.category.LAUNCHER" />
+39-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:21:17-76
+39-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:21:27-74
+40            </intent-filter>
+41        </activity>
+42
+43        <service
+43-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:24:13-31:19
+44            android:name="com.lomito.seguro.WatchReportListener"
+44-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:25:13-48
+45            android:exported="true" >
+45-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:26:13-36
+46            <intent-filter>
+46-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:27:13-30:29
+47                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+47-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:28:17-90
+47-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:28:25-88
+48
+49                <data
+49-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:29:17-99
+50                    android:host="*"
+50-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:29:45-61
+51                    android:pathPrefix="/watch/reporte"
+51-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:29:62-97
+52                    android:scheme="wear" />
+52-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:29:23-44
+53            </intent-filter>
+54        </service>
+55
+56        <provider
+56-->[androidx.emoji2:emoji2:1.3.0] C:\Users\carol\.gradle\caches\transforms-4\f3e56642b81b0f2bc7f918a04814cbc1\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
+57            android:name="androidx.startup.InitializationProvider"
+57-->[androidx.emoji2:emoji2:1.3.0] C:\Users\carol\.gradle\caches\transforms-4\f3e56642b81b0f2bc7f918a04814cbc1\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:25:13-67
+58            android:authorities="com.lomito.seguro.androidx-startup"
+58-->[androidx.emoji2:emoji2:1.3.0] C:\Users\carol\.gradle\caches\transforms-4\f3e56642b81b0f2bc7f918a04814cbc1\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:26:13-68
+59            android:exported="false" >
+59-->[androidx.emoji2:emoji2:1.3.0] C:\Users\carol\.gradle\caches\transforms-4\f3e56642b81b0f2bc7f918a04814cbc1\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:27:13-37
+60            <meta-data
+60-->[androidx.emoji2:emoji2:1.3.0] C:\Users\carol\.gradle\caches\transforms-4\f3e56642b81b0f2bc7f918a04814cbc1\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
+61                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+61-->[androidx.emoji2:emoji2:1.3.0] C:\Users\carol\.gradle\caches\transforms-4\f3e56642b81b0f2bc7f918a04814cbc1\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:30:17-75
+62                android:value="androidx.startup" />
+62-->[androidx.emoji2:emoji2:1.3.0] C:\Users\carol\.gradle\caches\transforms-4\f3e56642b81b0f2bc7f918a04814cbc1\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:31:17-49
+63            <meta-data
+63-->[androidx.lifecycle:lifecycle-process:2.8.0] C:\Users\carol\.gradle\caches\transforms-4\62356d22ace46af89f86e5acfe3371a2\transformed\jetified-lifecycle-process-2.8.0\AndroidManifest.xml:29:13-31:52
+64                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+64-->[androidx.lifecycle:lifecycle-process:2.8.0] C:\Users\carol\.gradle\caches\transforms-4\62356d22ace46af89f86e5acfe3371a2\transformed\jetified-lifecycle-process-2.8.0\AndroidManifest.xml:30:17-78
+65                android:value="androidx.startup" />
+65-->[androidx.lifecycle:lifecycle-process:2.8.0] C:\Users\carol\.gradle\caches\transforms-4\62356d22ace46af89f86e5acfe3371a2\transformed\jetified-lifecycle-process-2.8.0\AndroidManifest.xml:31:17-49
+66            <meta-data
+66-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:29:13-31:52
+67                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+67-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:30:17-85
+68                android:value="androidx.startup" />
+68-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:31:17-49
+69        </provider>
+70
+71        <activity
+71-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\carol\.gradle\caches\transforms-4\b881951ec5b9b7fec55f5ce47f130c8a\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:5:9-173
+72            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+72-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\carol\.gradle\caches\transforms-4\b881951ec5b9b7fec55f5ce47f130c8a\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:5:19-85
+73            android:exported="false"
+73-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\carol\.gradle\caches\transforms-4\b881951ec5b9b7fec55f5ce47f130c8a\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:5:146-170
+74            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+74-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\carol\.gradle\caches\transforms-4\b881951ec5b9b7fec55f5ce47f130c8a\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:5:86-145
+75
+76        <meta-data
+76-->[com.google.android.gms:play-services-basement:18.4.0] C:\Users\carol\.gradle\caches\transforms-4\58d5622fbe17580d27eb63a2a9a3b37c\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:6:9-122
+77            android:name="com.google.android.gms.version"
+77-->[com.google.android.gms:play-services-basement:18.4.0] C:\Users\carol\.gradle\caches\transforms-4\58d5622fbe17580d27eb63a2a9a3b37c\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:6:20-65
+78            android:value="@integer/google_play_services_version" />
+78-->[com.google.android.gms:play-services-basement:18.4.0] C:\Users\carol\.gradle\caches\transforms-4\58d5622fbe17580d27eb63a2a9a3b37c\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:6:66-119
+79
+80        <uses-library
+80-->[androidx.window:window:1.0.0] C:\Users\carol\.gradle\caches\transforms-4\aaf2ebaa1817ac465c48b9c1e59e0923\transformed\jetified-window-1.0.0\AndroidManifest.xml:25:9-27:40
+81            android:name="androidx.window.extensions"
+81-->[androidx.window:window:1.0.0] C:\Users\carol\.gradle\caches\transforms-4\aaf2ebaa1817ac465c48b9c1e59e0923\transformed\jetified-window-1.0.0\AndroidManifest.xml:26:13-54
+82            android:required="false" />
+82-->[androidx.window:window:1.0.0] C:\Users\carol\.gradle\caches\transforms-4\aaf2ebaa1817ac465c48b9c1e59e0923\transformed\jetified-window-1.0.0\AndroidManifest.xml:27:13-37
+83        <uses-library
+83-->[androidx.window:window:1.0.0] C:\Users\carol\.gradle\caches\transforms-4\aaf2ebaa1817ac465c48b9c1e59e0923\transformed\jetified-window-1.0.0\AndroidManifest.xml:28:9-30:40
+84            android:name="androidx.window.sidecar"
+84-->[androidx.window:window:1.0.0] C:\Users\carol\.gradle\caches\transforms-4\aaf2ebaa1817ac465c48b9c1e59e0923\transformed\jetified-window-1.0.0\AndroidManifest.xml:29:13-51
+85            android:required="false" />
+85-->[androidx.window:window:1.0.0] C:\Users\carol\.gradle\caches\transforms-4\aaf2ebaa1817ac465c48b9c1e59e0923\transformed\jetified-window-1.0.0\AndroidManifest.xml:30:13-37
+86
+87        <receiver
+87-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:34:9-52:20
+88            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+88-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:35:13-76
+89            android:directBootAware="false"
+89-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:36:13-44
+90            android:enabled="true"
+90-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:37:13-35
+91            android:exported="true"
+91-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:38:13-36
+92            android:permission="android.permission.DUMP" >
+92-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:39:13-57
+93            <intent-filter>
+93-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:40:13-42:29
+94                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+94-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:41:17-91
+94-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:41:25-88
+95            </intent-filter>
+96            <intent-filter>
+96-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:43:13-45:29
+97                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+97-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:44:17-85
+97-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:44:25-82
+98            </intent-filter>
+99            <intent-filter>
+99-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:46:13-48:29
+100                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+100-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:47:17-88
+100-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:47:25-85
+101            </intent-filter>
+102            <intent-filter>
+102-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:49:13-51:29
+103                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+103-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:50:17-95
+103-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:50:25-92
+104            </intent-filter>
+105        </receiver>
+106    </application>
+107
+108</manifest>

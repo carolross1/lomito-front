@@ -1,0 +1,50 @@
+[
+    {
+        "merged": "com.lomito.seguro.mobile-mergeDebugResources-52:/layout/activity_main.xml",
+        "source": "com.lomito.seguro.mobile-main-55:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-mergeDebugResources-52:/layout/fragment_refugios.xml",
+        "source": "com.lomito.seguro.mobile-main-55:/layout/fragment_refugios.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-mergeDebugResources-52:/layout/fragment_home.xml",
+        "source": "com.lomito.seguro.mobile-main-55:/layout/fragment_home.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-mergeDebugResources-52:/layout/fragment_crear_mascota.xml",
+        "source": "com.lomito.seguro.mobile-main-55:/layout/fragment_crear_mascota.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-mergeDebugResources-52:/layout/fragment_mascota_detail.xml",
+        "source": "com.lomito.seguro.mobile-main-55:/layout/fragment_mascota_detail.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-mergeDebugResources-52:/layout/fragment_simulator.xml",
+        "source": "com.lomito.seguro.mobile-main-55:/layout/fragment_simulator.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-mergeDebugResources-52:/layout/item_alerta.xml",
+        "source": "com.lomito.seguro.mobile-main-55:/layout/item_alerta.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-mergeDebugResources-52:/layout/fragment_register.xml",
+        "source": "com.lomito.seguro.mobile-main-55:/layout/fragment_register.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-mergeDebugResources-52:/layout/item_refugio.xml",
+        "source": "com.lomito.seguro.mobile-main-55:/layout/item_refugio.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-mergeDebugResources-52:/layout/fragment_login.xml",
+        "source": "com.lomito.seguro.mobile-main-55:/layout/fragment_login.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-mergeDebugResources-52:/layout/item_mascota_card.xml",
+        "source": "com.lomito.seguro.mobile-main-55:/layout/item_mascota_card.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-mergeDebugResources-52:/layout/fragment_alertas.xml",
+        "source": "com.lomito.seguro.mobile-main-55:/layout/fragment_alertas.xml"
+    }
+]

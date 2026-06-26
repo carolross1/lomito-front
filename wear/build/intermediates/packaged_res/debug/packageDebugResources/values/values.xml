@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="alerta_rojo">#F44336</color>
+    <color name="primary">#FF6B35</color>
+    <color name="verde_ok">#4CAF50</color>
+    <string name="app_name">Lomito Wear</string>
+</resources>
