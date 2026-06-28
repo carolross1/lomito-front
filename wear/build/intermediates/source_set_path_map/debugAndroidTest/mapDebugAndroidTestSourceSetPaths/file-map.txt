@@ -1,0 +1,4 @@
+com.lomito.seguro.wear.test.wear-androidTest-0 C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\build\generated\res\resValues\androidTest\debug
+com.lomito.seguro.wear.test.wear-mergeDebugAndroidTestResources-1 C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\merged.dir
+com.lomito.seguro.wear.test.wear-mergeDebugAndroidTestResources-2 C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\stripped.dir
+com.lomito.seguro.wear.test.wear-debugAndroidTest-3 C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\build\intermediates\merged_res\debugAndroidTest\mergeDebugAndroidTestResources

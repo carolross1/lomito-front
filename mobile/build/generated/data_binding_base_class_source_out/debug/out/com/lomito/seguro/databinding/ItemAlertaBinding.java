@@ -7,9 +7,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
-import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.button.MaterialButton;
 import com.lomito.seguro.R;
 import java.lang.NullPointerException;
 import java.lang.Override;
@@ -17,32 +18,41 @@ import java.lang.String;
 
 public final class ItemAlertaBinding implements ViewBinding {
   @NonNull
-  private final MaterialCardView rootView;
+  private final CardView rootView;
 
   @NonNull
-  public final TextView tvDistancia;
+  public final MaterialButton btnMarcarLeida;
 
   @NonNull
   public final TextView tvFecha;
 
   @NonNull
+  public final TextView tvIcono;
+
+  @NonNull
+  public final TextView tvLeida;
+
+  @NonNull
   public final TextView tvMensaje;
 
   @NonNull
-  public final TextView tvTipo;
+  public final TextView tvTitulo;
 
-  private ItemAlertaBinding(@NonNull MaterialCardView rootView, @NonNull TextView tvDistancia,
-      @NonNull TextView tvFecha, @NonNull TextView tvMensaje, @NonNull TextView tvTipo) {
+  private ItemAlertaBinding(@NonNull CardView rootView, @NonNull MaterialButton btnMarcarLeida,
+      @NonNull TextView tvFecha, @NonNull TextView tvIcono, @NonNull TextView tvLeida,
+      @NonNull TextView tvMensaje, @NonNull TextView tvTitulo) {
     this.rootView = rootView;
-    this.tvDistancia = tvDistancia;
+    this.btnMarcarLeida = btnMarcarLeida;
     this.tvFecha = tvFecha;
+    this.tvIcono = tvIcono;
+    this.tvLeida = tvLeida;
     this.tvMensaje = tvMensaje;
-    this.tvTipo = tvTipo;
+    this.tvTitulo = tvTitulo;
   }
 
   @Override
   @NonNull
-  public MaterialCardView getRoot() {
+  public CardView getRoot() {
     return rootView;
   }
 
@@ -67,9 +77,9 @@ public final class ItemAlertaBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
-      id = R.id.tvDistancia;
-      TextView tvDistancia = ViewBindings.findChildViewById(rootView, id);
-      if (tvDistancia == null) {
+      id = R.id.btnMarcarLeida;
+      MaterialButton btnMarcarLeida = ViewBindings.findChildViewById(rootView, id);
+      if (btnMarcarLeida == null) {
         break missingId;
       }
 
@@ -79,20 +89,32 @@ public final class ItemAlertaBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.tvIcono;
+      TextView tvIcono = ViewBindings.findChildViewById(rootView, id);
+      if (tvIcono == null) {
+        break missingId;
+      }
+
+      id = R.id.tvLeida;
+      TextView tvLeida = ViewBindings.findChildViewById(rootView, id);
+      if (tvLeida == null) {
+        break missingId;
+      }
+
       id = R.id.tvMensaje;
       TextView tvMensaje = ViewBindings.findChildViewById(rootView, id);
       if (tvMensaje == null) {
         break missingId;
       }
 
-      id = R.id.tvTipo;
-      TextView tvTipo = ViewBindings.findChildViewById(rootView, id);
-      if (tvTipo == null) {
+      id = R.id.tvTitulo;
+      TextView tvTitulo = ViewBindings.findChildViewById(rootView, id);
+      if (tvTitulo == null) {
         break missingId;
       }
 
-      return new ItemAlertaBinding((MaterialCardView) rootView, tvDistancia, tvFecha, tvMensaje,
-          tvTipo);
+      return new ItemAlertaBinding((CardView) rootView, btnMarcarLeida, tvFecha, tvIcono, tvLeida,
+          tvMensaje, tvTitulo);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

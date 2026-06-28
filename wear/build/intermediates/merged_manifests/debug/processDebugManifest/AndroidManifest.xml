@@ -17,6 +17,9 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <permission
         android:name="com.lomito.seguro.wear.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
@@ -44,8 +47,28 @@
 
         <activity
             android:name="com.lomito.seguro.wear.ui.home.WearMainActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault" />
+        <activity
+            android:name="com.lomito.seguro.wear.ui.alert.AlertActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault" />
+        <activity
+            android:name="com.lomito.seguro.wear.ui.report.ReportActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault" />
+        <activity
+            android:name="com.lomito.seguro.wear.ui.report.MascotaPerdidaDetailActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault" />
+        <activity
+            android:name="com.lomito.seguro.wear.ui.report.AgregarMascotaPerdidaActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault" />
+        <activity
+            android:name="com.lomito.seguro.wear.ui.dashboard.DashboardActivity"
             android:exported="true"
-            android:taskAffinity="" >
+            android:theme="@android:style/Theme.DeviceDefault" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,15 +76,39 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.lomito.seguro.wear.ui.alert.AlertActivity"
-            android:exported="false" />
+            android:name="com.lomito.seguro.wear.ui.mascota.MascotaListActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault" />
         <activity
-            android:name="com.lomito.seguro.wear.ui.report.ReportActivity"
-            android:exported="false" />
+            android:name="com.lomito.seguro.wear.ui.mascota.AddMascotaActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault" />
+        <activity
+            android:name="com.lomito.seguro.wear.ui.settings.SettingsActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault" />
+        <activity
+            android:name="com.lomito.seguro.wear.ui.selection.SelectionActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault" />
+        <activity
+            android:name="com.lomito.seguro.wear.ui.mascota.MascotaDetailActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault" />
+        <activity
+            android:name="com.lomito.seguro.wear.ui.report.ReportarAvistamientoActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault" />
+        <activity
+            android:name="com.lomito.seguro.wear.ui.mascota.MarcarPerdidaActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault" />
 
+        <!-- ✅ Servicio para recibir mensajes del móvil -->
         <service
             android:name="com.lomito.seguro.wear.data.WearMessageService"
-            android:exported="true" >
+            android:exported="true"
+            android:permission="com.google.android.gms.wearable.BIND_WEARABLE_LISTENER" >
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
 
@@ -78,7 +125,38 @@
                     android:pathPrefix="/ble/distancia"
                     android:scheme="wear" />
             </intent-filter>
+            <!-- ✅ Agregar más paths para recibir mensajes -->
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+
+                <data
+                    android:host="*"
+                    android:pathPrefix="/watch"
+                    android:scheme="wear" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+
+                <data
+                    android:host="*"
+                    android:pathPrefix="/mascota"
+                    android:scheme="wear" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+
+                <data
+                    android:host="*"
+                    android:pathPrefix="/alerta"
+                    android:scheme="wear" />
+            </intent-filter>
         </service>
+
+        <!-- Servicio de polling global -->
+        <service
+            android:name="com.lomito.seguro.wear.data.PollingService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
 
         <activity
             android:name="com.google.android.gms.common.api.GoogleApiActivity"

@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN"/>
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application
         android:allowBackup="true"
@@ -21,12 +23,23 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-            <service
+
+        <service
             android:name=".WatchReportListener"
-            android:exported="true">
+            android:exported="true"
+            android:permission="com.google.android.gms.wearable.BIND_WEARABLE_LISTENER">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED"/>
-                <data android:scheme="wear" android:host="*" android:pathPrefix="/watch/reporte"/>
+                <data android:scheme="wear" android:host="*" android:pathPrefix="/watch"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED"/>
+                <data android:scheme="wear" android:host="*" android:pathPrefix="/mascota"/>
+            </intent-filter>
+            <!-- ✅ Nuevo intent-filter para recibir alertas -->
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED"/>
+                <data android:scheme="wear" android:host="*" android:pathPrefix="/alerta"/>
             </intent-filter>
         </service>
     </application>

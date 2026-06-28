@@ -8,9 +8,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
-import com.google.android.material.card.MaterialCardView;
 import com.lomito.seguro.R;
 import java.lang.NullPointerException;
 import java.lang.Override;
@@ -18,7 +18,7 @@ import java.lang.String;
 
 public final class ItemMascotaCardBinding implements ViewBinding {
   @NonNull
-  private final MaterialCardView rootView;
+  private final CardView rootView;
 
   @NonNull
   public final ImageView ivMascota;
@@ -32,7 +32,7 @@ public final class ItemMascotaCardBinding implements ViewBinding {
   @NonNull
   public final TextView tvNombre;
 
-  private ItemMascotaCardBinding(@NonNull MaterialCardView rootView, @NonNull ImageView ivMascota,
+  private ItemMascotaCardBinding(@NonNull CardView rootView, @NonNull ImageView ivMascota,
       @NonNull TextView tvEspecie, @NonNull TextView tvEstado, @NonNull TextView tvNombre) {
     this.rootView = rootView;
     this.ivMascota = ivMascota;
@@ -43,7 +43,7 @@ public final class ItemMascotaCardBinding implements ViewBinding {
 
   @Override
   @NonNull
-  public MaterialCardView getRoot() {
+  public CardView getRoot() {
     return rootView;
   }
 
@@ -92,7 +92,7 @@ public final class ItemMascotaCardBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ItemMascotaCardBinding((MaterialCardView) rootView, ivMascota, tvEspecie, tvEstado,
+      return new ItemMascotaCardBinding((CardView) rootView, ivMascota, tvEspecie, tvEstado,
           tvNombre);
     }
     String missingId = rootView.getResources().getResourceName(id);

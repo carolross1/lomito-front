@@ -43,4 +43,4 @@ dependencies {
     implementation(libs.glide)
     implementation(libs.datastore)
     implementation(libs.play.services.wearable)
-}
+    implementation("androidx.localbroadcastmanager:localbroadcastmanager:1.1.0")}

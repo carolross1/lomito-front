@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.lomito.seguro.mobile-mergeDebugResources-51:/values-pt-rPT/values-pt-rPT.xml",
+            "outputFile": "com.lomito.seguro.mobile-mergeDebugResources-52:/values-pt-rPT/values-pt-rPT.xml",
             "map": [
                 {
                     "source": "C:\\Users\\carol\\.gradle\\caches\\transforms-4\\b881951ec5b9b7fec55f5ce47f130c8a\\transformed\\jetified-play-services-base-18.5.0\\res\\values-pt-rPT\\values.xml",

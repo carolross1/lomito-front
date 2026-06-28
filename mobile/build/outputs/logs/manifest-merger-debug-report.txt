@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:2:1-33:12
-INJECTED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:2:1-33:12
-INJECTED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:2:1-33:12
-INJECTED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:2:1-33:12
+ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:2:1-46:12
+INJECTED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:2:1-46:12
+INJECTED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:2:1-46:12
+INJECTED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:2:1-46:12
 MERGED from [androidx.databinding:viewbinding:8.6.0] C:\Users\carol\.gradle\caches\transforms-4\1d78a8b081d0ac7468775aaf26622bec\transformed\jetified-viewbinding-8.6.0\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.navigation:navigation-common:2.7.7] C:\Users\carol\.gradle\caches\transforms-4\d446f60aa2ea5888edccd248992d290c\transformed\navigation-common-2.7.7\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.navigation:navigation-common-ktx:2.7.7] C:\Users\carol\.gradle\caches\transforms-4\d8b6c0b871794cd087091f2d92edcff0\transformed\navigation-common-ktx-2.7.7\AndroidManifest.xml:2:1-7:12
@@ -60,6 +60,7 @@ MERGED from [androidx.datastore:datastore-core-android:1.1.1] C:\Users\carol\.gr
 MERGED from [androidx.datastore:datastore-android:1.1.1] C:\Users\carol\.gradle\caches\transforms-4\e19004542489c0ebb38a3dcfd4c44587\transformed\jetified-datastore-release\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.datastore:datastore-preferences-android:1.1.1] C:\Users\carol\.gradle\caches\transforms-4\b47f294048b41fd24c3497902311076a\transformed\jetified-datastore-preferences-release\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.annotation:annotation-experimental:1.4.0] C:\Users\carol\.gradle\caches\transforms-4\ff8601039528365605e07ebcd64f8e16\transformed\jetified-annotation-experimental-1.4.0\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.1.0] C:\Users\carol\.gradle\caches\transforms-4\8534934a9b73dd4cb840568dcbf99028\transformed\localbroadcastmanager-1.1.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\carol\.gradle\caches\transforms-4\4cd8dca2a96ee77e6143aa58b5a2489b\transformed\cursoradapter-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:17:1-55:12
 MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\carol\.gradle\caches\transforms-4\e501488ef54ee5526d62804b4c80e355\transformed\cardview-1.0.0\AndroidManifest.xml:17:1-22:12
@@ -71,7 +72,6 @@ MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\carol\.gradle\ca
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\carol\.gradle\caches\transforms-4\a7b929e874c743063fa018ea70af00f4\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:17:1-27:12
 MERGED from [androidx.arch.core:core-runtime:2.2.0] C:\Users\carol\.gradle\caches\transforms-4\7f721d36facc8144f5b6e8b31daf3f61\transformed\core-runtime-2.2.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\carol\.gradle\caches\transforms-4\e2283e609f3d00876152a07dbb7e97bc\transformed\documentfile-1.0.0\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\carol\.gradle\caches\transforms-4\db73a1eeaa8320e980c283995cec3d1b\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.print:print:1.0.0] C:\Users\carol\.gradle\caches\transforms-4\6dbd2dc7654bead8d3c88741cd6b9d38\transformed\print-1.0.0\AndroidManifest.xml:17:1-22:12
 	package
 		INJECTED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml
@@ -105,9 +105,17 @@ uses-permission#android.permission.BLUETOOTH_CONNECT
 ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:9:5-75
 	android:name
 		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:9:22-73
+uses-permission#android.permission.VIBRATE
+ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:10:5-65
+	android:name
+		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:10:22-63
+uses-permission#android.permission.POST_NOTIFICATIONS
+ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:11:5-76
+	android:name
+		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:11:22-74
 application
-ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:11:5-32:19
-INJECTED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:11:5-32:19
+ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:13:5-45:19
+INJECTED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:13:5-45:19
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\carol\.gradle\caches\transforms-4\70a8118a540d7c4e7139106849a40bdc\transformed\material-1.12.0\AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\carol\.gradle\caches\transforms-4\70a8118a540d7c4e7139106849a40bdc\transformed\material-1.12.0\AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] C:\Users\carol\.gradle\caches\transforms-4\4264efd67634f035066703cd764f5b1b\transformed\constraintlayout-2.0.1\AndroidManifest.xml:9:5-20
@@ -139,49 +147,55 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\ca
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.13.1] C:\Users\carol\.gradle\caches\transforms-4\3611863fe91a427ad21ab78f9cad0532\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
 	android:label
-		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:13:9-41
+		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:15:9-41
 	android:allowBackup
-		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:12:9-35
+		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:14:9-35
 	android:theme
-		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:14:9-50
+		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:16:9-50
 	android:usesCleartextTraffic
-		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:15:9-44
+		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:17:9-44
 activity#com.lomito.seguro.MainActivity
-ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:17:9-23:20
+ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:19:9-25:20
 	android:exported
-		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:18:13-36
+		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:20:13-36
 	android:name
-		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:17:19-47
+		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:19:19-47
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:19:13-22:29
+ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:21:13-24:29
 action#android.intent.action.MAIN
-ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:20:17-68
+ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:22:17-68
 	android:name
-		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:20:25-66
+		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:22:25-66
 category#android.intent.category.LAUNCHER
-ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:21:17-76
+ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:23:17-76
 	android:name
-		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:21:27-74
+		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:23:27-74
 service#com.lomito.seguro.WatchReportListener
-ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:24:13-31:19
+ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:27:9-44:19
 	android:exported
-		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:26:13-36
+		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:29:13-36
+	android:permission
+		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:30:13-88
 	android:name
-		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:25:13-48
-intent-filter#action:name:com.google.android.gms.wearable.MESSAGE_RECEIVED+data:host:*+data:pathPrefix:/watch/reporte+data:scheme:wear
-ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:27:13-30:29
+		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:28:13-48
+intent-filter#action:name:com.google.android.gms.wearable.MESSAGE_RECEIVED+data:host:*+data:pathPrefix:/watch+data:scheme:wear
+ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:31:13-34:29
 action#com.google.android.gms.wearable.MESSAGE_RECEIVED
-ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:28:17-90
+ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:32:17-90
 	android:name
-		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:28:25-88
+		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:32:25-88
 data
-ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:29:17-99
+ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:33:17-91
 	android:host
-		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:29:45-61
+		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:33:45-61
 	android:scheme
-		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:29:23-44
+		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:33:23-44
 	android:pathPrefix
-		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:29:62-97
+		ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:33:62-89
+intent-filter#action:name:com.google.android.gms.wearable.MESSAGE_RECEIVED+data:host:*+data:pathPrefix:/mascota+data:scheme:wear
+ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:35:13-38:29
+intent-filter#action:name:com.google.android.gms.wearable.MESSAGE_RECEIVED+data:host:*+data:pathPrefix:/alerta+data:scheme:wear
+ADDED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml:40:13-43:29
 uses-sdk
 INJECTED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\src\main\AndroidManifest.xml
@@ -298,6 +312,8 @@ MERGED from [androidx.datastore:datastore-preferences-android:1.1.1] C:\Users\ca
 MERGED from [androidx.datastore:datastore-preferences-android:1.1.1] C:\Users\carol\.gradle\caches\transforms-4\b47f294048b41fd24c3497902311076a\transformed\jetified-datastore-preferences-release\AndroidManifest.xml:20:5-44
 MERGED from [androidx.annotation:annotation-experimental:1.4.0] C:\Users\carol\.gradle\caches\transforms-4\ff8601039528365605e07ebcd64f8e16\transformed\jetified-annotation-experimental-1.4.0\AndroidManifest.xml:5:5-44
 MERGED from [androidx.annotation:annotation-experimental:1.4.0] C:\Users\carol\.gradle\caches\transforms-4\ff8601039528365605e07ebcd64f8e16\transformed\jetified-annotation-experimental-1.4.0\AndroidManifest.xml:5:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.1.0] C:\Users\carol\.gradle\caches\transforms-4\8534934a9b73dd4cb840568dcbf99028\transformed\localbroadcastmanager-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.1.0] C:\Users\carol\.gradle\caches\transforms-4\8534934a9b73dd4cb840568dcbf99028\transformed\localbroadcastmanager-1.1.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\carol\.gradle\caches\transforms-4\4cd8dca2a96ee77e6143aa58b5a2489b\transformed\cursoradapter-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\carol\.gradle\caches\transforms-4\4cd8dca2a96ee77e6143aa58b5a2489b\transformed\cursoradapter-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:21:5-44
@@ -320,8 +336,6 @@ MERGED from [androidx.arch.core:core-runtime:2.2.0] C:\Users\carol\.gradle\cache
 MERGED from [androidx.arch.core:core-runtime:2.2.0] C:\Users\carol\.gradle\caches\transforms-4\7f721d36facc8144f5b6e8b31daf3f61\transformed\core-runtime-2.2.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\carol\.gradle\caches\transforms-4\e2283e609f3d00876152a07dbb7e97bc\transformed\documentfile-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\carol\.gradle\caches\transforms-4\e2283e609f3d00876152a07dbb7e97bc\transformed\documentfile-1.0.0\AndroidManifest.xml:20:5-44
-MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\carol\.gradle\caches\transforms-4\db73a1eeaa8320e980c283995cec3d1b\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:20:5-44
-MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\carol\.gradle\caches\transforms-4\db73a1eeaa8320e980c283995cec3d1b\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.print:print:1.0.0] C:\Users\carol\.gradle\caches\transforms-4\6dbd2dc7654bead8d3c88741cd6b9d38\transformed\print-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.print:print:1.0.0] C:\Users\carol\.gradle\caches\transforms-4\6dbd2dc7654bead8d3c88741cd6b9d38\transformed\print-1.0.0\AndroidManifest.xml:20:5-44
 	android:targetSdkVersion

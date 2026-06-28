@@ -29,6 +29,24 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         session = SessionManager(requireContext())
 
+        // ✅ Configurar toolbar con título y estilo
+        binding.toolbar.apply {
+            title = "🐾 Mis Mascotas"
+            setTitleTextColor(resources.getColor(R.color.white, null))
+            inflateMenu(R.menu.home_menu)
+            setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.action_logout -> {
+                        session.logout()
+                        findNavController().navigate(R.id.action_home_to_login)
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }
+
+        // ✅ Configurar RecyclerView
         adapter = MascotaCardAdapter { mascota ->
             val bundle = android.os.Bundle().apply { putString("mascotaId", mascota.id) }
             findNavController().navigate(R.id.action_home_to_mascota_detail, bundle)
@@ -36,10 +54,12 @@ class HomeFragment : Fragment() {
         binding.rvMascotas.layoutManager = LinearLayoutManager(requireContext())
         binding.rvMascotas.adapter = adapter
 
+        // ✅ Configurar FAB
         binding.fabAgregarMascota.setOnClickListener {
             findNavController().navigate(R.id.action_home_to_crear_mascota)
         }
 
+        // ✅ Configurar botones de acciones rápidas
         binding.btnAlertas.setOnClickListener {
             findNavController().navigate(R.id.action_home_to_alertas)
         }
@@ -52,36 +72,32 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.action_home_to_simulator)
         }
 
+        binding.btnMural.setOnClickListener {
+            findNavController().navigate(R.id.action_home_to_mural)
+        }
+
+        // ✅ Observar datos
         viewModel.mascotas.observe(viewLifecycleOwner) { mascotas ->
             adapter.submitList(mascotas)
-            if (mascotas.isEmpty()) binding.tvEmpty.visible() else binding.tvEmpty.gone()
+            if (mascotas.isEmpty()) {
+                binding.tvEmpty.visible()
+                binding.ivEmpty.visible()
+            } else {
+                binding.tvEmpty.gone()
+                binding.ivEmpty.gone()
+            }
         }
 
         viewModel.alertasNoLeidas.observe(viewLifecycleOwner) { count ->
             binding.badgeAlertas.text = if (count > 0) count.toString() else ""
-            if (count > 0) binding.badgeAlertas.visible() else binding.badgeAlertas.gone()
+            binding.badgeAlertas.visibility = if (count > 0) View.VISIBLE else View.GONE
         }
 
         viewModel.loading.observe(viewLifecycleOwner) { loading ->
-            if (loading) binding.progressBar.visible() else binding.progressBar.gone()
+            binding.progressBar.visibility = if (loading) View.VISIBLE else View.GONE
         }
 
         viewModel.cargar(session.getUserId())
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.home_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_logout -> {
-                session.logout()
-                findNavController().navigate(R.id.action_home_to_login)
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     override fun onDestroyView() {

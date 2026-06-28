@@ -10,6 +10,9 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application
         android:allowBackup="true"
@@ -19,25 +22,83 @@
         android:networkSecurityConfig="@xml/network_security_config">
 
         <uses-library android:name="com.google.android.wearable" android:required="true"/>
-
         <meta-data android:name="com.google.android.wearable.standalone" android:value="false"/>
 
         <activity
             android:name=".ui.home.WearMainActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault"/>
+
+        <activity
+            android:name=".ui.alert.AlertActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault"/>
+
+        <activity
+            android:name=".ui.report.ReportActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault"/>
+
+        <activity
+            android:name=".ui.report.MascotaPerdidaDetailActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault"/>
+
+        <activity
+            android:name=".ui.report.AgregarMascotaPerdidaActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault"/>
+
+        <activity
+            android:name=".ui.dashboard.DashboardActivity"
             android:exported="true"
-            android:taskAffinity="">
+            android:theme="@android:style/Theme.DeviceDefault">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.alert.AlertActivity" android:exported="false"/>
-        <activity android:name=".ui.report.ReportActivity" android:exported="false"/>
+        <activity
+            android:name=".ui.mascota.MascotaListActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault"/>
 
+        <activity
+            android:name=".ui.mascota.AddMascotaActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault"/>
+
+        <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault"/>
+
+        <activity
+            android:name=".ui.selection.SelectionActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault"/>
+
+        <activity
+            android:name=".ui.mascota.MascotaDetailActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault"/>
+
+        <activity
+            android:name=".ui.report.ReportarAvistamientoActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault"/>
+
+        <activity
+            android:name=".ui.mascota.MarcarPerdidaActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault"/>
+
+        <!-- ✅ Servicio para recibir mensajes del móvil -->
         <service
             android:name=".data.WearMessageService"
-            android:exported="true">
+            android:exported="true"
+            android:permission="com.google.android.gms.wearable.BIND_WEARABLE_LISTENER">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED"/>
                 <data android:scheme="wear" android:host="*" android:pathPrefix="/ble/distancia"/>
@@ -46,6 +107,26 @@
                 <action android:name="com.google.android.gms.wearable.DATA_CHANGED"/>
                 <data android:scheme="wear" android:host="*" android:pathPrefix="/ble/distancia"/>
             </intent-filter>
+            <!-- ✅ Agregar más paths para recibir mensajes -->
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED"/>
+                <data android:scheme="wear" android:host="*" android:pathPrefix="/watch"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED"/>
+                <data android:scheme="wear" android:host="*" android:pathPrefix="/mascota"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED"/>
+                <data android:scheme="wear" android:host="*" android:pathPrefix="/alerta"/>
+            </intent-filter>
         </service>
+
+        <!-- Servicio de polling global -->
+        <service
+            android:name=".data.PollingService"
+            android:foregroundServiceType="dataSync"
+            android:exported="false"/>
+
     </application>
 </manifest>

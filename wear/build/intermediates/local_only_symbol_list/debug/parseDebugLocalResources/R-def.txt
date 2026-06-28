@@ -4,4 +4,6 @@ color alerta_rojo
 color primary
 color verde_ok
 string app_name
+style Theme.LomitoSeguro
+style Theme.LomitoSeguro.Alert
 xml network_security_config

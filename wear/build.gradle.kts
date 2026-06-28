@@ -37,6 +37,10 @@ dependencies {
     implementation(libs.coroutines.android)
     implementation(libs.gson)
     implementation(libs.play.services.wearable)
+    implementation("androidx.activity:activity-compose:1.9.3")
+    implementation("androidx.wear:wear-input:1.1.0")
+
+
 
     // Compose base
     val composeBom = platform("androidx.compose:compose-bom:2024.05.00")
@@ -56,4 +60,5 @@ dependencies {
 
     // Coroutines tasks (para .await())
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.0")
+
 }

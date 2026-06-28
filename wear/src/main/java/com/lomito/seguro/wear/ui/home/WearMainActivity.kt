@@ -6,6 +6,8 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -22,121 +24,179 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.wear.compose.material.*
 import com.lomito.seguro.wear.data.BleState
+import com.lomito.seguro.wear.data.PollingService
 import com.lomito.seguro.wear.data.WatchViewModel
-import com.lomito.seguro.wear.data.WearMessageService
 import com.lomito.seguro.wear.ui.alert.AlertActivity
+import com.lomito.seguro.wear.ui.dashboard.DashboardActivity
 import com.lomito.seguro.wear.ui.report.ReportActivity
-import kotlinx.coroutines.*
-import org.json.JSONObject
-import java.net.URL
+import com.lomito.seguro.wear.ui.selection.SelectionActivity
 
 class WearMainActivity : ComponentActivity() {
     private lateinit var viewModel: WatchViewModel
-    private var pollingJob: Job? = null
-
-    // ⚠️ Cambia esta IP a la de tu computadora
-    private val backendUrl = "http://192.168.100.12:3000"
 
     private val bleReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            val distancia = intent.getIntExtra("distancia", 0)
-            val mascotaId = intent.getStringExtra("mascotaId") ?: ""
-            val umbral = intent.getIntExtra("umbral", 50)
-            val superaUmbral = intent.getBooleanExtra("superaUmbral", false)
-            viewModel.actualizarEstado(distancia, mascotaId, umbral, superaUmbral)
+            try {
+                val distancia = intent.getIntExtra("distancia", 0)
+                val mascotaId = intent.getStringExtra("mascotaId") ?: ""
+                val umbral = intent.getIntExtra("umbral", 50)
+                val superaUmbral = intent.getBooleanExtra("superaUmbral", false)
+                viewModel.actualizarEstado(distancia, mascotaId, umbral, superaUmbral)
+            } catch (e: Exception) {
+                android.util.Log.e("WEAR_MAIN", "Error en bleReceiver: ${e.message}")
+            }
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this)[WatchViewModel::class.java]
+        try {
+            super.onCreate(savedInstanceState)
+            viewModel = ViewModelProvider(this)[WatchViewModel::class.java]
 
-        val filter = IntentFilter("com.lomito.seguro.wear.BLE_UPDATE")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(bleReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
-        } else {
-            registerReceiver(bleReceiver, filter)
-        }
+            val prefs = getSharedPreferences("watch_prefs", MODE_PRIVATE)
+            val mascotaId = prefs.getString("mascota_activa_id", "") ?: ""
+            val mascotaNombre = prefs.getString("mascota_activa_nombre", "Mascota") ?: "Mascota"
+            val umbral = prefs.getInt("mascota_umbral", 50)
 
-        WearMessageService.onUpdate = { dist, mid, umb, supera ->
-            viewModel.actualizarEstado(dist, mid, umb, supera)
-        }
-
-        // Polling al backend cada 2 segundos para obtener distancia simulada
-        iniciarPolling()
-
-        setContent {
-            val state by viewModel.bleState.observeAsState(BleState())
-            WearMainScreen(
-                state = state,
-                onAlertClick = { startActivity(Intent(this, AlertActivity::class.java)) },
-                onReportClick = { startActivity(Intent(this, ReportActivity::class.java)) }
-            )
-        }
-    }
-
-    private fun iniciarPolling() {
-        pollingJob = CoroutineScope(Dispatchers.IO).launch {
-            while (isActive) {
-                try {
-                    val url = java.net.URL("http://10.0.2.2:3000/api/simulador/estado")
-                    val conn = url.openConnection() as java.net.HttpURLConnection
-                    conn.connectTimeout = 3000
-                    conn.readTimeout = 3000
-                    conn.requestMethod = "GET"
-                    val response = conn.inputStream.bufferedReader().readText()
-                    conn.disconnect()
-
-                    val json = JSONObject(response)
-                    val distancia = json.optInt("distancia", 0)
-                    val umbral = json.optInt("umbral", 50)
-                    val mascotaId = json.optString("mascotaId", "")
-                    val superaUmbral = distancia > umbral
-
-                    android.util.Log.d("WEAR_POLL", "✅ distancia=$distancia umbral=$umbral")
-
-                    withContext(Dispatchers.Main) {
-                        viewModel.actualizarEstado(distancia, mascotaId, umbral, superaUmbral)
-                    }
-                } catch (e: Exception) {
-                    android.util.Log.e("WEAR_POLL", "Error polling: ${e.message}")
-                }
-                delay(2000)
+            if (mascotaId.isEmpty()) {
+                startActivity(Intent(this, SelectionActivity::class.java))
+                finish()
+                return
             }
+
+            viewModel.actualizarEstado(0, mascotaId, umbral, false)
+
+            // ✅ Iniciar PollingService global
+            val serviceIntent = Intent(this, PollingService::class.java)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(serviceIntent)
+            } else {
+                startService(serviceIntent)
+            }
+
+            // ✅ Receiver para actualizar UI desde el PollingService
+            val filter = IntentFilter("com.lomito.seguro.wear.BLE_UPDATE")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                registerReceiver(bleReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
+            } else {
+                registerReceiver(bleReceiver, filter)
+            }
+
+            setContent {
+                val state by viewModel.bleState.observeAsState(BleState())
+                WearMainScreen(
+                    state = state,
+                    mascotaNombre = mascotaNombre,
+                    onAlertClick = {
+                        try {
+                            startActivity(Intent(this, AlertActivity::class.java))
+                        } catch (e: Exception) {
+                            android.util.Log.e("WEAR_MAIN", "Error: ${e.message}")
+                        }
+                    },
+                    onReportClick = {
+                        try {
+                            startActivity(Intent(this, ReportActivity::class.java).apply {
+                                putExtra("mascotaId", mascotaId)
+                                putExtra("mascotaNombre", mascotaNombre)
+                            })
+                        } catch (e: Exception) {
+                            android.util.Log.e("WEAR_MAIN", "Error: ${e.message}")
+                        }
+                    },
+                    onChangeMascota = {
+                        try {
+                            startActivity(Intent(this, SelectionActivity::class.java))
+                            finish()
+                        } catch (e: Exception) {
+                            android.util.Log.e("WEAR_MAIN", "Error: ${e.message}")
+                        }
+                    },
+                    onDashboardClick = {
+                        try {
+                            startActivity(Intent(this, DashboardActivity::class.java))
+                            finish()
+                        } catch (e: Exception) {
+                            android.util.Log.e("WEAR_MAIN", "Error: ${e.message}")
+                        }
+                    }
+                )
+            }
+
+        } catch (e: Exception) {
+            android.util.Log.e("WEAR_MAIN", "Error FATAL: ${e.message}", e)
+            try {
+                startActivity(Intent(this, SelectionActivity::class.java))
+            } catch (e2: Exception) {
+                android.util.Log.e("WEAR_MAIN", "No se pudo abrir Selection: ${e2.message}")
+            }
+            finish()
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        pollingJob?.cancel()
-        unregisterReceiver(bleReceiver)
-        WearMessageService.onUpdate = null  // ✅ CORREGIDO
+        try { unregisterReceiver(bleReceiver) } catch (e: Exception) {}
     }
 }
 
 @Composable
 fun WearMainScreen(
     state: BleState,
+    mascotaNombre: String,
     onAlertClick: () -> Unit,
-    onReportClick: () -> Unit
+    onReportClick: () -> Unit,
+    onChangeMascota: () -> Unit,
+    onDashboardClick: () -> Unit
 ) {
     val pct = if (state.umbral > 0)
         (state.distancia.toFloat() / state.umbral.toFloat()).coerceIn(0f, 1f)
     else 0f
 
     val ringColor = when {
-        pct < 0.5f -> Color(0xFF4CAF50)
-        pct < 0.85f -> Color(0xFFFF9800)
-        else -> Color(0xFFF44336)
+        state.distancia > 250 -> Color(0xFF8B0000)
+        state.distancia > 150 -> Color(0xFFD32F2F)
+        state.distancia > 100 -> Color(0xFFE53935)
+        state.distancia > 70  -> Color(0xFFFF5722)
+        state.distancia > 50  -> Color(0xFFFF9800)
+        state.distancia > 30  -> Color(0xFFFFC107)
+        else                  -> Color(0xFF4CAF50)
     }
-    val bgColor = if (state.superaUmbral) Color(0xFF1A0000) else Color(0xFF1A1A2E)
+
+    val bgColor = when {
+        state.distancia > 250 -> Color(0xFF1A0000)
+        state.distancia > 150 -> Color(0xFF2A0000)
+        state.distancia > 100 -> Color(0xFF3A0000)
+        state.distancia > 70  -> Color(0xFF3A1A00)
+        state.distancia > 50  -> Color(0xFF3A2A00)
+        state.distancia > 30  -> Color(0xFF2A2A00)
+        else                  -> Color(0xFF1A1A2E)
+    }
+
+    val alertLevel = when {
+        state.distancia > 250 -> "🚨 ¡PELIGRO EXTREMO!"
+        state.distancia > 150 -> "🚨 ¡ALERTA MÁXIMA!"
+        state.distancia > 100 -> "🔴 ¡ALERTA!"
+        state.distancia > 70  -> "🟠 ¡Cuidado!"
+        state.distancia > 50  -> "🟡 Atención"
+        state.distancia > 30  -> "🟢 Distancia media"
+        else                  -> "✅ En rango"
+    }
+
+    val alertIcon = when {
+        state.distancia > 100 -> "🚨"
+        state.distancia > 50  -> "⚠️"
+        else                  -> "🐾"
+    }
 
     Scaffold(
         timeText = { TimeText() },
         vignette = { Vignette(vignettePosition = VignettePosition.TopAndBottom) }
     ) {
         Box(
-            modifier = Modifier.fillMaxSize().background(bgColor),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(bgColor),
             contentAlignment = Alignment.Center
         ) {
             CircularProgressIndicator(
@@ -146,38 +206,68 @@ fun WearMainScreen(
                 indicatorColor = ringColor,
                 trackColor = Color.White.copy(alpha = 0.1f)
             )
+
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text(text = if (state.superaUmbral) "🚨" else "🐾", fontSize = 20.sp)
+                Text(
+                    text = mascotaNombre,
+                    fontSize = 12.sp,
+                    color = Color.White.copy(alpha = 0.7f),
+                    fontWeight = FontWeight.Medium
+                )
+
+                Spacer(modifier = Modifier.height(2.dp))
+
+                Text(text = alertIcon, fontSize = 24.sp)
+
                 Text(
                     text = "${state.distancia}m",
                     fontSize = 36.sp,
                     fontWeight = FontWeight.Bold,
                     color = ringColor
                 )
+
                 Text(
-                    text = if (state.superaUmbral) "¡FUERA DE RANGO!" else "En rango",
+                    text = alertLevel,
                     fontSize = 11.sp,
-                    color = Color.White.copy(alpha = 0.8f),
+                    color = Color.White.copy(alpha = 0.9f),
                     textAlign = TextAlign.Center
                 )
+
                 Text(
-                    text = "umbral ${state.umbral}m",
+                    text = "Umbral: ${state.umbral}m",
                     fontSize = 10.sp,
                     color = Color.White.copy(alpha = 0.5f)
                 )
-                Spacer(modifier = Modifier.height(8.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+
+                Spacer(modifier = Modifier.height(6.dp))
+
+                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                     CompactButton(
                         onClick = onAlertClick,
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFD32F2F))
-                    ) { Text("⚠️", fontSize = 12.sp) }
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFD32F2F)),
+                        modifier = Modifier.size(36.dp)
+                    ) { Text("🔔", fontSize = 12.sp) }
+
                     CompactButton(
                         onClick = onReportClick,
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF1565C0))
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF1565C0)),
+                        modifier = Modifier.size(36.dp)
                     ) { Text("📍", fontSize = 12.sp) }
+
+                    CompactButton(
+                        onClick = onChangeMascota,
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF6A1B9A)),
+                        modifier = Modifier.size(36.dp)
+                    ) { Text("🐾", fontSize = 12.sp) }
+
+                    CompactButton(
+                        onClick = onDashboardClick,
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF2E7D32)),
+                        modifier = Modifier.size(36.dp)
+                    ) { Text("🏠", fontSize = 12.sp) }
                 }
             }
         }

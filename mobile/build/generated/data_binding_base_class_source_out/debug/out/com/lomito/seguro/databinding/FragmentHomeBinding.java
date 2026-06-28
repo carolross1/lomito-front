@@ -4,15 +4,17 @@ package com.lomito.seguro.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
-import com.google.android.material.button.MaterialButton;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.lomito.seguro.R;
 import java.lang.NullPointerException;
@@ -21,22 +23,31 @@ import java.lang.String;
 
 public final class FragmentHomeBinding implements ViewBinding {
   @NonNull
-  private final CoordinatorLayout rootView;
+  private final ConstraintLayout rootView;
+
+  @NonNull
+  public final LinearLayout actionsContainer;
 
   @NonNull
   public final TextView badgeAlertas;
 
   @NonNull
-  public final MaterialButton btnAlertas;
+  public final LinearLayout btnAlertas;
 
   @NonNull
-  public final MaterialButton btnRefugios;
+  public final LinearLayout btnMural;
 
   @NonNull
-  public final MaterialButton btnSimulador;
+  public final LinearLayout btnRefugios;
+
+  @NonNull
+  public final LinearLayout btnSimulador;
 
   @NonNull
   public final FloatingActionButton fabAgregarMascota;
+
+  @NonNull
+  public final ImageView ivEmpty;
 
   @NonNull
   public final ProgressBar progressBar;
@@ -45,27 +56,36 @@ public final class FragmentHomeBinding implements ViewBinding {
   public final RecyclerView rvMascotas;
 
   @NonNull
+  public final MaterialToolbar toolbar;
+
+  @NonNull
   public final TextView tvEmpty;
 
-  private FragmentHomeBinding(@NonNull CoordinatorLayout rootView, @NonNull TextView badgeAlertas,
-      @NonNull MaterialButton btnAlertas, @NonNull MaterialButton btnRefugios,
-      @NonNull MaterialButton btnSimulador, @NonNull FloatingActionButton fabAgregarMascota,
+  private FragmentHomeBinding(@NonNull ConstraintLayout rootView,
+      @NonNull LinearLayout actionsContainer, @NonNull TextView badgeAlertas,
+      @NonNull LinearLayout btnAlertas, @NonNull LinearLayout btnMural,
+      @NonNull LinearLayout btnRefugios, @NonNull LinearLayout btnSimulador,
+      @NonNull FloatingActionButton fabAgregarMascota, @NonNull ImageView ivEmpty,
       @NonNull ProgressBar progressBar, @NonNull RecyclerView rvMascotas,
-      @NonNull TextView tvEmpty) {
+      @NonNull MaterialToolbar toolbar, @NonNull TextView tvEmpty) {
     this.rootView = rootView;
+    this.actionsContainer = actionsContainer;
     this.badgeAlertas = badgeAlertas;
     this.btnAlertas = btnAlertas;
+    this.btnMural = btnMural;
     this.btnRefugios = btnRefugios;
     this.btnSimulador = btnSimulador;
     this.fabAgregarMascota = fabAgregarMascota;
+    this.ivEmpty = ivEmpty;
     this.progressBar = progressBar;
     this.rvMascotas = rvMascotas;
+    this.toolbar = toolbar;
     this.tvEmpty = tvEmpty;
   }
 
   @Override
   @NonNull
-  public CoordinatorLayout getRoot() {
+  public ConstraintLayout getRoot() {
     return rootView;
   }
 
@@ -90,6 +110,12 @@ public final class FragmentHomeBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.actionsContainer;
+      LinearLayout actionsContainer = ViewBindings.findChildViewById(rootView, id);
+      if (actionsContainer == null) {
+        break missingId;
+      }
+
       id = R.id.badgeAlertas;
       TextView badgeAlertas = ViewBindings.findChildViewById(rootView, id);
       if (badgeAlertas == null) {
@@ -97,19 +123,25 @@ public final class FragmentHomeBinding implements ViewBinding {
       }
 
       id = R.id.btnAlertas;
-      MaterialButton btnAlertas = ViewBindings.findChildViewById(rootView, id);
+      LinearLayout btnAlertas = ViewBindings.findChildViewById(rootView, id);
       if (btnAlertas == null) {
         break missingId;
       }
 
+      id = R.id.btnMural;
+      LinearLayout btnMural = ViewBindings.findChildViewById(rootView, id);
+      if (btnMural == null) {
+        break missingId;
+      }
+
       id = R.id.btnRefugios;
-      MaterialButton btnRefugios = ViewBindings.findChildViewById(rootView, id);
+      LinearLayout btnRefugios = ViewBindings.findChildViewById(rootView, id);
       if (btnRefugios == null) {
         break missingId;
       }
 
       id = R.id.btnSimulador;
-      MaterialButton btnSimulador = ViewBindings.findChildViewById(rootView, id);
+      LinearLayout btnSimulador = ViewBindings.findChildViewById(rootView, id);
       if (btnSimulador == null) {
         break missingId;
       }
@@ -117,6 +149,12 @@ public final class FragmentHomeBinding implements ViewBinding {
       id = R.id.fabAgregarMascota;
       FloatingActionButton fabAgregarMascota = ViewBindings.findChildViewById(rootView, id);
       if (fabAgregarMascota == null) {
+        break missingId;
+      }
+
+      id = R.id.ivEmpty;
+      ImageView ivEmpty = ViewBindings.findChildViewById(rootView, id);
+      if (ivEmpty == null) {
         break missingId;
       }
 
@@ -132,14 +170,21 @@ public final class FragmentHomeBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.toolbar;
+      MaterialToolbar toolbar = ViewBindings.findChildViewById(rootView, id);
+      if (toolbar == null) {
+        break missingId;
+      }
+
       id = R.id.tvEmpty;
       TextView tvEmpty = ViewBindings.findChildViewById(rootView, id);
       if (tvEmpty == null) {
         break missingId;
       }
 
-      return new FragmentHomeBinding((CoordinatorLayout) rootView, badgeAlertas, btnAlertas,
-          btnRefugios, btnSimulador, fabAgregarMascota, progressBar, rvMascotas, tvEmpty);
+      return new FragmentHomeBinding((ConstraintLayout) rootView, actionsContainer, badgeAlertas,
+          btnAlertas, btnMural, btnRefugios, btnSimulador, fabAgregarMascota, ivEmpty, progressBar,
+          rvMascotas, toolbar, tvEmpty);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

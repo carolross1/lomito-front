@@ -1,0 +1,4 @@
+com.lomito.seguro.test.mobile-androidTest-0 C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\build\generated\res\resValues\androidTest\debug
+com.lomito.seguro.test.mobile-mergeDebugAndroidTestResources-1 C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\merged.dir
+com.lomito.seguro.test.mobile-mergeDebugAndroidTestResources-2 C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\stripped.dir
+com.lomito.seguro.test.mobile-debugAndroidTest-3 C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\mobile\build\intermediates\merged_res\debugAndroidTest\mergeDebugAndroidTestResources

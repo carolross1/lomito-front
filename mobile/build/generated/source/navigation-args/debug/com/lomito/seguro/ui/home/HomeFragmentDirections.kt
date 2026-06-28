@@ -39,5 +39,8 @@ public class HomeFragmentDirections private constructor() {
 
     public fun actionHomeToSimulator(): NavDirections =
         ActionOnlyNavDirections(R.id.action_home_to_simulator)
+
+    public fun actionHomeToMural(): NavDirections =
+        ActionOnlyNavDirections(R.id.action_home_to_mural)
   }
 }

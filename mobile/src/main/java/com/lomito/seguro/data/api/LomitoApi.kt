@@ -19,19 +19,18 @@ interface LomitoApi {
     @PUT("auth/profile/{id}")
     suspend fun updateProfile(@Path("id") id: String, @Body data: Map<String, String>): Response<Usuario>
 
-    // MASCOTAS
+    // MASCOTAS — rutas estáticas primero, luego las de {id}
     @GET("mascotas")
     suspend fun getMascotas(@Query("ownerId") ownerId: String): Response<List<Mascota>>
-
-    @GET("mascotas/{id}")
-    suspend fun getMascotaById(@Path("id") id: String): Response<Mascota>
 
     @GET("mascotas/estado")
     suspend fun getMascotasByEstado(@Query("estado") estado: String): Response<List<Mascota>>
 
-
     @POST("mascotas")
     suspend fun createMascota(@Body mascota: CreateMascotaRequest): Response<Mascota>
+
+    @GET("mascotas/{id}")
+    suspend fun getMascotaById(@Path("id") id: String): Response<Mascota>
 
     @PUT("mascotas/{id}")
     suspend fun updateMascota(@Path("id") id: String, @Body data: Map<String, Any>): Response<Mascota>
@@ -58,7 +57,7 @@ interface LomitoApi {
     @PUT("alertas/{id}/leida")
     suspend fun marcarLeida(@Path("id") id: String): Response<Map<String, Any>>
 
-    @PUT("alertas/leidas/{ownerId}")
+    @PUT("alertas.leidas/{ownerId}")
     suspend fun marcarTodasLeidas(@Path("ownerId") ownerId: String): Response<Map<String, Any>>
 
     // REPORTES

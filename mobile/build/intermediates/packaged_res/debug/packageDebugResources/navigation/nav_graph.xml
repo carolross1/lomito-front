@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/loginFragment">
 
@@ -30,6 +29,7 @@
         <action android:id="@+id/action_home_to_alertas" app:destination="@id/alertasFragment"/>
         <action android:id="@+id/action_home_to_refugios" app:destination="@id/refugiosFragment"/>
         <action android:id="@+id/action_home_to_simulator" app:destination="@id/simulatorFragment"/>
+        <action android:id="@+id/action_home_to_mural" app:destination="@id/muralFragment"/>
     </fragment>
 
     <fragment android:id="@+id/mascotaDetailFragment"
@@ -44,7 +44,11 @@
 
     <fragment android:id="@+id/alertasFragment"
         android:name="com.lomito.seguro.ui.alertas.AlertasFragment"
-        android:label="Alertas"/>
+        android:label="Alertas">
+        <!-- ✅ Agregar acción para navegar al detalle de mascota desde alertas -->
+        <action android:id="@+id/action_alertas_to_mascota_detail"
+            app:destination="@id/mascotaDetailFragment"/>
+    </fragment>
 
     <fragment android:id="@+id/refugiosFragment"
         android:name="com.lomito.seguro.ui.refugios.RefugiosFragment"
@@ -53,4 +57,11 @@
     <fragment android:id="@+id/simulatorFragment"
         android:name="com.lomito.seguro.ui.simulator.SimulatorFragment"
         android:label="Simulador BLE"/>
+
+    <fragment android:id="@+id/muralFragment"
+        android:name="com.lomito.seguro.ui.mural.MuralFragment"
+        android:label="Mural de Mascotas">
+        <action android:id="@+id/action_mural_to_mascota_detail" app:destination="@id/mascotaDetailFragment"/>
+    </fragment>
+
 </navigation>

@@ -1,50 +1,62 @@
 [
     {
-        "merged": "com.lomito.seguro.mobile-mergeDebugResources-52:/layout/activity_main.xml",
-        "source": "com.lomito.seguro.mobile-main-55:/layout/activity_main.xml"
+        "merged": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-mergeDebugResources-53:\\layout\\fragment_simulator.xml",
+        "source": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-main-56:\\layout\\fragment_simulator.xml"
     },
     {
-        "merged": "com.lomito.seguro.mobile-mergeDebugResources-52:/layout/fragment_refugios.xml",
-        "source": "com.lomito.seguro.mobile-main-55:/layout/fragment_refugios.xml"
+        "merged": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-mergeDebugResources-53:\\layout\\item_alerta.xml",
+        "source": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-main-56:\\layout\\item_alerta.xml"
     },
     {
-        "merged": "com.lomito.seguro.mobile-mergeDebugResources-52:/layout/fragment_home.xml",
-        "source": "com.lomito.seguro.mobile-main-55:/layout/fragment_home.xml"
+        "merged": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-mergeDebugResources-53:\\layout\\fragment_register.xml",
+        "source": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-main-56:\\layout\\fragment_register.xml"
     },
     {
-        "merged": "com.lomito.seguro.mobile-mergeDebugResources-52:/layout/fragment_crear_mascota.xml",
-        "source": "com.lomito.seguro.mobile-main-55:/layout/fragment_crear_mascota.xml"
+        "merged": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-mergeDebugResources-53:\\layout\\fragment_mascota_detail.xml",
+        "source": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-main-56:\\layout\\fragment_mascota_detail.xml"
     },
     {
-        "merged": "com.lomito.seguro.mobile-mergeDebugResources-52:/layout/fragment_mascota_detail.xml",
-        "source": "com.lomito.seguro.mobile-main-55:/layout/fragment_mascota_detail.xml"
+        "merged": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-mergeDebugResources-53:\\layout\\fragment_crear_mascota.xml",
+        "source": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-main-56:\\layout\\fragment_crear_mascota.xml"
     },
     {
-        "merged": "com.lomito.seguro.mobile-mergeDebugResources-52:/layout/fragment_simulator.xml",
-        "source": "com.lomito.seguro.mobile-main-55:/layout/fragment_simulator.xml"
+        "merged": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-mergeDebugResources-53:\\layout\\fragment_refugios.xml",
+        "source": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-main-56:\\layout\\fragment_refugios.xml"
     },
     {
-        "merged": "com.lomito.seguro.mobile-mergeDebugResources-52:/layout/item_alerta.xml",
-        "source": "com.lomito.seguro.mobile-main-55:/layout/item_alerta.xml"
+        "merged": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-mergeDebugResources-53:\\layout\\fragment_home.xml",
+        "source": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-main-56:\\layout\\fragment_home.xml"
     },
     {
-        "merged": "com.lomito.seguro.mobile-mergeDebugResources-52:/layout/fragment_register.xml",
-        "source": "com.lomito.seguro.mobile-main-55:/layout/fragment_register.xml"
+        "merged": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-mergeDebugResources-53:\\layout\\item_refugio.xml",
+        "source": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-main-56:\\layout\\item_refugio.xml"
     },
     {
-        "merged": "com.lomito.seguro.mobile-mergeDebugResources-52:/layout/item_refugio.xml",
-        "source": "com.lomito.seguro.mobile-main-55:/layout/item_refugio.xml"
+        "merged": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-mergeDebugResources-53:\\layout\\activity_main.xml",
+        "source": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-main-56:\\layout\\activity_main.xml"
     },
     {
-        "merged": "com.lomito.seguro.mobile-mergeDebugResources-52:/layout/fragment_login.xml",
-        "source": "com.lomito.seguro.mobile-main-55:/layout/fragment_login.xml"
+        "merged": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-mergeDebugResources-53:\\layout\\item_mascota_card.xml",
+        "source": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-main-56:\\layout\\item_mascota_card.xml"
     },
     {
-        "merged": "com.lomito.seguro.mobile-mergeDebugResources-52:/layout/item_mascota_card.xml",
-        "source": "com.lomito.seguro.mobile-main-55:/layout/item_mascota_card.xml"
+        "merged": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-mergeDebugResources-53:\\layout\\item_mascota_mural.xml",
+        "source": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-main-56:\\layout\\item_mascota_mural.xml"
     },
     {
-        "merged": "com.lomito.seguro.mobile-mergeDebugResources-52:/layout/fragment_alertas.xml",
-        "source": "com.lomito.seguro.mobile-main-55:/layout/fragment_alertas.xml"
+        "merged": "com.lomito.seguro.mobile-mergeDebugResources-53:/layout/fragment_home.xml",
+        "source": "com.lomito.seguro.mobile-main-56:/layout/fragment_home.xml"
+    },
+    {
+        "merged": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-mergeDebugResources-53:\\layout\\fragment_login.xml",
+        "source": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-main-56:\\layout\\fragment_login.xml"
+    },
+    {
+        "merged": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-mergeDebugResources-53:\\layout\\fragment_mural.xml",
+        "source": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-main-56:\\layout\\fragment_mural.xml"
+    },
+    {
+        "merged": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-mergeDebugResources-53:\\layout\\fragment_alertas.xml",
+        "source": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-main-56:\\layout\\fragment_alertas.xml"
     }
 ]
