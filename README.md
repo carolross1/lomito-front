@@ -215,6 +215,39 @@ El backend expone endpoints REST consumidos por Retrofit desde la app móvil y, 
 
 
 ## Imágenes
+### Capturas de pantalla — Móvil
+
+<table>
+  <tr>
+    <td><img width="260" alt="image1" src="https://github.com/user-attachments/assets/eb5ac2eb-6b00-48a3-9b05-0eee0126764d" /></td>
+    <td><img width="260" alt="image2" src="https://github.com/user-attachments/assets/dbaf60ce-897e-4e55-b8f3-d89066d36238" /></td>
+    <td><img width="260" alt="image3" src="https://github.com/user-attachments/assets/46217ccf-a21a-4ba5-82ab-a541f0bc16bb" /></td>
+  </tr>
+</table>
+
+### Capturas de pantalla — watch
+
+<table>
+  <tr>
+    <td><img width="260" alt="image4" src="https://github.com/user-attachments/assets/23b0fd1b-e414-4c0a-9205-53265bdf618c" /></td>
+    <td><img width="260" alt="image5" src="https://github.com/user-attachments/assets/06e2c699-0dcf-4e7d-9047-56838fe8e200" /></td>
+    <td><img width="260" alt="image6" src="https://github.com/user-attachments/assets/43607ea8-344c-4011-95b0-ec2ac16e609d" /></td>
+  </tr>
+  <tr>
+    <td><img width="260" alt="image7" src="https://github.com/user-attachments/assets/676e5026-06d0-4b4f-abe9-872d320c6d4a" /></td>
+    <td><img width="260" alt="image8" src="https://github.com/user-attachments/assets/1868a020-ff59-45a3-87ec-e2cad9e69c2b" /></td>
+    <td><img width="260" alt="image9" src="https://github.com/user-attachments/assets/f544a992-7246-4dc6-b121-62f86af7861d" /></td>
+  </tr>
+  <tr>
+    <td><img width="260" alt="image10" src="https://github.com/user-attachments/assets/8912382c-c51c-4195-b70c-0c29ce408279" /></td>
+    <td><img width="260" alt="image11" src="https://github.com/user-attachments/assets/cf8cf682-2d21-49f3-8494-e8f28906f9c8" /></td>
+    <td><img width="260" alt="image12" src="https://github.com/user-attachments/assets/7057c242-0558-4109-88c4-a1c64a2760bb" /></td>
+    <td> <img width="436" alt="image13" src="https://github.com/user-attachments/assets/1149910a-1f25-437f-b55f-1d344ecc3bc7" /></td>
+
+  </tr>
+</table>
+
+
 
 
 ## 📄 Licencia
