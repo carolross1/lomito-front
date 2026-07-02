@@ -213,6 +213,10 @@ El backend expone endpoints REST consumidos por Retrofit desde la app móvil y, 
 
 ---
 
+
+## Imágenes
+
+
 ## 📄 Licencia
 
 Este proyecto fue desarrollado como parte de la asignatura Desarrollo para Dispositivos Inteligentes en la Universidad Tecnológica del Norte de Guanajuato, bajo la supervisión del profesor Anastacio Rodríguez García.
