@@ -76,7 +76,7 @@ class ReportViewModel(app: android.app.Application) : AndroidViewModel(app) {
                         .sendMessage(node.id, "/watch/reporte", payload).await()
                 }
 
-                val url = URL("http://192.168.100.12:3000/api/reportes")
+                val url = URL("http://10.31.0.65:3000/api/reportes")
                 val conn = url.openConnection() as java.net.HttpURLConnection
                 conn.requestMethod = "POST"
                 conn.setRequestProperty("Content-Type", "application/json")

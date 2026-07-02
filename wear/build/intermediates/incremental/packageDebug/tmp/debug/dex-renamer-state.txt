@@ -1,4 +1,4 @@
-#Sat Jun 27 22:55:02 CST 2026
+#Wed Jul 01 18:49:09 CST 2026
 base.0=C\:\\Users\\carol\\Downloads\\LomitoSeguro_Frontend\\LomitoSeguro\\wear\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
 base.1=C\:\\Users\\carol\\Downloads\\LomitoSeguro_Frontend\\LomitoSeguro\\wear\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex
 base.2=C\:\\Users\\carol\\Downloads\\LomitoSeguro_Frontend\\LomitoSeguro\\wear\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\12\\classes.dex

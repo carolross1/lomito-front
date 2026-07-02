@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class AlertasRepository {
-    private val backendUrl = "http://192.168.100.12:3000"
+    private val backendUrl = "http://10.31.0.65:3000"
     private val TAG = "AlertasRepository"
 
     suspend fun getAlertas(ownerId: Int): AlertasResult {

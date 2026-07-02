@@ -58,7 +58,7 @@ class AlertasViewModel : ViewModel() {
                         alerta
                     }
                 }
-                _alertas.value = alertasActualizadas
+                _alertas.value = alertasActualizadas ?: emptyList()
                 true
             } else {
                 _errorMessage.value = result.error ?: "Error al marcar como leída"
@@ -80,7 +80,7 @@ class AlertasViewModel : ViewModel() {
                 val alertasActualizadas = _alertas.value?.map { alerta ->
                     alerta.copy(leida = true)
                 }
-                _alertas.value = alertasActualizadas
+                _alertas.value = alertasActualizadas ?: emptyList()
                 true
             } else {
                 _errorMessage.value = result.error ?: "Error al marcar todas como leídas"

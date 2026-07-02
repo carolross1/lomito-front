@@ -197,7 +197,7 @@ class SimulatorFragment : Fragment() {
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val url = URL("http://192.168.100.12:3000/api/simulador/distancia")
+                val url = URL("http://10.31.0.65:3000/api/simulador/distancia")
                 val conn = url.openConnection() as HttpURLConnection
                 conn.requestMethod = "POST"
                 conn.connectTimeout = 3000

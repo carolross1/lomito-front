@@ -1,5 +1,9 @@
 [
     {
+        "merged": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.wear-debug-48:\\xml_network_security_config.xml.flat",
+        "source": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.wear-main-50:\\xml\\network_security_config.xml"
+    },
+    {
         "merged": "com.lomito.seguro.wear-debug-48:/xml_network_security_config.xml.flat",
         "source": "com.lomito.seguro.wear-main-50:/xml/network_security_config.xml"
     }

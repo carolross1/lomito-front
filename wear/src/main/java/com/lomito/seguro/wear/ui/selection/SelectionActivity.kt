@@ -283,6 +283,6 @@ class SelectionActivity : ComponentActivity() {
     }
 
     companion object {
-        private const val backendUrl = "http://192.168.100.12:3000"
+        private const val backendUrl = "http://10.31.0.65:3000"
     }
 }

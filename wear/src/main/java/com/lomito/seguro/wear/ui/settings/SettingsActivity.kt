@@ -33,7 +33,7 @@ data class MascotaSetting(
 )
 
 class SettingsActivity : ComponentActivity() {
-    private val backendUrl = "http://192.168.100.12:3000"
+    private val backendUrl = "http://10.31.0.65:3000"
     private val userId = 2 // Usuario fijo por ahora
 
     override fun onCreate(savedInstanceState: Bundle?) {
