@@ -48,7 +48,7 @@ data class MascotaPerdida(
 )
 
 class ReportarAvistamientoActivity : ComponentActivity() {
-    private val backendUrl = "http://10.31.0.65:3000"
+    private val backendUrl = "http://192.168.100.12:3000"
     private var ubicacionLat = 0.0
     private var ubicacionLng = 0.0
     private var ubicacionTexto = "Obteniendo ubicacion..."

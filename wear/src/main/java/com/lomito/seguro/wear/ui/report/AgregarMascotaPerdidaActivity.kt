@@ -31,7 +31,7 @@ private const val KEY_TEXTO = "key_texto_input"
 enum class Paso { NOMBRE, ESPECIE, RAZA, COLOR, TELEFONO, CONFIRMAR }
 
 class AgregarMascotaPerdidaActivity : ComponentActivity() {
-    private val backendUrl = "http://10.31.0.65:3000"
+    private val backendUrl = "http://192.168.100.12:3000"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 rootProject.name = "LomitoSeguro"
 include(":mobile")
 include(":wear")
+include(":tv")

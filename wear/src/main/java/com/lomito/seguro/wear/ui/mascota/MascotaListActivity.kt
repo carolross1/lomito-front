@@ -44,7 +44,7 @@ data class MascotaItem(
 
 class MascotaListActivity : ComponentActivity() {
     private var pollingJob: Job? = null
-    private val backendUrl = "http://10.31.0.65:3000"
+    private val backendUrl = "http://192.168.100.12:3000"
     private val distanciasSimuladas = mutableStateMapOf<String, Int>()
 
     // ✅ State para mascotas con actualización inmediata

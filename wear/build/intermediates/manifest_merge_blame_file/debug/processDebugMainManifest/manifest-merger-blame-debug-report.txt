@@ -66,318 +66,319 @@
 35-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:19:9-41
 36        android:networkSecurityConfig="@xml/network_security_config"
 36-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:22:9-69
-37        android:theme="@android:style/Theme.DeviceDefault"
-37-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:20:9-59
-38        android:usesCleartextTraffic="true" >
-38-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:21:9-44
-39        <uses-library
-39-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:24:9-91
-40            android:name="com.google.android.wearable"
-40-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:24:23-65
-41            android:required="true" />
-41-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:24:66-89
-42
-43        <meta-data
-43-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:25:9-97
-44            android:name="com.google.android.wearable.standalone"
-44-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:25:20-73
-45            android:value="false" />
-45-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:25:74-95
-46
-47        <activity
-47-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:27:9-30:65
-48            android:name="com.lomito.seguro.wear.ui.home.WearMainActivity"
-48-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:28:13-53
-49            android:exported="false"
-49-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:29:13-37
-50            android:theme="@android:style/Theme.DeviceDefault" />
-50-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:30:13-63
-51        <activity
-51-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:32:9-35:65
-52            android:name="com.lomito.seguro.wear.ui.alert.AlertActivity"
-52-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:33:13-51
-53            android:exported="false"
-53-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:34:13-37
-54            android:theme="@android:style/Theme.DeviceDefault" />
-54-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:35:13-63
-55        <activity
-55-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:37:9-40:65
-56            android:name="com.lomito.seguro.wear.ui.report.ReportActivity"
-56-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:38:13-53
-57            android:exported="false"
-57-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:39:13-37
-58            android:theme="@android:style/Theme.DeviceDefault" />
-58-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:40:13-63
-59        <activity
-59-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:42:9-45:65
-60            android:name="com.lomito.seguro.wear.ui.report.MascotaPerdidaDetailActivity"
-60-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:43:13-67
-61            android:exported="false"
-61-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:44:13-37
-62            android:theme="@android:style/Theme.DeviceDefault" />
-62-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:45:13-63
-63        <activity
-63-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:47:9-50:65
-64            android:name="com.lomito.seguro.wear.ui.report.AgregarMascotaPerdidaActivity"
-64-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:48:13-68
-65            android:exported="false"
-65-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:49:13-37
-66            android:theme="@android:style/Theme.DeviceDefault" />
-66-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:50:13-63
-67        <activity
-67-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:52:9-60:20
-68            android:name="com.lomito.seguro.wear.ui.dashboard.DashboardActivity"
-68-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:53:13-59
-69            android:exported="true"
-69-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:54:13-36
-70            android:theme="@android:style/Theme.DeviceDefault" >
-70-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:55:13-63
-71            <intent-filter>
-71-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:56:13-59:29
-72                <action android:name="android.intent.action.MAIN" />
-72-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:57:17-68
-72-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:57:25-66
-73
-74                <category android:name="android.intent.category.LAUNCHER" />
-74-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:58:17-76
-74-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:58:27-74
-75            </intent-filter>
-76        </activity>
-77        <activity
-77-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:62:9-65:65
-78            android:name="com.lomito.seguro.wear.ui.mascota.MascotaListActivity"
-78-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:63:13-59
-79            android:exported="false"
-79-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:64:13-37
-80            android:theme="@android:style/Theme.DeviceDefault" />
-80-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:65:13-63
-81        <activity
-81-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:67:9-70:65
-82            android:name="com.lomito.seguro.wear.ui.mascota.AddMascotaActivity"
-82-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:68:13-58
-83            android:exported="false"
-83-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:69:13-37
-84            android:theme="@android:style/Theme.DeviceDefault" />
-84-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:70:13-63
-85        <activity
-85-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:72:9-75:65
-86            android:name="com.lomito.seguro.wear.ui.settings.SettingsActivity"
-86-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:73:13-57
-87            android:exported="false"
-87-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:74:13-37
-88            android:theme="@android:style/Theme.DeviceDefault" />
-88-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:75:13-63
-89        <activity
-89-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:77:9-80:65
-90            android:name="com.lomito.seguro.wear.ui.selection.SelectionActivity"
-90-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:78:13-59
-91            android:exported="false"
-91-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:79:13-37
-92            android:theme="@android:style/Theme.DeviceDefault" />
-92-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:80:13-63
-93        <activity
-93-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:82:9-85:65
-94            android:name="com.lomito.seguro.wear.ui.mascota.MascotaDetailActivity"
-94-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:83:13-61
-95            android:exported="false"
-95-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:84:13-37
-96            android:theme="@android:style/Theme.DeviceDefault" />
-96-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:85:13-63
-97        <activity
-97-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:87:9-90:65
-98            android:name="com.lomito.seguro.wear.ui.report.ReportarAvistamientoActivity"
-98-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:88:13-67
-99            android:exported="false"
-99-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:89:13-37
-100            android:theme="@android:style/Theme.DeviceDefault" />
-100-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:90:13-63
-101        <activity
-101-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:92:9-95:65
-102            android:name="com.lomito.seguro.wear.ui.mascota.MarcarPerdidaActivity"
-102-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:93:13-61
-103            android:exported="false"
-103-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:94:13-37
-104            android:theme="@android:style/Theme.DeviceDefault" />
-104-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:95:13-63
-105
-106        <!-- ✅ Servicio para recibir mensajes del móvil -->
-107        <service
-107-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:98:9-123:19
-108            android:name="com.lomito.seguro.wear.data.WearMessageService"
-108-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:99:13-52
-109            android:exported="true"
-109-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:100:13-36
-110            android:permission="com.google.android.gms.wearable.BIND_WEARABLE_LISTENER" >
-110-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:101:13-88
-111            <intent-filter>
-111-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:102:13-105:29
-112                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
-112-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:103:17-90
-112-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:103:25-88
-113
-114                <data
-114-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:17-99
-115                    android:host="*"
-115-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:45-61
-116                    android:pathPrefix="/ble/distancia"
-116-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:62-97
-117                    android:scheme="wear" />
-117-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:23-44
-118            </intent-filter>
-119            <intent-filter>
-119-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:106:13-109:29
-120                <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />
-120-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:107:17-86
-120-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:107:25-84
-121
-122                <data
-122-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:17-99
-123                    android:host="*"
-123-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:45-61
-124                    android:pathPrefix="/ble/distancia"
-124-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:62-97
-125                    android:scheme="wear" />
-125-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:23-44
-126            </intent-filter>
-127            <!-- ✅ Agregar más paths para recibir mensajes -->
-128            <intent-filter>
-128-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:111:13-114:29
-129                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
-129-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:103:17-90
-129-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:103:25-88
-130
-131                <data
-131-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:17-99
-132                    android:host="*"
-132-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:45-61
-133                    android:pathPrefix="/watch"
-133-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:62-97
-134                    android:scheme="wear" />
-134-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:23-44
-135            </intent-filter>
-136            <intent-filter>
-136-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:115:13-118:29
-137                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
-137-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:103:17-90
-137-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:103:25-88
-138
-139                <data
-139-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:17-99
-140                    android:host="*"
-140-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:45-61
-141                    android:pathPrefix="/mascota"
-141-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:62-97
-142                    android:scheme="wear" />
-142-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:23-44
-143            </intent-filter>
-144            <intent-filter>
-144-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:119:13-122:29
-145                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
-145-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:103:17-90
-145-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:103:25-88
-146
-147                <data
-147-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:17-99
-148                    android:host="*"
-148-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:45-61
-149                    android:pathPrefix="/alerta"
-149-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:62-97
-150                    android:scheme="wear" />
-150-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:23-44
-151            </intent-filter>
-152        </service>
-153
-154        <!-- Servicio de polling global -->
-155        <service
-155-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:126:9-129:39
-156            android:name="com.lomito.seguro.wear.data.PollingService"
-156-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:127:13-48
-157            android:exported="false"
-157-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:129:13-37
-158            android:foregroundServiceType="dataSync" />
-158-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:128:13-53
-159
-160        <activity
-160-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\carol\.gradle\caches\transforms-4\b881951ec5b9b7fec55f5ce47f130c8a\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:5:9-173
-161            android:name="com.google.android.gms.common.api.GoogleApiActivity"
-161-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\carol\.gradle\caches\transforms-4\b881951ec5b9b7fec55f5ce47f130c8a\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:5:19-85
-162            android:exported="false"
-162-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\carol\.gradle\caches\transforms-4\b881951ec5b9b7fec55f5ce47f130c8a\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:5:146-170
-163            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-163-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\carol\.gradle\caches\transforms-4\b881951ec5b9b7fec55f5ce47f130c8a\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:5:86-145
-164
-165        <provider
-165-->[androidx.emoji2:emoji2:1.3.0] C:\Users\carol\.gradle\caches\transforms-4\f3e56642b81b0f2bc7f918a04814cbc1\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
-166            android:name="androidx.startup.InitializationProvider"
-166-->[androidx.emoji2:emoji2:1.3.0] C:\Users\carol\.gradle\caches\transforms-4\f3e56642b81b0f2bc7f918a04814cbc1\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:25:13-67
-167            android:authorities="com.lomito.seguro.wear.androidx-startup"
-167-->[androidx.emoji2:emoji2:1.3.0] C:\Users\carol\.gradle\caches\transforms-4\f3e56642b81b0f2bc7f918a04814cbc1\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:26:13-68
-168            android:exported="false" >
-168-->[androidx.emoji2:emoji2:1.3.0] C:\Users\carol\.gradle\caches\transforms-4\f3e56642b81b0f2bc7f918a04814cbc1\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:27:13-37
-169            <meta-data
-169-->[androidx.emoji2:emoji2:1.3.0] C:\Users\carol\.gradle\caches\transforms-4\f3e56642b81b0f2bc7f918a04814cbc1\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
-170                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-170-->[androidx.emoji2:emoji2:1.3.0] C:\Users\carol\.gradle\caches\transforms-4\f3e56642b81b0f2bc7f918a04814cbc1\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:30:17-75
-171                android:value="androidx.startup" />
-171-->[androidx.emoji2:emoji2:1.3.0] C:\Users\carol\.gradle\caches\transforms-4\f3e56642b81b0f2bc7f918a04814cbc1\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:31:17-49
-172            <meta-data
-172-->[androidx.lifecycle:lifecycle-process:2.8.0] C:\Users\carol\.gradle\caches\transforms-4\62356d22ace46af89f86e5acfe3371a2\transformed\jetified-lifecycle-process-2.8.0\AndroidManifest.xml:29:13-31:52
-173                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-173-->[androidx.lifecycle:lifecycle-process:2.8.0] C:\Users\carol\.gradle\caches\transforms-4\62356d22ace46af89f86e5acfe3371a2\transformed\jetified-lifecycle-process-2.8.0\AndroidManifest.xml:30:17-78
-174                android:value="androidx.startup" />
-174-->[androidx.lifecycle:lifecycle-process:2.8.0] C:\Users\carol\.gradle\caches\transforms-4\62356d22ace46af89f86e5acfe3371a2\transformed\jetified-lifecycle-process-2.8.0\AndroidManifest.xml:31:17-49
-175            <meta-data
-175-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:29:13-31:52
-176                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
-176-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:30:17-85
-177                android:value="androidx.startup" />
-177-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:31:17-49
-178        </provider>
-179
-180        <meta-data
-180-->[com.google.android.gms:play-services-basement:18.4.0] C:\Users\carol\.gradle\caches\transforms-4\58d5622fbe17580d27eb63a2a9a3b37c\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:6:9-122
-181            android:name="com.google.android.gms.version"
-181-->[com.google.android.gms:play-services-basement:18.4.0] C:\Users\carol\.gradle\caches\transforms-4\58d5622fbe17580d27eb63a2a9a3b37c\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:6:20-65
-182            android:value="@integer/google_play_services_version" />
-182-->[com.google.android.gms:play-services-basement:18.4.0] C:\Users\carol\.gradle\caches\transforms-4\58d5622fbe17580d27eb63a2a9a3b37c\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:6:66-119
-183
-184        <receiver
-184-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:34:9-52:20
-185            android:name="androidx.profileinstaller.ProfileInstallReceiver"
-185-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:35:13-76
-186            android:directBootAware="false"
-186-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:36:13-44
-187            android:enabled="true"
-187-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:37:13-35
-188            android:exported="true"
-188-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:38:13-36
-189            android:permission="android.permission.DUMP" >
-189-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:39:13-57
-190            <intent-filter>
-190-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:40:13-42:29
-191                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
-191-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:41:17-91
-191-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:41:25-88
-192            </intent-filter>
-193            <intent-filter>
-193-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:43:13-45:29
-194                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
-194-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:44:17-85
-194-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:44:25-82
-195            </intent-filter>
-196            <intent-filter>
-196-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:46:13-48:29
-197                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
-197-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:47:17-88
-197-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:47:25-85
-198            </intent-filter>
-199            <intent-filter>
-199-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:49:13-51:29
-200                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
-200-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:50:17-95
-200-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:50:25-92
-201            </intent-filter>
-202        </receiver>
-203    </application>
-204
-205</manifest>
+37        android:testOnly="true"
+38        android:theme="@android:style/Theme.DeviceDefault"
+38-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:20:9-59
+39        android:usesCleartextTraffic="true" >
+39-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:21:9-44
+40        <uses-library
+40-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:24:9-91
+41            android:name="com.google.android.wearable"
+41-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:24:23-65
+42            android:required="true" />
+42-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:24:66-89
+43
+44        <meta-data
+44-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:25:9-97
+45            android:name="com.google.android.wearable.standalone"
+45-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:25:20-73
+46            android:value="false" />
+46-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:25:74-95
+47
+48        <activity
+48-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:27:9-30:65
+49            android:name="com.lomito.seguro.wear.ui.home.WearMainActivity"
+49-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:28:13-53
+50            android:exported="false"
+50-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:29:13-37
+51            android:theme="@android:style/Theme.DeviceDefault" />
+51-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:30:13-63
+52        <activity
+52-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:32:9-35:65
+53            android:name="com.lomito.seguro.wear.ui.alert.AlertActivity"
+53-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:33:13-51
+54            android:exported="false"
+54-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:34:13-37
+55            android:theme="@android:style/Theme.DeviceDefault" />
+55-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:35:13-63
+56        <activity
+56-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:37:9-40:65
+57            android:name="com.lomito.seguro.wear.ui.report.ReportActivity"
+57-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:38:13-53
+58            android:exported="false"
+58-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:39:13-37
+59            android:theme="@android:style/Theme.DeviceDefault" />
+59-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:40:13-63
+60        <activity
+60-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:42:9-45:65
+61            android:name="com.lomito.seguro.wear.ui.report.MascotaPerdidaDetailActivity"
+61-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:43:13-67
+62            android:exported="false"
+62-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:44:13-37
+63            android:theme="@android:style/Theme.DeviceDefault" />
+63-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:45:13-63
+64        <activity
+64-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:47:9-50:65
+65            android:name="com.lomito.seguro.wear.ui.report.AgregarMascotaPerdidaActivity"
+65-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:48:13-68
+66            android:exported="false"
+66-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:49:13-37
+67            android:theme="@android:style/Theme.DeviceDefault" />
+67-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:50:13-63
+68        <activity
+68-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:52:9-60:20
+69            android:name="com.lomito.seguro.wear.ui.dashboard.DashboardActivity"
+69-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:53:13-59
+70            android:exported="true"
+70-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:54:13-36
+71            android:theme="@android:style/Theme.DeviceDefault" >
+71-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:55:13-63
+72            <intent-filter>
+72-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:56:13-59:29
+73                <action android:name="android.intent.action.MAIN" />
+73-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:57:17-68
+73-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:57:25-66
+74
+75                <category android:name="android.intent.category.LAUNCHER" />
+75-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:58:17-76
+75-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:58:27-74
+76            </intent-filter>
+77        </activity>
+78        <activity
+78-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:62:9-65:65
+79            android:name="com.lomito.seguro.wear.ui.mascota.MascotaListActivity"
+79-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:63:13-59
+80            android:exported="false"
+80-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:64:13-37
+81            android:theme="@android:style/Theme.DeviceDefault" />
+81-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:65:13-63
+82        <activity
+82-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:67:9-70:65
+83            android:name="com.lomito.seguro.wear.ui.mascota.AddMascotaActivity"
+83-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:68:13-58
+84            android:exported="false"
+84-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:69:13-37
+85            android:theme="@android:style/Theme.DeviceDefault" />
+85-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:70:13-63
+86        <activity
+86-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:72:9-75:65
+87            android:name="com.lomito.seguro.wear.ui.settings.SettingsActivity"
+87-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:73:13-57
+88            android:exported="false"
+88-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:74:13-37
+89            android:theme="@android:style/Theme.DeviceDefault" />
+89-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:75:13-63
+90        <activity
+90-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:77:9-80:65
+91            android:name="com.lomito.seguro.wear.ui.selection.SelectionActivity"
+91-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:78:13-59
+92            android:exported="false"
+92-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:79:13-37
+93            android:theme="@android:style/Theme.DeviceDefault" />
+93-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:80:13-63
+94        <activity
+94-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:82:9-85:65
+95            android:name="com.lomito.seguro.wear.ui.mascota.MascotaDetailActivity"
+95-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:83:13-61
+96            android:exported="false"
+96-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:84:13-37
+97            android:theme="@android:style/Theme.DeviceDefault" />
+97-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:85:13-63
+98        <activity
+98-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:87:9-90:65
+99            android:name="com.lomito.seguro.wear.ui.report.ReportarAvistamientoActivity"
+99-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:88:13-67
+100            android:exported="false"
+100-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:89:13-37
+101            android:theme="@android:style/Theme.DeviceDefault" />
+101-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:90:13-63
+102        <activity
+102-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:92:9-95:65
+103            android:name="com.lomito.seguro.wear.ui.mascota.MarcarPerdidaActivity"
+103-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:93:13-61
+104            android:exported="false"
+104-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:94:13-37
+105            android:theme="@android:style/Theme.DeviceDefault" />
+105-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:95:13-63
+106
+107        <!-- ✅ Servicio para recibir mensajes del móvil -->
+108        <service
+108-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:98:9-123:19
+109            android:name="com.lomito.seguro.wear.data.WearMessageService"
+109-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:99:13-52
+110            android:exported="true"
+110-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:100:13-36
+111            android:permission="com.google.android.gms.wearable.BIND_WEARABLE_LISTENER" >
+111-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:101:13-88
+112            <intent-filter>
+112-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:102:13-105:29
+113                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+113-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:103:17-90
+113-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:103:25-88
+114
+115                <data
+115-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:17-99
+116                    android:host="*"
+116-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:45-61
+117                    android:pathPrefix="/ble/distancia"
+117-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:62-97
+118                    android:scheme="wear" />
+118-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:23-44
+119            </intent-filter>
+120            <intent-filter>
+120-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:106:13-109:29
+121                <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />
+121-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:107:17-86
+121-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:107:25-84
+122
+123                <data
+123-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:17-99
+124                    android:host="*"
+124-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:45-61
+125                    android:pathPrefix="/ble/distancia"
+125-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:62-97
+126                    android:scheme="wear" />
+126-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:23-44
+127            </intent-filter>
+128            <!-- ✅ Agregar más paths para recibir mensajes -->
+129            <intent-filter>
+129-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:111:13-114:29
+130                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+130-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:103:17-90
+130-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:103:25-88
+131
+132                <data
+132-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:17-99
+133                    android:host="*"
+133-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:45-61
+134                    android:pathPrefix="/watch"
+134-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:62-97
+135                    android:scheme="wear" />
+135-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:23-44
+136            </intent-filter>
+137            <intent-filter>
+137-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:115:13-118:29
+138                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+138-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:103:17-90
+138-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:103:25-88
+139
+140                <data
+140-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:17-99
+141                    android:host="*"
+141-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:45-61
+142                    android:pathPrefix="/mascota"
+142-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:62-97
+143                    android:scheme="wear" />
+143-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:23-44
+144            </intent-filter>
+145            <intent-filter>
+145-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:119:13-122:29
+146                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+146-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:103:17-90
+146-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:103:25-88
+147
+148                <data
+148-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:17-99
+149                    android:host="*"
+149-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:45-61
+150                    android:pathPrefix="/alerta"
+150-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:62-97
+151                    android:scheme="wear" />
+151-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:104:23-44
+152            </intent-filter>
+153        </service>
+154
+155        <!-- Servicio de polling global -->
+156        <service
+156-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:126:9-129:39
+157            android:name="com.lomito.seguro.wear.data.PollingService"
+157-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:127:13-48
+158            android:exported="false"
+158-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:129:13-37
+159            android:foregroundServiceType="dataSync" />
+159-->C:\Users\carol\Downloads\LomitoSeguro_Frontend\LomitoSeguro\wear\src\main\AndroidManifest.xml:128:13-53
+160
+161        <activity
+161-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\carol\.gradle\caches\transforms-4\b881951ec5b9b7fec55f5ce47f130c8a\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:5:9-173
+162            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+162-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\carol\.gradle\caches\transforms-4\b881951ec5b9b7fec55f5ce47f130c8a\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:5:19-85
+163            android:exported="false"
+163-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\carol\.gradle\caches\transforms-4\b881951ec5b9b7fec55f5ce47f130c8a\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:5:146-170
+164            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+164-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\carol\.gradle\caches\transforms-4\b881951ec5b9b7fec55f5ce47f130c8a\transformed\jetified-play-services-base-18.5.0\AndroidManifest.xml:5:86-145
+165
+166        <provider
+166-->[androidx.emoji2:emoji2:1.3.0] C:\Users\carol\.gradle\caches\transforms-4\f3e56642b81b0f2bc7f918a04814cbc1\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
+167            android:name="androidx.startup.InitializationProvider"
+167-->[androidx.emoji2:emoji2:1.3.0] C:\Users\carol\.gradle\caches\transforms-4\f3e56642b81b0f2bc7f918a04814cbc1\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:25:13-67
+168            android:authorities="com.lomito.seguro.wear.androidx-startup"
+168-->[androidx.emoji2:emoji2:1.3.0] C:\Users\carol\.gradle\caches\transforms-4\f3e56642b81b0f2bc7f918a04814cbc1\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:26:13-68
+169            android:exported="false" >
+169-->[androidx.emoji2:emoji2:1.3.0] C:\Users\carol\.gradle\caches\transforms-4\f3e56642b81b0f2bc7f918a04814cbc1\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:27:13-37
+170            <meta-data
+170-->[androidx.emoji2:emoji2:1.3.0] C:\Users\carol\.gradle\caches\transforms-4\f3e56642b81b0f2bc7f918a04814cbc1\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
+171                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+171-->[androidx.emoji2:emoji2:1.3.0] C:\Users\carol\.gradle\caches\transforms-4\f3e56642b81b0f2bc7f918a04814cbc1\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:30:17-75
+172                android:value="androidx.startup" />
+172-->[androidx.emoji2:emoji2:1.3.0] C:\Users\carol\.gradle\caches\transforms-4\f3e56642b81b0f2bc7f918a04814cbc1\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:31:17-49
+173            <meta-data
+173-->[androidx.lifecycle:lifecycle-process:2.8.0] C:\Users\carol\.gradle\caches\transforms-4\62356d22ace46af89f86e5acfe3371a2\transformed\jetified-lifecycle-process-2.8.0\AndroidManifest.xml:29:13-31:52
+174                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+174-->[androidx.lifecycle:lifecycle-process:2.8.0] C:\Users\carol\.gradle\caches\transforms-4\62356d22ace46af89f86e5acfe3371a2\transformed\jetified-lifecycle-process-2.8.0\AndroidManifest.xml:30:17-78
+175                android:value="androidx.startup" />
+175-->[androidx.lifecycle:lifecycle-process:2.8.0] C:\Users\carol\.gradle\caches\transforms-4\62356d22ace46af89f86e5acfe3371a2\transformed\jetified-lifecycle-process-2.8.0\AndroidManifest.xml:31:17-49
+176            <meta-data
+176-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:29:13-31:52
+177                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+177-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:30:17-85
+178                android:value="androidx.startup" />
+178-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:31:17-49
+179        </provider>
+180
+181        <meta-data
+181-->[com.google.android.gms:play-services-basement:18.4.0] C:\Users\carol\.gradle\caches\transforms-4\58d5622fbe17580d27eb63a2a9a3b37c\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:6:9-122
+182            android:name="com.google.android.gms.version"
+182-->[com.google.android.gms:play-services-basement:18.4.0] C:\Users\carol\.gradle\caches\transforms-4\58d5622fbe17580d27eb63a2a9a3b37c\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:6:20-65
+183            android:value="@integer/google_play_services_version" />
+183-->[com.google.android.gms:play-services-basement:18.4.0] C:\Users\carol\.gradle\caches\transforms-4\58d5622fbe17580d27eb63a2a9a3b37c\transformed\jetified-play-services-basement-18.4.0\AndroidManifest.xml:6:66-119
+184
+185        <receiver
+185-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:34:9-52:20
+186            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+186-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:35:13-76
+187            android:directBootAware="false"
+187-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:36:13-44
+188            android:enabled="true"
+188-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:37:13-35
+189            android:exported="true"
+189-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:38:13-36
+190            android:permission="android.permission.DUMP" >
+190-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:39:13-57
+191            <intent-filter>
+191-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:40:13-42:29
+192                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+192-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:41:17-91
+192-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:41:25-88
+193            </intent-filter>
+194            <intent-filter>
+194-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:43:13-45:29
+195                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+195-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:44:17-85
+195-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:44:25-82
+196            </intent-filter>
+197            <intent-filter>
+197-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:46:13-48:29
+198                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+198-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:47:17-88
+198-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:47:25-85
+199            </intent-filter>
+200            <intent-filter>
+200-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:49:13-51:29
+201                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+201-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:50:17-95
+201-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\carol\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:50:25-92
+202            </intent-filter>
+203        </receiver>
+204    </application>
+205
+206</manifest>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="lomito_tv_background">#121212</color>
+    <color name="lomito_tv_orange">#FF8A00</color>
+    <string name="app_name">Lomito Seguro TV</string>
+    <style name="Theme.LomitoTv" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/lomito_tv_background</item>
+        <item name="android:colorBackground">@color/lomito_tv_background</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+</resources>

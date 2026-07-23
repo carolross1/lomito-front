@@ -22,7 +22,7 @@ class AddMascotaActivity : ComponentActivity() {
     private var isSending = false
     private var isSuccess = false
     private var errorMessage = ""
-    private val backendUrl = "http://10.31.0.65:3000"
+    private val backendUrl = "http://192.168.100.12:3000"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
