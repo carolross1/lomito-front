@@ -2,38 +2,30 @@
 <project version="4">
   <component name="deploymentTargetSelector">
     <selectionStates>
-      <SelectionState runConfigName="wear">
+      <SelectionState runConfigName="LomitoSeguro.wear">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2026-06-26T04:00:40.898048700Z">
+        <DropdownSelection timestamp="2026-07-31T23:49:09.588339600Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\carol\.android\avd\Wear_OS_Large_Round_API_36.avd" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\ANDY\.android\avd\Television_1080p.avd" />
             </handle>
           </Target>
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="mobile">
+      <SelectionState runConfigName="LomitoSeguro.mobile">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2026-07-22T23:48:04.187626200Z">
+        <DropdownSelection timestamp="2026-07-31T23:52:31.036464800Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\carol\.android\avd\Pixel_8a_API_35_2.avd" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\ANDY\.android\avd\Television_1080p.avd" />
             </handle>
           </Target>
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="tv">
+      <SelectionState runConfigName="LomitoSeguro.tv">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2026-07-22T23:31:01.592730Z">
-          <Target type="DEFAULT_BOOT">
-            <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\carol\.android\avd\Television_1080p_API_36.avd" />
-            </handle>
-          </Target>
-        </DropdownSelection>
-        <DialogSelection />
       </SelectionState>
     </selectionStates>
   </component>

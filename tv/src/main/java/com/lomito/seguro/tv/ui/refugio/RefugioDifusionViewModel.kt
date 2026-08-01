@@ -25,6 +25,7 @@ class RefugioDifusionViewModel(
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(cargando = true)
             val refugio = repo.getRefugioById(refugioId)
+            // ✅ AHORA USA EL videoUrl QUE VIENE DE LA BASE DE DATOS
             _uiState.value = RefugioDifusionUiState(cargando = false, refugio = refugio)
         }
     }
