@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +16,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,30 +25,20 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
 import androidx.tv.material3.Text
 import com.lomito.seguro.tv.data.model.Mascota
 import com.lomito.seguro.tv.data.model.ReporteVista
+import com.lomito.seguro.tv.ui.detalle.MapaView
 import com.lomito.seguro.tv.ui.theme.LomitoAlertRed
 import com.lomito.seguro.tv.ui.theme.LomitoOrange
 import com.lomito.seguro.tv.ui.theme.LomitoSurfaceAlt
 import com.lomito.seguro.tv.ui.theme.LomitoTvTheme
 
-/**
- * Perfil completo de una mascota: línea de tiempo de todos sus reportes de
- * avistamiento y una visualización simple de la ruta que ha seguido,
- * conectando los puntos reportados en orden cronológico.
- */
 class MascotaPerfilActivity : ComponentActivity() {
 
     companion object {
@@ -97,6 +88,10 @@ fun MascotaPerfilScreen(viewModel: MascotaPerfilViewModel, mascotaId: String) {
 private fun MascotaPerfilContenido(mascota: Mascota, reportes: List<ReporteVista>) {
     val perdida = mascota.estado.equals("PERDIDA", ignoreCase = true)
 
+    val ultimoReporte = reportes.maxByOrNull { it.timestamp }
+    val lat = ultimoReporte?.latitud ?: mascota.latitud
+    val lng = ultimoReporte?.longitud ?: mascota.longitud
+
     Column(modifier = Modifier.fillMaxSize()) {
         Row {
             Text(
@@ -114,7 +109,7 @@ private fun MascotaPerfilContenido(mascota: Mascota, reportes: List<ReporteVista
             ) {
                 Text(
                     text = if (perdida) "Perdida" else mascota.estado,
-                    color = Color.White,
+                    color = androidx.compose.ui.graphics.Color.White,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                 )
@@ -124,11 +119,11 @@ private fun MascotaPerfilContenido(mascota: Mascota, reportes: List<ReporteVista
             text = "${reportes.size} reportes de avistamiento registrados",
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             fontSize = 15.sp,
-            modifier = Modifier.padding(top = 4.dp, bottom = 24.dp)
+            modifier = Modifier.padding(top = 4.dp, bottom = 16.dp)
         )
 
         Row(modifier = Modifier.fillMaxSize()) {
-            Column(modifier = Modifier.fillMaxHeight().width(480.dp)) {
+            Column(modifier = Modifier.fillMaxHeight().width(380.dp)) {
                 Text(
                     text = "LÍNEA DE TIEMPO",
                     color = LomitoOrange,
@@ -150,24 +145,49 @@ private fun MascotaPerfilContenido(mascota: Mascota, reportes: List<ReporteVista
                 }
             }
 
-            Spacer(modifier = Modifier.width(32.dp))
+            Spacer(modifier = Modifier.width(24.dp))
 
-            Column(modifier = Modifier.fillMaxHeight()) {
+            Column(modifier = Modifier.fillMaxHeight().fillMaxWidth()) {
                 Text(
-                    text = "RUTA REPORTADA",
+                    text = "📍 MAPA DE AVISTAMIENTOS",
                     color = LomitoOrange,
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp,
-                    modifier = Modifier.padding(bottom = 12.dp)
+                    modifier = Modifier.padding(bottom = 8.dp)
                 )
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(1.4f)
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(LomitoSurfaceAlt)
-                ) {
-                    RutaVisual(reportes = reportes)
+
+                if (lat != null && lng != null) {
+                    MapaView(
+                        lat = lat,
+                        lng = lng,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(280.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(LomitoSurfaceAlt)
+                    )
+
+                    Text(
+                        text = "Última ubicación: ${ultimoReporte?.direccion?.ifBlank { "Sin dirección" } ?: "Sin dirección"}",
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontSize = 12.sp,
+                        modifier = Modifier.padding(top = 6.dp)
+                    )
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(280.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(LomitoSurfaceAlt)
+                    ) {
+                        Text(
+                            text = "📍 Ubicación no disponible",
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            fontSize = 16.sp,
+                            modifier = Modifier.padding(16.dp)
+                        )
+                    }
                 }
             }
         }
@@ -179,7 +199,7 @@ private fun ReporteRow(reporte: ReporteVista) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 10.dp)
+            .padding(vertical = 8.dp)
     ) {
         Box(
             modifier = Modifier
@@ -192,66 +212,13 @@ private fun ReporteRow(reporte: ReporteVista) {
             Text(
                 text = reporte.direccion.ifBlank { "Ubicación sin dirección" },
                 color = MaterialTheme.colorScheme.onSurface,
-                fontSize = 16.sp,
+                fontSize = 15.sp,
                 fontWeight = FontWeight.Bold
             )
             Text(
                 text = reporte.timestamp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontSize = 13.sp
-            )
-        }
-    }
-}
-
-/**
- * Visualización simple de la ruta: ubica cada reporte (lat/long) de forma
- * proporcional dentro del panel y traza una línea punteada entre ellos en
- * orden cronológico. No es un mapa real (no hay SDK de mapas en este
- * módulo), pero comunica visualmente el trayecto de avistamientos.
- */
-@Composable
-private fun RutaVisual(reportes: List<ReporteVista>) {
-    if (reportes.size < 2) {
-        Text(
-            text = if (reportes.isEmpty()) "Sin puntos para trazar la ruta" else "Se necesita más de un reporte para trazar una ruta",
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            fontSize = 13.sp,
-            modifier = Modifier.padding(16.dp)
-        )
-        return
-    }
-
-    val cronologico = reportes.sortedBy { it.timestamp }
-    val lats = cronologico.map { it.latitud }
-    val lngs = cronologico.map { it.longitud }
-    val latRange = ((lats.maxOrNull() ?: 0.0) - (lats.minOrNull() ?: 0.0)).let { if (it == 0.0) 1.0 else it }
-    val lngRange = ((lngs.maxOrNull() ?: 0.0) - (lngs.minOrNull() ?: 0.0)).let { if (it == 0.0) 1.0 else it }
-    val minLat = lats.minOrNull() ?: 0.0
-    val minLng = lngs.minOrNull() ?: 0.0
-
-    Canvas(modifier = Modifier.fillMaxSize().padding(28.dp)) {
-        val puntos = cronologico.map { reporte ->
-            val nx = ((reporte.longitud - minLng) / lngRange).toFloat()
-            val ny = 1f - ((reporte.latitud - minLat) / latRange).toFloat()
-            Offset(nx * size.width, ny * size.height)
-        }
-
-        for (i in 0 until puntos.size - 1) {
-            drawLine(
-                color = LomitoOrange,
-                start = puntos[i],
-                end = puntos[i + 1],
-                strokeWidth = 4f,
-                cap = StrokeCap.Round,
-                pathEffect = PathEffect.dashPathEffect(floatArrayOf(14f, 12f), 0f)
-            )
-        }
-        puntos.forEachIndexed { index, offset ->
-            drawCircle(
-                color = if (index == puntos.size - 1) LomitoAlertRed else LomitoOrange,
-                radius = if (index == puntos.size - 1) 10f else 7f,
-                center = offset
+                fontSize = 12.sp
             )
         }
     }

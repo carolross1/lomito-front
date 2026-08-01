@@ -3,8 +3,6 @@ package com.lomito.seguro.tv.ui.refugio
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.widget.MediaController
-import android.widget.VideoView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -23,6 +21,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.media3.common.MediaItem
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.PlayerView
+import androidx.tv.material3.Button
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import com.lomito.seguro.tv.data.model.Refugio
@@ -48,14 +50,18 @@ class RefugioDifusionActivity : ComponentActivity() {
 
         setContent {
             LomitoTvTheme {
-                RefugioDifusionScreen(viewModel = viewModel, refugioId = refugioId)
+                RefugioDifusionScreen(
+                    viewModel = viewModel, 
+                    refugioId = refugioId,
+                    onBackClick = { finish() }
+                )
             }
         }
     }
 }
 
 @Composable
-fun RefugioDifusionScreen(viewModel: RefugioDifusionViewModel, refugioId: String) {
+fun RefugioDifusionScreen(viewModel: RefugioDifusionViewModel, refugioId: String, onBackClick: () -> Unit) {
     LaunchedEffect(refugioId) { viewModel.cargar(refugioId) }
     val state by viewModel.uiState.collectAsState()
 
@@ -80,33 +86,36 @@ fun RefugioDifusionScreen(viewModel: RefugioDifusionViewModel, refugioId: String
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.align(Alignment.Center)
             )
-            else -> RefugioDifusionContenido(refugio = state.refugio!!)
+            else -> RefugioDifusionContenido(refugio = state.refugio!!, onBackClick = onBackClick)
         }
     }
 }
 
 @Composable
-private fun RefugioDifusionContenido(refugio: Refugio) {
+private fun RefugioDifusionContenido(refugio: Refugio, onBackClick: () -> Unit) {
     Box(modifier = Modifier.fillMaxSize()) {
         AndroidView(
             modifier = Modifier.fillMaxSize(),
             factory = { context: Context ->
-                VideoView(context).apply {
-                    setVideoURI(Uri.parse(refugio.videoUrl))
-                    val mediaController = MediaController(context)
-                    mediaController.setAnchorView(this)
-                    setMediaController(mediaController)
-                    setOnPreparedListener { player ->
-                        player.isLooping = true
-                        start()
+                PlayerView(context).apply {
+                    useController = true
+                    player = ExoPlayer.Builder(context).build().apply {
+                        setMediaItem(MediaItem.fromUri(Uri.parse(refugio.videoUrl)))
+                        prepare()
+                        playWhenReady = true
+                        repeatMode = ExoPlayer.REPEAT_MODE_ALL
                     }
                 }
+            },
+            onRelease = { playerView ->
+                playerView.player?.release()
             }
         )
 
         Column(
             modifier = Modifier
-                .align(Alignment.TopStart)
+                .align(Alignment.TopEnd)
+                .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.8f))
                 .padding(32.dp)
         ) {
             Text(
@@ -122,10 +131,15 @@ private fun RefugioDifusionContenido(refugio: Refugio) {
                 fontSize = 26.sp
             )
             Text(
-                text = "${refugio.direccion} · ${refugio.telefono}",
+                text = "${refugio.direccion}\nTel: ${refugio.telefono}\nHorarios: ${refugio.horarios}",
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontSize = 15.sp
+                fontSize = 15.sp,
+                modifier = Modifier.padding(top = 8.dp, bottom = 24.dp)
             )
+            
+            Button(onClick = onBackClick) {
+                Text(text = "VOLVER AL DASHBOARD")
+            }
         }
     }
 }

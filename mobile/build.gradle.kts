@@ -43,4 +43,6 @@ dependencies {
     implementation(libs.glide)
     implementation(libs.datastore)
     implementation(libs.play.services.wearable)
-    implementation("androidx.localbroadcastmanager:localbroadcastmanager:1.1.0")}
+    implementation("androidx.localbroadcastmanager:localbroadcastmanager:1.1.0")
+    implementation("io.coil-kt:coil-compose:2.6.0")
+}

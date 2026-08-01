@@ -1,3 +1,7 @@
+// ✅ Agregar los imports al inicio del archivo
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -7,16 +11,26 @@ android {
     namespace = "com.lomito.seguro.tv"
     compileSdk = 35
 
+    // ✅ Leer local.properties correctamente
+    val localProperties = Properties()
+    val localFile = rootProject.file("local.properties")
+    if (localFile.exists()) {
+        localProperties.load(FileInputStream(localFile))
+    }
+    val mapsApiKey = localProperties.getProperty("MAPS_API_KEY") ?: ""
+
     defaultConfig {
         applicationId = "com.lomito.seguro.tv"
         minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
+        buildConfigField("String", "MAPS_API_KEY", "\"$mapsApiKey\"")
     }
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     composeOptions {
@@ -54,9 +68,10 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("io.coil-kt:coil-compose:2.6.0")
 
-    // Compose for TV. Note: as of the stable release, TvLazyRow/TvLazyColumn were
-    // removed from tv-foundation — the standard LazyRow/LazyColumn from
-    // compose-foundation (1.7+) now has built-in D-pad focus support, so we only
-    // need tv-material for the TV-styled components (Card, Surface, Button...).
+    // Compose for TV
     implementation("androidx.tv:tv-material:1.0.0")
+
+    // ExoPlayer
+    implementation("androidx.media3:media3-exoplayer:1.2.0")
+    implementation("androidx.media3:media3-ui:1.2.0")
 }
