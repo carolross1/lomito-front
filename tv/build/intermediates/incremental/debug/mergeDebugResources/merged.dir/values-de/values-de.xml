@@ -17,6 +17,9 @@
     <item quantity="one">%d Sekunde zurückspulen</item>
     <item quantity="other">%d Sekunden zurückspulen</item>
   </plurals>
+    <string name="about">Über</string>
+    <string name="about_message">Diese Software benutzt Kartenmaterial von OpenStreetMap.org</string>
+    <string name="base">OSM Basislayer</string>
     <string msgid="881409763997275156" name="call_notification_answer_action">"Annehmen"</string>
     <string msgid="8793775615905189152" name="call_notification_answer_video_action">"Video"</string>
     <string msgid="3229508546291798546" name="call_notification_decline_action">"Ablehnen"</string>
@@ -26,6 +29,7 @@
     <string msgid="59049573811482460" name="call_notification_screening_text">"Filter für eingehenden Anruf"</string>
     <string msgid="406453423630273620" name="close_drawer">"Navigationsmenü schließen"</string>
     <string msgid="7573152094250666567" name="close_sheet">"Tabelle schließen"</string>
+    <string name="cyclemap">Fahrradkarte</string>
     <string msgid="8038256446254964252" name="default_error_message">"Ungültige Eingabe"</string>
     <string msgid="6312721426453364202" name="default_popup_window_title">"Pop-up-Fenster"</string>
     <string msgid="1890207353314751437" name="dropdown_menu">"Drop-down-Menü"</string>
@@ -80,6 +84,7 @@
     <string name="exo_track_surround_5_point_1">5.1-Surround-Sound</string>
     <string name="exo_track_surround_7_point_1">7.1-Surround-Sound</string>
     <string name="exo_track_unknown">Unbekannt</string>
+    <string name="hills">Relief</string>
     <string msgid="6827826412747255547" name="in_progress">"In Bearbeitung"</string>
     <string msgid="7933458017204019916" name="indeterminate">"Teilweise aktiviert"</string>
     <string msgid="2721825378927619928" name="lb_control_display_fast_forward_multiplier">"%1$dX"</string>
@@ -120,6 +125,8 @@
     <string msgid="2795474673510974502" name="lb_search_bar_hint_speech">"Zum Suchen sprechen"</string>
     <string msgid="7453744869467668159" name="lb_search_bar_hint_with_title">"In <ns1:g id="SEARCH_CONTEXT">%1$s</ns1:g> suchen"</string>
     <string msgid="5851694095153624617" name="lb_search_bar_hint_with_title_speech">"Zum Suchen in <ns1:g id="SEARCH_CONTEXT">%1$s</ns1:g> sprechen"</string>
+    <string name="map_mode">Kartenmodus</string>
+    <string name="my_location">Standort</string>
     <string msgid="542007171693138492" name="navigation_menu">"Navigationsmenü"</string>
     <string msgid="6610465462668679431" name="not_selected">"Nicht ausgewählt"</string>
     <string msgid="875452955155264703" name="off">"Aus"</string>
@@ -134,4 +141,6 @@
     <string msgid="5946805113151406391" name="template_percent">"<ns1:g id="PERCENTAGE">%1$d</ns1:g> Prozent."</string>
     <string msgid="3765533235322692011" name="tooltip_description">"Kurzinfo"</string>
     <string msgid="3124740595719787496" name="tooltip_label">"Kurzinfo anzeigen"</string>
+    <string name="topo">Topographisch</string>
+    <string name="unknown">Unbekannt</string>
 </resources>

@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.lomito.seguro.tv-mergeDebugResources-50:/values-zh-rCN/values-zh-rCN.xml",
+            "outputFile": "com.lomito.seguro.tv-mergeDebugResources-51:/values-zh-rCN/values-zh-rCN.xml",
             "map": [
                 {
                     "source": "C:\\Users\\ANDY\\.gradle\\caches\\transforms-4\\afc2c7eb83e31294754121cc06e72435\\transformed\\jetified-ui-release\\res\\values-zh-rCN\\values-zh-rCN.xml",

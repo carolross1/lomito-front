@@ -11,45 +11,46 @@ com.lomito.seguro.tv-jetified-coil-base-2.6.0-9 C:\Users\ANDY\.gradle\caches\tra
 com.lomito.seguro.tv-jetified-media3-exoplayer-1.2.0-10 C:\Users\ANDY\.gradle\caches\transforms-4\2a10b2f2bf3361b6ec25a62bcbec8242\transformed\jetified-media3-exoplayer-1.2.0\res
 com.lomito.seguro.tv-core-1.13.1-11 C:\Users\ANDY\.gradle\caches\transforms-4\3611863fe91a427ad21ab78f9cad0532\transformed\core-1.13.1\res
 com.lomito.seguro.tv-jetified-ui-tooling-preview-release-12 C:\Users\ANDY\.gradle\caches\transforms-4\47b6a8507f034805865ea25c25a200f9\transformed\jetified-ui-tooling-preview-release\res
-com.lomito.seguro.tv-jetified-savedstate-1.2.1-13 C:\Users\ANDY\.gradle\caches\transforms-4\4c06bb59719e3ba028574087d23baff6\transformed\jetified-savedstate-1.2.1\res
-com.lomito.seguro.tv-jetified-ui-graphics-release-14 C:\Users\ANDY\.gradle\caches\transforms-4\4e93d47c563892017bdd9598389f77df\transformed\jetified-ui-graphics-release\res
-com.lomito.seguro.tv-jetified-tv-material-1.0.0-15 C:\Users\ANDY\.gradle\caches\transforms-4\519d455389eec9fa9a51a0619201d889\transformed\jetified-tv-material-1.0.0\res
-com.lomito.seguro.tv-jetified-core-ktx-1.13.1-16 C:\Users\ANDY\.gradle\caches\transforms-4\52d4918a0270135de6ae9ee0571e5eac\transformed\jetified-core-ktx-1.13.1\res
-com.lomito.seguro.tv-jetified-media3-ui-1.2.0-17 C:\Users\ANDY\.gradle\caches\transforms-4\53694cf05994dd081e33a01245821a79\transformed\jetified-media3-ui-1.2.0\res
-com.lomito.seguro.tv-jetified-startup-runtime-1.1.1-18 C:\Users\ANDY\.gradle\caches\transforms-4\549eac2935eda9adfe011530a53e8539\transformed\jetified-startup-runtime-1.1.1\res
-com.lomito.seguro.tv-jetified-material-icons-core-release-19 C:\Users\ANDY\.gradle\caches\transforms-4\589d1416a63176ce0f1fe41dda9d4e0e\transformed\jetified-material-icons-core-release\res
-com.lomito.seguro.tv-jetified-lifecycle-process-2.8.0-20 C:\Users\ANDY\.gradle\caches\transforms-4\62356d22ace46af89f86e5acfe3371a2\transformed\jetified-lifecycle-process-2.8.0\res
-com.lomito.seguro.tv-recyclerview-1.3.0-21 C:\Users\ANDY\.gradle\caches\transforms-4\66a9ca9c585c290fc03323d8ed939275\transformed\recyclerview-1.3.0\res
-com.lomito.seguro.tv-jetified-customview-poolingcontainer-1.0.0-22 C:\Users\ANDY\.gradle\caches\transforms-4\73dc4462c1a8883e39ce73c521609a04\transformed\jetified-customview-poolingcontainer-1.0.0\res
-com.lomito.seguro.tv-jetified-glide-4.16.0-23 C:\Users\ANDY\.gradle\caches\transforms-4\758ba39d6cc8745798f32002a94caa73\transformed\jetified-glide-4.16.0\res
-com.lomito.seguro.tv-core-runtime-2.2.0-24 C:\Users\ANDY\.gradle\caches\transforms-4\7f721d36facc8144f5b6e8b31daf3f61\transformed\core-runtime-2.2.0\res
-com.lomito.seguro.tv-jetified-activity-ktx-1.9.3-25 C:\Users\ANDY\.gradle\caches\transforms-4\820f416a9874b9615e66cc3ba173f303\transformed\jetified-activity-ktx-1.9.3\res
-com.lomito.seguro.tv-jetified-lifecycle-livedata-core-ktx-2.8.0-26 C:\Users\ANDY\.gradle\caches\transforms-4\89b509317e340fc39ab375deb4cf316d\transformed\jetified-lifecycle-livedata-core-ktx-2.8.0\res
-com.lomito.seguro.tv-jetified-lifecycle-viewmodel-savedstate-2.8.0-27 C:\Users\ANDY\.gradle\caches\transforms-4\9369d284af4bf2089226708691a8f7ac\transformed\jetified-lifecycle-viewmodel-savedstate-2.8.0\res
-com.lomito.seguro.tv-jetified-lifecycle-viewmodel-ktx-2.8.0-28 C:\Users\ANDY\.gradle\caches\transforms-4\9e90447fd453a68460a666176e4bb875\transformed\jetified-lifecycle-viewmodel-ktx-2.8.0\res
-com.lomito.seguro.tv-jetified-activity-1.9.3-29 C:\Users\ANDY\.gradle\caches\transforms-4\a8258db5efe781b2a362c1ff231a6cab\transformed\jetified-activity-1.9.3\res
-com.lomito.seguro.tv-jetified-ui-unit-release-30 C:\Users\ANDY\.gradle\caches\transforms-4\a905d8b88bdc1af056ea027f58571c91\transformed\jetified-ui-unit-release\res
-com.lomito.seguro.tv-jetified-ui-release-31 C:\Users\ANDY\.gradle\caches\transforms-4\afc2c7eb83e31294754121cc06e72435\transformed\jetified-ui-release\res
-com.lomito.seguro.tv-coordinatorlayout-1.0.0-32 C:\Users\ANDY\.gradle\caches\transforms-4\b76088a62e99373af79c974cea60d3e7\transformed\coordinatorlayout-1.0.0\res
-com.lomito.seguro.tv-fragment-1.3.6-33 C:\Users\ANDY\.gradle\caches\transforms-4\ba51a2d462fd7a081a1b1c870f1e6a8e\transformed\fragment-1.3.6\res
-com.lomito.seguro.tv-jetified-animation-core-release-34 C:\Users\ANDY\.gradle\caches\transforms-4\c11d36bfc5a7b1e980976fad77ae3173\transformed\jetified-animation-core-release\res
-com.lomito.seguro.tv-jetified-savedstate-ktx-1.2.1-35 C:\Users\ANDY\.gradle\caches\transforms-4\c1d20216cf6b060daeb46e6f118fd055\transformed\jetified-savedstate-ktx-1.2.1\res
-com.lomito.seguro.tv-jetified-runtime-saveable-release-36 C:\Users\ANDY\.gradle\caches\transforms-4\c6fee078068088e9c40f3f7a6ea9fa75\transformed\jetified-runtime-saveable-release\res
-com.lomito.seguro.tv-jetified-runtime-release-37 C:\Users\ANDY\.gradle\caches\transforms-4\cd63ea29a9b758e3ef7013e6f1d25591\transformed\jetified-runtime-release\res
-com.lomito.seguro.tv-media-1.6.0-38 C:\Users\ANDY\.gradle\caches\transforms-4\cec9da5f5766ced910144e6932ce48b3\transformed\media-1.6.0\res
-com.lomito.seguro.tv-jetified-ui-geometry-release-39 C:\Users\ANDY\.gradle\caches\transforms-4\d0b0137aaa7ba40578b4e4caaf4beb55\transformed\jetified-ui-geometry-release\res
-com.lomito.seguro.tv-jetified-animation-release-40 C:\Users\ANDY\.gradle\caches\transforms-4\d0f612edb9d74ee39e9fa9ba6682a7ec\transformed\jetified-animation-release\res
-com.lomito.seguro.tv-jetified-profileinstaller-1.3.1-41 C:\Users\ANDY\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\res
-com.lomito.seguro.tv-leanback-1.0.0-42 C:\Users\ANDY\.gradle\caches\transforms-4\e04aa56a63685775f0979e589978baa2\transformed\leanback-1.0.0\res
-com.lomito.seguro.tv-jetified-lifecycle-viewmodel-release-43 C:\Users\ANDY\.gradle\caches\transforms-4\ed899af4cb9d5a0716741049ec1f866d\transformed\jetified-lifecycle-viewmodel-release\res
-com.lomito.seguro.tv-jetified-emoji2-1.3.0-44 C:\Users\ANDY\.gradle\caches\transforms-4\f3e56642b81b0f2bc7f918a04814cbc1\transformed\jetified-emoji2-1.3.0\res
-com.lomito.seguro.tv-jetified-foundation-layout-release-45 C:\Users\ANDY\.gradle\caches\transforms-4\f79731bdedf24af23a3cad538a4f9cb2\transformed\jetified-foundation-layout-release\res
-com.lomito.seguro.tv-jetified-lifecycle-runtime-release-46 C:\Users\ANDY\.gradle\caches\transforms-4\fd70b4ef2dac561263c438650e7e00fb\transformed\jetified-lifecycle-runtime-release\res
-com.lomito.seguro.tv-jetified-annotation-experimental-1.4.0-47 C:\Users\ANDY\.gradle\caches\transforms-4\ff8601039528365605e07ebcd64f8e16\transformed\jetified-annotation-experimental-1.4.0\res
-com.lomito.seguro.tv-pngs-48 C:\Users\ANDY\Documents\UTNG\INGENIERIA\9no cuatrimestre\Desarrollo para Dispositivos Inteligentes\Unidad II\Proyecto Lomito\lomito-front\tv\build\generated\res\pngs\debug
-com.lomito.seguro.tv-resValues-49 C:\Users\ANDY\Documents\UTNG\INGENIERIA\9no cuatrimestre\Desarrollo para Dispositivos Inteligentes\Unidad II\Proyecto Lomito\lomito-front\tv\build\generated\res\resValues\debug
-com.lomito.seguro.tv-packageDebugResources-50 C:\Users\ANDY\Documents\UTNG\INGENIERIA\9no cuatrimestre\Desarrollo para Dispositivos Inteligentes\Unidad II\Proyecto Lomito\lomito-front\tv\build\intermediates\incremental\debug\packageDebugResources\merged.dir
-com.lomito.seguro.tv-packageDebugResources-51 C:\Users\ANDY\Documents\UTNG\INGENIERIA\9no cuatrimestre\Desarrollo para Dispositivos Inteligentes\Unidad II\Proyecto Lomito\lomito-front\tv\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
-com.lomito.seguro.tv-debug-52 C:\Users\ANDY\Documents\UTNG\INGENIERIA\9no cuatrimestre\Desarrollo para Dispositivos Inteligentes\Unidad II\Proyecto Lomito\lomito-front\tv\build\intermediates\merged_res\debug\mergeDebugResources
-com.lomito.seguro.tv-debug-53 C:\Users\ANDY\Documents\UTNG\INGENIERIA\9no cuatrimestre\Desarrollo para Dispositivos Inteligentes\Unidad II\Proyecto Lomito\lomito-front\tv\src\debug\res
-com.lomito.seguro.tv-main-54 C:\Users\ANDY\Documents\UTNG\INGENIERIA\9no cuatrimestre\Desarrollo para Dispositivos Inteligentes\Unidad II\Proyecto Lomito\lomito-front\tv\src\main\res
+com.lomito.seguro.tv-jetified-osmdroid-android-6.1.17-13 C:\Users\ANDY\.gradle\caches\transforms-4\4b4e9ac6d1cd71a9313c911cf10eaacc\transformed\jetified-osmdroid-android-6.1.17\res
+com.lomito.seguro.tv-jetified-savedstate-1.2.1-14 C:\Users\ANDY\.gradle\caches\transforms-4\4c06bb59719e3ba028574087d23baff6\transformed\jetified-savedstate-1.2.1\res
+com.lomito.seguro.tv-jetified-ui-graphics-release-15 C:\Users\ANDY\.gradle\caches\transforms-4\4e93d47c563892017bdd9598389f77df\transformed\jetified-ui-graphics-release\res
+com.lomito.seguro.tv-jetified-tv-material-1.0.0-16 C:\Users\ANDY\.gradle\caches\transforms-4\519d455389eec9fa9a51a0619201d889\transformed\jetified-tv-material-1.0.0\res
+com.lomito.seguro.tv-jetified-core-ktx-1.13.1-17 C:\Users\ANDY\.gradle\caches\transforms-4\52d4918a0270135de6ae9ee0571e5eac\transformed\jetified-core-ktx-1.13.1\res
+com.lomito.seguro.tv-jetified-media3-ui-1.2.0-18 C:\Users\ANDY\.gradle\caches\transforms-4\53694cf05994dd081e33a01245821a79\transformed\jetified-media3-ui-1.2.0\res
+com.lomito.seguro.tv-jetified-startup-runtime-1.1.1-19 C:\Users\ANDY\.gradle\caches\transforms-4\549eac2935eda9adfe011530a53e8539\transformed\jetified-startup-runtime-1.1.1\res
+com.lomito.seguro.tv-jetified-material-icons-core-release-20 C:\Users\ANDY\.gradle\caches\transforms-4\589d1416a63176ce0f1fe41dda9d4e0e\transformed\jetified-material-icons-core-release\res
+com.lomito.seguro.tv-jetified-lifecycle-process-2.8.0-21 C:\Users\ANDY\.gradle\caches\transforms-4\62356d22ace46af89f86e5acfe3371a2\transformed\jetified-lifecycle-process-2.8.0\res
+com.lomito.seguro.tv-recyclerview-1.3.0-22 C:\Users\ANDY\.gradle\caches\transforms-4\66a9ca9c585c290fc03323d8ed939275\transformed\recyclerview-1.3.0\res
+com.lomito.seguro.tv-jetified-customview-poolingcontainer-1.0.0-23 C:\Users\ANDY\.gradle\caches\transforms-4\73dc4462c1a8883e39ce73c521609a04\transformed\jetified-customview-poolingcontainer-1.0.0\res
+com.lomito.seguro.tv-jetified-glide-4.16.0-24 C:\Users\ANDY\.gradle\caches\transforms-4\758ba39d6cc8745798f32002a94caa73\transformed\jetified-glide-4.16.0\res
+com.lomito.seguro.tv-core-runtime-2.2.0-25 C:\Users\ANDY\.gradle\caches\transforms-4\7f721d36facc8144f5b6e8b31daf3f61\transformed\core-runtime-2.2.0\res
+com.lomito.seguro.tv-jetified-activity-ktx-1.9.3-26 C:\Users\ANDY\.gradle\caches\transforms-4\820f416a9874b9615e66cc3ba173f303\transformed\jetified-activity-ktx-1.9.3\res
+com.lomito.seguro.tv-jetified-lifecycle-livedata-core-ktx-2.8.0-27 C:\Users\ANDY\.gradle\caches\transforms-4\89b509317e340fc39ab375deb4cf316d\transformed\jetified-lifecycle-livedata-core-ktx-2.8.0\res
+com.lomito.seguro.tv-jetified-lifecycle-viewmodel-savedstate-2.8.0-28 C:\Users\ANDY\.gradle\caches\transforms-4\9369d284af4bf2089226708691a8f7ac\transformed\jetified-lifecycle-viewmodel-savedstate-2.8.0\res
+com.lomito.seguro.tv-jetified-lifecycle-viewmodel-ktx-2.8.0-29 C:\Users\ANDY\.gradle\caches\transforms-4\9e90447fd453a68460a666176e4bb875\transformed\jetified-lifecycle-viewmodel-ktx-2.8.0\res
+com.lomito.seguro.tv-jetified-activity-1.9.3-30 C:\Users\ANDY\.gradle\caches\transforms-4\a8258db5efe781b2a362c1ff231a6cab\transformed\jetified-activity-1.9.3\res
+com.lomito.seguro.tv-jetified-ui-unit-release-31 C:\Users\ANDY\.gradle\caches\transforms-4\a905d8b88bdc1af056ea027f58571c91\transformed\jetified-ui-unit-release\res
+com.lomito.seguro.tv-jetified-ui-release-32 C:\Users\ANDY\.gradle\caches\transforms-4\afc2c7eb83e31294754121cc06e72435\transformed\jetified-ui-release\res
+com.lomito.seguro.tv-coordinatorlayout-1.0.0-33 C:\Users\ANDY\.gradle\caches\transforms-4\b76088a62e99373af79c974cea60d3e7\transformed\coordinatorlayout-1.0.0\res
+com.lomito.seguro.tv-fragment-1.3.6-34 C:\Users\ANDY\.gradle\caches\transforms-4\ba51a2d462fd7a081a1b1c870f1e6a8e\transformed\fragment-1.3.6\res
+com.lomito.seguro.tv-jetified-animation-core-release-35 C:\Users\ANDY\.gradle\caches\transforms-4\c11d36bfc5a7b1e980976fad77ae3173\transformed\jetified-animation-core-release\res
+com.lomito.seguro.tv-jetified-savedstate-ktx-1.2.1-36 C:\Users\ANDY\.gradle\caches\transforms-4\c1d20216cf6b060daeb46e6f118fd055\transformed\jetified-savedstate-ktx-1.2.1\res
+com.lomito.seguro.tv-jetified-runtime-saveable-release-37 C:\Users\ANDY\.gradle\caches\transforms-4\c6fee078068088e9c40f3f7a6ea9fa75\transformed\jetified-runtime-saveable-release\res
+com.lomito.seguro.tv-jetified-runtime-release-38 C:\Users\ANDY\.gradle\caches\transforms-4\cd63ea29a9b758e3ef7013e6f1d25591\transformed\jetified-runtime-release\res
+com.lomito.seguro.tv-media-1.6.0-39 C:\Users\ANDY\.gradle\caches\transforms-4\cec9da5f5766ced910144e6932ce48b3\transformed\media-1.6.0\res
+com.lomito.seguro.tv-jetified-ui-geometry-release-40 C:\Users\ANDY\.gradle\caches\transforms-4\d0b0137aaa7ba40578b4e4caaf4beb55\transformed\jetified-ui-geometry-release\res
+com.lomito.seguro.tv-jetified-animation-release-41 C:\Users\ANDY\.gradle\caches\transforms-4\d0f612edb9d74ee39e9fa9ba6682a7ec\transformed\jetified-animation-release\res
+com.lomito.seguro.tv-jetified-profileinstaller-1.3.1-42 C:\Users\ANDY\.gradle\caches\transforms-4\d13b572c42044c07b99bc08ca0579c27\transformed\jetified-profileinstaller-1.3.1\res
+com.lomito.seguro.tv-leanback-1.0.0-43 C:\Users\ANDY\.gradle\caches\transforms-4\e04aa56a63685775f0979e589978baa2\transformed\leanback-1.0.0\res
+com.lomito.seguro.tv-jetified-lifecycle-viewmodel-release-44 C:\Users\ANDY\.gradle\caches\transforms-4\ed899af4cb9d5a0716741049ec1f866d\transformed\jetified-lifecycle-viewmodel-release\res
+com.lomito.seguro.tv-jetified-emoji2-1.3.0-45 C:\Users\ANDY\.gradle\caches\transforms-4\f3e56642b81b0f2bc7f918a04814cbc1\transformed\jetified-emoji2-1.3.0\res
+com.lomito.seguro.tv-jetified-foundation-layout-release-46 C:\Users\ANDY\.gradle\caches\transforms-4\f79731bdedf24af23a3cad538a4f9cb2\transformed\jetified-foundation-layout-release\res
+com.lomito.seguro.tv-jetified-lifecycle-runtime-release-47 C:\Users\ANDY\.gradle\caches\transforms-4\fd70b4ef2dac561263c438650e7e00fb\transformed\jetified-lifecycle-runtime-release\res
+com.lomito.seguro.tv-jetified-annotation-experimental-1.4.0-48 C:\Users\ANDY\.gradle\caches\transforms-4\ff8601039528365605e07ebcd64f8e16\transformed\jetified-annotation-experimental-1.4.0\res
+com.lomito.seguro.tv-pngs-49 C:\Users\ANDY\Documents\UTNG\INGENIERIA\9no cuatrimestre\Desarrollo para Dispositivos Inteligentes\Unidad II\Proyecto Lomito\lomito-front\tv\build\generated\res\pngs\debug
+com.lomito.seguro.tv-resValues-50 C:\Users\ANDY\Documents\UTNG\INGENIERIA\9no cuatrimestre\Desarrollo para Dispositivos Inteligentes\Unidad II\Proyecto Lomito\lomito-front\tv\build\generated\res\resValues\debug
+com.lomito.seguro.tv-packageDebugResources-51 C:\Users\ANDY\Documents\UTNG\INGENIERIA\9no cuatrimestre\Desarrollo para Dispositivos Inteligentes\Unidad II\Proyecto Lomito\lomito-front\tv\build\intermediates\incremental\debug\packageDebugResources\merged.dir
+com.lomito.seguro.tv-packageDebugResources-52 C:\Users\ANDY\Documents\UTNG\INGENIERIA\9no cuatrimestre\Desarrollo para Dispositivos Inteligentes\Unidad II\Proyecto Lomito\lomito-front\tv\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
+com.lomito.seguro.tv-debug-53 C:\Users\ANDY\Documents\UTNG\INGENIERIA\9no cuatrimestre\Desarrollo para Dispositivos Inteligentes\Unidad II\Proyecto Lomito\lomito-front\tv\build\intermediates\merged_res\debug\mergeDebugResources
+com.lomito.seguro.tv-debug-54 C:\Users\ANDY\Documents\UTNG\INGENIERIA\9no cuatrimestre\Desarrollo para Dispositivos Inteligentes\Unidad II\Proyecto Lomito\lomito-front\tv\src\debug\res
+com.lomito.seguro.tv-main-55 C:\Users\ANDY\Documents\UTNG\INGENIERIA\9no cuatrimestre\Desarrollo para Dispositivos Inteligentes\Unidad II\Proyecto Lomito\lomito-front\tv\src\main\res

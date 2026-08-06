@@ -4,7 +4,7 @@
             "outputFile": "com.lomito.seguro.wear-mergeDebugResources-46:/values-v21/values-v21.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\carol\\.gradle\\caches\\transforms-4\\3611863fe91a427ad21ab78f9cad0532\\transformed\\core-1.13.1\\res\\values-v21\\values-v21.xml",
+                    "source": "C:\\Users\\ANDY\\.gradle\\caches\\transforms-4\\3611863fe91a427ad21ab78f9cad0532\\transformed\\core-1.13.1\\res\\values-v21\\values-v21.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,13",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4",

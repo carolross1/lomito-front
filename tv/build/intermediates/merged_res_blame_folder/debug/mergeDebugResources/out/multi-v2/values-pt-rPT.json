@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.lomito.seguro.tv-mergeDebugResources-50:/values-pt-rPT/values-pt-rPT.xml",
+            "outputFile": "com.lomito.seguro.tv-mergeDebugResources-51:/values-pt-rPT/values-pt-rPT.xml",
             "map": [
                 {
                     "source": "C:\\Users\\ANDY\\.gradle\\caches\\transforms-4\\afc2c7eb83e31294754121cc06e72435\\transformed\\jetified-ui-release\\res\\values-pt-rPT\\values-pt-rPT.xml",

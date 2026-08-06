@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.lomito.seguro.tv-mergeDebugResources-50:/values-kn/values-kn.xml",
+            "outputFile": "com.lomito.seguro.tv-mergeDebugResources-51:/values-kn/values-kn.xml",
             "map": [
                 {
                     "source": "C:\\Users\\ANDY\\.gradle\\caches\\transforms-4\\53694cf05994dd081e33a01245821a79\\transformed\\jetified-media3-ui-1.2.0\\res\\values-kn\\values-kn.xml",

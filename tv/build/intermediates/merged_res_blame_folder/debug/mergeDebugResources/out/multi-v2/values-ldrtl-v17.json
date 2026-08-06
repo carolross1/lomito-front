@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.lomito.seguro.tv-mergeDebugResources-50:/values-ldrtl-v17/values-ldrtl-v17.xml",
+            "outputFile": "com.lomito.seguro.tv-mergeDebugResources-51:/values-ldrtl-v17/values-ldrtl-v17.xml",
             "map": [
                 {
                     "source": "C:\\Users\\ANDY\\.gradle\\caches\\transforms-4\\e04aa56a63685775f0979e589978baa2\\transformed\\leanback-1.0.0\\res\\values-ldrtl-v17\\values-ldrtl-v17.xml",

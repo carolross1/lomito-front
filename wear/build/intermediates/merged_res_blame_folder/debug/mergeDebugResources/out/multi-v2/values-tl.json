@@ -4,24 +4,7 @@
             "outputFile": "com.lomito.seguro.wear-mergeDebugResources-46:/values-tl/values-tl.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\carol\\.gradle\\caches\\transforms-4\\58d5622fbe17580d27eb63a2a9a3b37c\\transformed\\jetified-play-services-basement-18.4.0\\res\\values-tl\\values.xml",
-                    "from": {
-                        "startLines": "4",
-                        "startColumns": "0",
-                        "startOffsets": "195",
-                        "endColumns": "140",
-                        "endOffsets": "335"
-                    },
-                    "to": {
-                        "startLines": "47",
-                        "startColumns": "4",
-                        "startOffsets": "5097",
-                        "endColumns": "144",
-                        "endOffsets": "5237"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\carol\\.gradle\\caches\\transforms-4\\2d69685774621985e522504ce39cc082\\transformed\\jetified-wear-input-1.1.0\\res\\values-tl\\values-tl.xml",
+                    "source": "C:\\Users\\ANDY\\.gradle\\caches\\transforms-4\\2d69685774621985e522504ce39cc082\\transformed\\jetified-wear-input-1.1.0\\res\\values-tl\\values-tl.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -38,7 +21,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\carol\\.gradle\\caches\\transforms-4\\f3dade5366517b1f32e35d2825276c76\\transformed\\jetified-ui-release\\res\\values-tl\\values-tl.xml",
+                    "source": "C:\\Users\\ANDY\\.gradle\\caches\\transforms-4\\f3dade5366517b1f32e35d2825276c76\\transformed\\jetified-ui-release\\res\\values-tl\\values-tl.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -55,7 +38,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\carol\\.gradle\\caches\\transforms-4\\b881951ec5b9b7fec55f5ce47f130c8a\\transformed\\jetified-play-services-base-18.5.0\\res\\values-tl\\values.xml",
+                    "source": "C:\\Users\\ANDY\\.gradle\\caches\\transforms-4\\b881951ec5b9b7fec55f5ce47f130c8a\\transformed\\jetified-play-services-base-18.5.0\\res\\values-tl\\values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
                         "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
@@ -72,7 +55,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\carol\\.gradle\\caches\\transforms-4\\3611863fe91a427ad21ab78f9cad0532\\transformed\\core-1.13.1\\res\\values-tl\\values-tl.xml",
+                    "source": "C:\\Users\\ANDY\\.gradle\\caches\\transforms-4\\3611863fe91a427ad21ab78f9cad0532\\transformed\\core-1.13.1\\res\\values-tl\\values-tl.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",
@@ -89,7 +72,24 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\carol\\.gradle\\caches\\transforms-4\\4a5f19aba36f0b67e9050769928fc74f\\transformed\\jetified-foundation-release\\res\\values-tl\\values-tl.xml",
+                    "source": "C:\\Users\\ANDY\\.gradle\\caches\\transforms-4\\58d5622fbe17580d27eb63a2a9a3b37c\\transformed\\jetified-play-services-basement-18.4.0\\res\\values-tl\\values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "195",
+                        "endColumns": "140",
+                        "endOffsets": "335"
+                    },
+                    "to": {
+                        "startLines": "47",
+                        "startColumns": "4",
+                        "startOffsets": "5097",
+                        "endColumns": "144",
+                        "endOffsets": "5237"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\ANDY\\.gradle\\caches\\transforms-4\\4a5f19aba36f0b67e9050769928fc74f\\transformed\\jetified-foundation-release\\res\\values-tl\\values-tl.xml",
                     "from": {
                         "startLines": "2,3",
                         "startColumns": "4,4",

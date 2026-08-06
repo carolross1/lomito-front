@@ -1,4 +1,4 @@
-#Fri Jul 31 23:52:44 CST 2026
+#Thu Aug 06 12:35:23 CST 2026
 base.0=C\:\\Users\\ANDY\\Documents\\UTNG\\INGENIERIA\\9no cuatrimestre\\Desarrollo para Dispositivos Inteligentes\\Unidad II\\Proyecto Lomito\\lomito-front\\tv\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
 base.1=C\:\\Users\\ANDY\\Documents\\UTNG\\INGENIERIA\\9no cuatrimestre\\Desarrollo para Dispositivos Inteligentes\\Unidad II\\Proyecto Lomito\\lomito-front\\tv\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex
 base.2=C\:\\Users\\ANDY\\Documents\\UTNG\\INGENIERIA\\9no cuatrimestre\\Desarrollo para Dispositivos Inteligentes\\Unidad II\\Proyecto Lomito\\lomito-front\\tv\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\10\\classes.dex

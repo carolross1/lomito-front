@@ -160,9 +160,10 @@ private fun MascotaPerfilContenido(mascota: Mascota, reportes: List<ReporteVista
                     MapaView(
                         lat = lat,
                         lng = lng,
+                        reportes = reportes,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(280.dp)
+                            .height(320.dp)
                             .clip(RoundedCornerShape(12.dp))
                             .background(LomitoSurfaceAlt)
                     )
