@@ -1,0 +1,62 @@
+[
+    {
+        "merged": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-mergeDebugResources-67:\\layout\\fragment_refugios.xml",
+        "source": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-main-70:\\layout\\fragment_refugios.xml"
+    },
+    {
+        "merged": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-mergeDebugResources-67:\\layout\\item_refugio.xml",
+        "source": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-main-70:\\layout\\item_refugio.xml"
+    },
+    {
+        "merged": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-mergeDebugResources-67:\\layout\\item_alerta.xml",
+        "source": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-main-70:\\layout\\item_alerta.xml"
+    },
+    {
+        "merged": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-mergeDebugResources-67:\\layout\\fragment_mural.xml",
+        "source": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-main-70:\\layout\\fragment_mural.xml"
+    },
+    {
+        "merged": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-mergeDebugResources-67:\\layout\\item_mascota_mural.xml",
+        "source": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-main-70:\\layout\\item_mascota_mural.xml"
+    },
+    {
+        "merged": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-mergeDebugResources-67:\\layout\\fragment_register.xml",
+        "source": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-main-70:\\layout\\fragment_register.xml"
+    },
+    {
+        "merged": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-mergeDebugResources-67:\\layout\\item_mascota_card.xml",
+        "source": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-main-70:\\layout\\item_mascota_card.xml"
+    },
+    {
+        "merged": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-mergeDebugResources-67:\\layout\\fragment_login.xml",
+        "source": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-main-70:\\layout\\fragment_login.xml"
+    },
+    {
+        "merged": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-mergeDebugResources-67:\\layout\\fragment_alertas.xml",
+        "source": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-main-70:\\layout\\fragment_alertas.xml"
+    },
+    {
+        "merged": "com.lomito.seguro.mobile-mergeDebugResources-67:/layout/fragment_home.xml",
+        "source": "com.lomito.seguro.mobile-main-70:/layout/fragment_home.xml"
+    },
+    {
+        "merged": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-mergeDebugResources-67:\\layout\\fragment_crear_mascota.xml",
+        "source": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-main-70:\\layout\\fragment_crear_mascota.xml"
+    },
+    {
+        "merged": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-mergeDebugResources-67:\\layout\\fragment_simulator.xml",
+        "source": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-main-70:\\layout\\fragment_simulator.xml"
+    },
+    {
+        "merged": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-mergeDebugResources-67:\\layout\\fragment_home.xml",
+        "source": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-main-70:\\layout\\fragment_home.xml"
+    },
+    {
+        "merged": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-mergeDebugResources-67:\\layout\\activity_main.xml",
+        "source": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-main-70:\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-mergeDebugResources-67:\\layout\\fragment_mascota_detail.xml",
+        "source": "C:\\Users\\carol\\.gradle\\daemon\\8.7\\com.lomito.seguro.mobile-main-70:\\layout\\fragment_mascota_detail.xml"
+    }
+]

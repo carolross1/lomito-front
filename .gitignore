@@ -1,0 +1,4 @@
+﻿*.hprof
+*.log
+*.tmp
+local.properties
