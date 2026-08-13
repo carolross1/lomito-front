@@ -1,4 +1,4 @@
-🐕 Lomito Seguro
+# **🐕 Lomito Seguro**
 
 **Integrantes del equipo:**
 - Camarillo Olaez Juana Jaqueline (1223100400)
@@ -49,11 +49,38 @@
 | **SettingsActivity** | Configuración de mascotas y preferencias del reloj (`WatchPreferences`). |
 | **PollingService / WearMessageService** | Servicios encargados de sincronizar datos con el móvil vía Wearable Data Layer (Message API). |
 
+
+### 📺 Aplicación Smart TV (módulo `tv`, Android TV)
+| Pantalla / Componente | Funcionalidad |
+|------------------------|---------------|
+| **LomitoTvApp** | Clase de aplicación, punto de entrada del módulo TV. |
+| **DashboardActivity** | Pantalla principal del módulo TV, con `DashboardViewModel` gestionando el estado del menú/inicio. |
+| **MascotaDetalleActivity** | Detalle de una mascota (perdida o en seguimiento), con `MascotaDetalleViewModel` y `MapaView` para mostrar su ubicación en un mapa. |
+| **MascotaPerfilActivity** | Perfil de la mascota (datos generales), gestionado por `MascotaPerfilViewModel`. |
+| **RefugioDifusionActivity** | Pantalla de difusión de refugios en pantalla grande, con `RefugioDifusionViewModel`. |
+| **LomitoTvApi / RetrofitClient** | Interfaz Retrofit y cliente HTTP configurados para las peticiones del módulo TV. |
+| **Models** | Modelos de datos (mascotas, refugios, etc.) usados en el módulo TV. |
+| **LomitoTvRepository** | Repositorio que conecta la API con los ViewModels de las pantallas. |
+| **Theme** | Definición del tema visual (colores, tipografía) para las pantallas de TV. |
 ---
 
-## Validación del Proyecto y aprobación del beneficiario 
+## Validación del Proyecto y aprobación del beneficiario (video)
 
 Link del video: https://drive.google.com/file/d/1bBsdhZP3Ac88JmY6P5wFixVLnhpm_m3E/view?usp=drive_link 
+
+## Carta de validación del proyecto y aprobación del beneficiario
+
+<table>
+   <tr>
+      <td><img width="1204" height="1600" alt="imagen1" src="https://github.com/user-attachments/assets/1d1686ca-62dd-4dac-af31-deb5358d8f67" /></td>
+   </tr>
+   <tr>
+      <td><img width="1204" height="1600" alt="imagen2" src="https://github.com/user-attachments/assets/07781686-5761-474b-a9e8-977eedf25ef4" /></td>
+   </tr>
+   <tr>
+      <td><img width="1204" height="1600" alt="imagen3" src="https://github.com/user-attachments/assets/8fb817a7-b0c1-4d7f-ac03-68c05ab729ab" /></td>
+   </tr>
+</table>
 
 ## 🛠️ Tecnologías utilizadas
 
@@ -213,7 +240,7 @@ El backend expone endpoints REST consumidos por Retrofit desde la app móvil y, 
 
 - [x] App móvil (autenticación, registro de mascotas, mural, alertas, refugios, simulador).
 - [x] App Wear OS (dashboard, selección de mascota, alertas, reporte de avistamientos, ajustes).
-- [ ] Módulo Smart TV (mural comunitario, streaming de refugios) — pendiente, no solicitado aún en la entrega actual.
+- [x] Módulo Smart TV (mural comunitario, streaming de refugios) — pendiente, no solicitado aún en la entrega actual.
 
 ---
 
@@ -249,6 +276,20 @@ El backend expone endpoints REST consumidos por Retrofit desde la app móvil y, 
     <td> <img width="436" alt="image13" src="https://github.com/user-attachments/assets/1149910a-1f25-437f-b55f-1d344ecc3bc7" /></td>
 
   </tr>
+</table>
+
+### Capturas de pantalla - Smart TV
+
+<table>
+   <tr>
+      <td><img width="1206" height="684" alt="image14" src="https://github.com/user-attachments/assets/f7cf1f75-2236-409e-96e6-0413f2f7e043" /></td>
+      <td> <img width="1185" height="649" alt="image15" src="https://github.com/user-attachments/assets/19c7cb32-8318-4b76-91a3-0ac009f12e6f" /></td>
+     
+   </tr>
+   <tr>
+      <td><img width="1189" height="649" alt="image16" src="https://github.com/user-attachments/assets/ac858cbd-8b07-48e8-a472-0aaf1aa50fe6" /></td>
+      <td><img width="1195" height="670" alt="image17" src="https://github.com/user-attachments/assets/08e7034b-1f39-4ad3-8bb9-1e3f63fcb236" /></td>
+   </tr>
 </table>
 
 
