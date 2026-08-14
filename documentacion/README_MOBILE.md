@@ -16,28 +16,28 @@ Al estudiar y seguir esta guia, comprenderas:
 6. Como integrar **Google Maps** para mostrar refugios y reportar avistamientos geolocalizados.
 7. Como implementar la funcionalidad de fotos con subida al servidor y visualizacion con **Glide/Coil**.
 
-## Arquitectura del Modulo Movil
+## Arquitectura del Módulo Móvil
 
-El modulo movil sigue la arquitectura **MVVM (Model-View-ViewModel)** con separacion de responsabilidades en capas:
+El módulo móvil sigue la arquitectura **MVVM (Model-View-ViewModel)** con separación de responsabilidades en capas:
 
-\app/
-+-- config/       -> Configuracion global (URLs, constantes)
-+-- data/
-|   +-- api/      -> Interfaces Retrofit + Cliente HTTP
-|   +-- model/    -> Data classes (entidades de dominio)
-|   +-- repos/    -> Repositorios (acceso a datos)
-+-- network/      -> Interceptores OkHttp
-+-- ui/           -> Fragments + ViewModels + Adapters
-|   +-- auth/     -> Login y Registro
-|   +-- home/     -> Pantalla principal y lista de mascotas
-|   +-- mascota/  -> CRUD de mascotas
-|   +-- alertas/  -> Notificaciones de avistamientos
-|   +-- mural/    -> Mural comunitario de mascotas perdidas
-|   +-- refugios/ -> Mapa de refugios
-|   +-- simulator/-> Simulador BLE de distancia
-+-- util/         -> Funciones de extension y utilidades
-\
----
+```text
+app/
+├── config/        # Configuración global (URLs, constantes)
+├── data/
+│   ├── api/       # Interfaces Retrofit + Cliente HTTP
+│   ├── model/     # Data classes (entidades de dominio)
+│   └── repos/     # Repositorios (acceso a datos)
+├── network/       # Interceptores OkHttp
+├── ui/            # Fragments + ViewModels + Adapters
+│   ├── auth/      # Login y Registro
+│   ├── home/      # Pantalla principal y lista de mascotas
+│   ├── mascota/   # CRUD de mascotas
+│   ├── alertas/   # Notificaciones de avistamientos
+│   ├── mural/     # Mural comunitario de mascotas perdidas
+│   ├── refugios/  # Mapa de refugios
+│   └── simulator/ # Simulador BLE de distancia
+└── util/          # Funciones de extensión y utilidades
+```
 
 ## FASE 1: `com/lomito/seguro`
 
