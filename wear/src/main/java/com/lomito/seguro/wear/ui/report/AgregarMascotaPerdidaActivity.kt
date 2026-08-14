@@ -31,6 +31,13 @@ private const val KEY_TEXTO = "key_texto_input"
 
 enum class Paso { NOMBRE, ESPECIE, RAZA, COLOR, TELEFONO, CONFIRMAR }
 
+/**
+ * [Actividad para registrar una mascota que ha sido encontrada o perdida por otra persona]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Recopilar los datos de una mascota ajena mediante pasos (wizard)]
+ * - [Publicar el registro de la mascota como perdida en el backend]
+ */
 class AgregarMascotaPerdidaActivity : ComponentActivity() {
     private val backendUrl = BuildConfig.BACKEND_URL
 

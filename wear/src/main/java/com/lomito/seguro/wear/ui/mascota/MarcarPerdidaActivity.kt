@@ -25,6 +25,12 @@ import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 
+/**
+ * [Modelo simplificado para representar a una mascota en la lista de mascotas a perder]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Mantener el estado e información básica de la mascota]
+ */
 data class MascotaParaPerder(
     val id: String,
     val nombre: String,
@@ -36,6 +42,13 @@ data class MascotaParaPerder(
     val estado: String = "EN_CASA"
 )
 
+/**
+ * [Actividad para listar mascotas y marcarlas como perdidas]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Obtener la lista de mascotas del usuario actual]
+ * - [Permitir al usuario cambiar el estado de una mascota a "PERDIDA"]
+ */
 class MarcarPerdidaActivity : ComponentActivity() {
     private val backendUrl = BuildConfig.BACKEND_URL
 
@@ -223,6 +236,18 @@ private val AccentGreen = Color(0xFF4CD97B)
 private val AccentOrange = Color(0xFFFFA94D)
 private val AccentBlue = Color(0xFF4D9FFF)
 
+/**
+ * [Pantalla para listar y marcar mascotas como perdidas]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [mascotas]: Lista de mascotas del usuario
+ * - [isLoading]: Estado de carga
+ * - [errorMessage]: Mensaje de error general
+ * - [successMessage]: Mensaje de éxito al realizar la operación
+ * - [onMarcarPerdida]: Acción al intentar marcar como perdida
+ * - [onBack]: Acción para volver atrás
+ * - [onRetry]: Acción para reintentar la carga
+ */
 @Composable
 fun MarcarPerdidaScreen(
     mascotas: List<MascotaParaPerder>,

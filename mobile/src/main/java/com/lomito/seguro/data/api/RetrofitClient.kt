@@ -7,6 +7,13 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
+/**
+ * [Cliente Retrofit configurado para la app]
+ *
+ * Responsabilidades:
+ * - [Construir y proveer la instancia central de Retrofit]
+ * - [Configurar interceptores y tiempos de espera de las peticiones]
+ */
 object RetrofitClient {
     // ✅ La IP/URL real vive en /gradle.properties (LOMITO_BACKEND_URL),
     // se inyecta aquí vía BuildConfig. No hardcodees la IP en más archivos.

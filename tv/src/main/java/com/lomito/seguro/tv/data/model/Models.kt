@@ -2,6 +2,13 @@ package com.lomito.seguro.tv.data.model
 
 import com.google.gson.annotations.SerializedName
 
+/**
+ * [Clase de datos que representa a una Mascota]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Contener la información básica y de estado de una mascota]
+ * - [Mapear los atributos desde el modelo remoto de datos]
+ */
 data class Mascota(
     val id: String = "",
     val nombre: String = "",
@@ -19,6 +26,13 @@ data class Mascota(
     val longitud: Double? = null
 )
 
+/**
+ * [Clase de datos que representa un Reporte de Vista de mascota]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Almacenar los datos de ubicación, dirección y tiempo del avistamiento]
+ * - [Vincular el reporte con una mascota y usuario específicos]
+ */
 data class ReporteVista(
     val id: String = "",
     @SerializedName("mascota_id") val mascotaId: String = "",
@@ -29,6 +43,13 @@ data class ReporteVista(
     val timestamp: String = ""
 )
 
+/**
+ * [Clase de datos que representa un Refugio para animales]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Mantener la información de contacto y horarios del refugio]
+ * - [Proporcionar enlaces a recursos multimedia del refugio]
+ */
 data class Refugio(
     val id: String = "",
     val nombre: String = "",

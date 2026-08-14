@@ -32,6 +32,15 @@ import com.lomito.seguro.wear.ui.mascota.MascotaListActivity
 import com.lomito.seguro.wear.ui.report.ReportarAvistamientoActivity
 import com.lomito.seguro.wear.ui.settings.SettingsActivity
 
+/**
+ * [Modelo de datos de las opciones del menú en el Dashboard]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [id]: Identificador único de la opción
+ * - [icon]: Icono o emoji que lo representa
+ * - [title]: Título a mostrar
+ * - [action]: Acción a ejecutar al hacer clic
+ */
 data class MenuItem(
     val id: String,
     val icon: String,
@@ -39,6 +48,13 @@ data class MenuItem(
     val action: () -> Unit
 )
 
+/**
+ * [Actividad principal del menú de inicio]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Mostrar las diferentes opciones de navegación del reloj]
+ * - [Iniciar los servicios necesarios en segundo plano]
+ */
 class DashboardActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,6 +110,13 @@ private val CardBg4 = Color(0xFF2E2A1F) // Config (ámbar oscuro)
 private val AccentGreen = Color(0xFF4CD97B)
 private val AccentOrange = Color(0xFFFFA94D)
 
+/**
+ * [Pantalla principal del menú de opciones (Dashboard)]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [hasMascota]: Indica si existe una mascota configurada
+ * - [onNavigateTo]: Callback para manejar la navegación entre pantallas
+ */
 @Composable
 fun DashboardScreen(
     hasMascota: Boolean,

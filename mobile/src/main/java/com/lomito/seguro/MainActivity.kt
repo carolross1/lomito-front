@@ -30,6 +30,14 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
+/**
+ * [Actividad principal de la aplicación]
+ *
+ * Responsabilidades:
+ * - [Gestionar la navegación principal de la app]
+ * - [Configurar el polling de notificaciones de avistamientos]
+ * - [Sincronizar información básica con el smartwatch]
+ */
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val alertasRepository = AlertasRepository()

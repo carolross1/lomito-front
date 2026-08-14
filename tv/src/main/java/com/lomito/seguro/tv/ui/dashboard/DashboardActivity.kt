@@ -47,12 +47,11 @@ import com.lomito.seguro.tv.ui.theme.LomitoTvTheme
 import com.lomito.seguro.tv.util.toAbsoluteUrl
 
 /**
- * Pantalla principal del módulo Smart TV. Pensada para un TV en la sala de un
- * refugio o espacio comunitario: no requiere login, se controla con el
- * control remoto (D-pad) y se auto-refresca sola.
+ * [Actividad principal del Dashboard para Android TV]
  *
- * Corresponde a la pantalla "Dashboard" del diagrama de flujo (mural
- * comunitario de mascotas perdidas/encontradas + refugios locales).
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Mostrar el mural comunitario de mascotas perdidas y encontradas]
+ * - [Mostrar el directorio de refugios locales]
  */
 class DashboardActivity : ComponentActivity() {
 
@@ -82,6 +81,14 @@ class DashboardActivity : ComponentActivity() {
     }
 }
 
+/**
+ * [Pantalla componible del Dashboard]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - viewModel: [ViewModel que provee el estado de la pantalla]
+ * - onMascotaClick: [Callback al seleccionar una mascota]
+ * - onRefugioClick: [Callback al seleccionar un refugio]
+ */
 @Composable
 fun DashboardScreen(
     viewModel: DashboardViewModel,

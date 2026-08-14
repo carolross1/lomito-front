@@ -1,5 +1,12 @@
 package com.lomito.seguro.wear.data.models
 
+/**
+ * [Modelo de datos para una mascota perdida]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Representar la información de una mascota en estado de pérdida]
+ * - [Almacenar datos del dueño y última ubicación]
+ */
 data class MascotaPerdida(
     val id: String,
     val nombre: String,

@@ -19,6 +19,13 @@ import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 
+/**
+ * [Actividad para agregar una nueva mascota desde el reloj]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Capturar nombre, especie y umbral]
+ * - [Enviar la solicitud al backend para registrar la nueva mascota]
+ */
 class AddMascotaActivity : ComponentActivity() {
     private var isSending = false
     private var isSuccess = false
@@ -85,6 +92,16 @@ class AddMascotaActivity : ComponentActivity() {
     }
 }
 
+/**
+ * [Pantalla de formulario para agregar mascota]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [isSending]: Estado de envío de la solicitud
+ * - [isSuccess]: Estado de éxito tras guardar
+ * - [errorMessage]: Mensaje de error a mostrar si falla
+ * - [onSave]: Acción al guardar los datos
+ * - [onBack]: Acción para volver atrás
+ */
 @Composable
 fun AddMascotaScreen(
     isSending: Boolean,

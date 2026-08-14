@@ -32,6 +32,12 @@ import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 
+/**
+ * [Modelo para representar una mascota en el mural de perdidas]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Almacenar los datos de la mascota a buscar, incluyendo dueño e ubicación]
+ */
 data class MascotaPerdida(
     val id: String,
     val nombre: String,
@@ -48,6 +54,14 @@ data class MascotaPerdida(
     val ultimaUbicacionLng: Double? = null
 )
 
+/**
+ * [Actividad principal para el mural de mascotas perdidas y reportar avistamientos]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Mostrar la lista de mascotas reportadas como perdidas por la comunidad]
+ * - [Permitir agregar nuevas mascotas al mural de perdidas]
+ * - [Permitir reportar el avistamiento de una mascota con la ubicación GPS]
+ */
 class ReportarAvistamientoActivity : ComponentActivity() {
     private val backendUrl = BuildConfig.BACKEND_URL
     private var ubicacionLat = 0.0
@@ -502,6 +516,21 @@ private val AccentBlue = Color(0xFF4D9FFF)
 // ✅ PANTALLA PRINCIPAL DEL MURAL - CON SCROLL VERTICAL
 // ============================================================
 
+/**
+ * [Pantalla con la cuadrícula del mural de mascotas perdidas]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [mascotas]: Lista de mascotas del mural
+ * - [isLoading]: Estado de carga del mural
+ * - [errorMessage]: Mensaje de error a mostrar
+ * - [successMessage]: Mensaje de éxito de la última operación
+ * - [isSendingReport]: Indica si hay un reporte en proceso de envío
+ * - [ubicacionTexto]: Texto descriptivo de la ubicación actual
+ * - [ubicacionValida]: Indica si se tiene una ubicación GPS válida
+ * - [onMascotaClick]: Acción al presionar una mascota del mural
+ * - [onAgregarClick]: Acción al presionar el botón de agregar
+ * - [onRetry]: Acción para recargar el mural
+ */
 @Composable
 fun MainScreenGrid(
     mascotas: List<MascotaPerdida>,

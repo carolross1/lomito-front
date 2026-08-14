@@ -4,6 +4,13 @@ import com.lomito.seguro.data.api.RetrofitClient
 import com.lomito.seguro.data.model.*
 import okhttp3.MultipartBody
 
+/**
+ * [Repositorio de datos para abstraer las llamadas de red]
+ *
+ * Responsabilidades:
+ * - [Servir como intermediario entre los ViewModels y la API]
+ * - [Gestionar los métodos de login, mascotas, alertas y refugios]
+ */
 class LomitoRepository {
     private val api = RetrofitClient.api
 

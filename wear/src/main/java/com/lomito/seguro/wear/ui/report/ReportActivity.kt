@@ -39,6 +39,13 @@ private val CardBg = Color(0xFF2C2C3E)
 private val AccentGreen = Color(0xFF4CAF50)
 private val AccentBlue = Color(0xFF2196F3)
 
+/**
+ * [ViewModel para manejar la lógica de reporte]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Obtener la ubicación del dispositivo]
+ * - [Enviar el reporte de avistamiento al backend y al móvil conectado]
+ */
 class ReportViewModel(app: android.app.Application) : AndroidViewModel(app) {
     private val _estado = MutableLiveData<String>("¿Viste a esta mascota?")
     val estado: LiveData<String> = _estado
@@ -107,6 +114,12 @@ class ReportViewModel(app: android.app.Application) : AndroidViewModel(app) {
     }
 }
 
+/**
+ * [Actividad para reportar que se ha visto una mascota]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Iniciar la pantalla de reporte con el ID y nombre de la mascota]
+ */
 class ReportActivity : ComponentActivity() {
     private val reportVM: ReportViewModel by viewModels()
 
@@ -130,6 +143,16 @@ class ReportActivity : ComponentActivity() {
     }
 }
 
+/**
+ * [Pantalla de confirmación para reportar avistamiento]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [mascotaNombre]: Nombre de la mascota vista
+ * - [estado]: Estado actual del proceso de reporte
+ * - [enviado]: Indica si el reporte fue enviado con éxito
+ * - [onReportar]: Acción para ejecutar el envío del reporte
+ * - [onDismiss]: Acción para cerrar o cancelar
+ */
 @Composable
 fun ReportScreen(
     mascotaNombre: String,

@@ -21,6 +21,15 @@ import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 import java.security.cert.X509Certificate
 
+/**
+ * [Componente de Mapa interactivo para Android TV]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - lat: [Latitud central del mapa]
+ * - lng: [Longitud central del mapa]
+ * - reportes: [Lista de reportes a mostrar como marcadores]
+ * - modifier: [Modificador para el componente visual]
+ */
 @Composable
 fun MapaView(
     lat: Double,

@@ -47,14 +47,11 @@ import com.lomito.seguro.tv.ui.theme.LomitoTvTheme
 import com.lomito.seguro.tv.util.toAbsoluteUrl
 
 /**
- * Pantalla "Detalle de mascota" del diagrama de flujo: la comunidad ve la
- * ficha completa de una mascota reportada en el mural (foto, estado, última
- * ubicación vista) y puede confirmar que también la vio, o pasar al perfil
- * completo con su historial de reportes.
+ * [Actividad de Detalle de Mascota para Android TV]
  *
- * Antes de confirmar, se pide un número de contacto (con un teclado numérico
- * pensado para control remoto) para que el dueño pueda comunicarse con quien
- * reportó el avistamiento.
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Mostrar la información detallada de una mascota específica]
+ * - [Permitir confirmar avistamientos solicitando número de contacto]
  */
 class MascotaDetalleActivity : ComponentActivity() {
 
@@ -85,6 +82,14 @@ class MascotaDetalleActivity : ComponentActivity() {
     }
 }
 
+/**
+ * [Pantalla componible de Detalle de Mascota]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - viewModel: [ViewModel que gestiona el estado y lógica del detalle]
+ * - mascotaId: [Identificador único de la mascota a mostrar]
+ * - onVerPerfilCompleto: [Callback para navegar al perfil completo]
+ */
 @Composable
 fun MascotaDetalleScreen(
     viewModel: MascotaDetalleViewModel,

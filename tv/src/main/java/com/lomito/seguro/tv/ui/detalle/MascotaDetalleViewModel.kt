@@ -22,6 +22,13 @@ data class MascotaDetalleUiState(
     val numeroContacto: String = ""
 )
 
+/**
+ * [ViewModel de Detalle de Mascota]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Cargar los detalles y último reporte de la mascota]
+ * - [Gestionar la lógica de envío de nuevos reportes de avistamiento]
+ */
 class MascotaDetalleViewModel(
     private val repo: LomitoTvRepository = LomitoTvRepository()
 ) : ViewModel() {

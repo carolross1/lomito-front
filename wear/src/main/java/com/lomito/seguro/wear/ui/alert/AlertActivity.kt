@@ -33,6 +33,13 @@ import com.lomito.seguro.wear.data.PollingService
 import com.lomito.seguro.wear.ui.dashboard.DashboardActivity
 import kotlinx.coroutines.*
 
+/**
+ * [Actividad principal para mostrar una alerta visual y táctil]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Mostrar distancia actual de la mascota y notificar al móvil]
+ * - [Responder al aumento crítico de la distancia con vibración y sonidos]
+ */
 class AlertActivity : ComponentActivity() {
 
     companion object {
@@ -232,6 +239,16 @@ class AlertActivity : ComponentActivity() {
     }
 }
 
+/**
+ * [Pantalla de UI que muestra el estado de alerta]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [distancia]: Distancia de la mascota
+ * - [mascotaNombre]: Nombre de la mascota
+ * - [incremento]: Incremento en distancia desde la última alerta
+ * - [onAceptar]: Callback al confirmar la alerta
+ * - [onIgnorar]: Callback al ignorar la alerta
+ */
 @Composable
 fun AlertScreen(
     distancia: Int,

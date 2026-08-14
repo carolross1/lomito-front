@@ -14,6 +14,13 @@ data class RefugioDifusionUiState(
     val refugio: Refugio? = null
 )
 
+/**
+ * [ViewModel de Difusión de Refugio]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Cargar los datos del refugio desde el repositorio]
+ * - [Proveer la URL del video del refugio para su reproducción en la TV]
+ */
 class RefugioDifusionViewModel(
     private val repo: LomitoTvRepository = LomitoTvRepository()
 ) : ViewModel() {

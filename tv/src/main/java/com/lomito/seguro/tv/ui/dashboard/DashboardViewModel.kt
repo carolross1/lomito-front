@@ -20,6 +20,13 @@ data class DashboardUiState(
 /** Cada cuánto se refresca el mural sin interacción del usuario (pantalla comunitaria). */
 private const val AUTO_REFRESH_MS = 30_000L
 
+/**
+ * [ViewModel del Dashboard]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Cargar y exponer el estado de las mascotas y refugios]
+ * - [Manejar la lógica de auto-refresco periódico]
+ */
 class DashboardViewModel(
     private val repo: LomitoTvRepository = LomitoTvRepository()
 ) : ViewModel() {

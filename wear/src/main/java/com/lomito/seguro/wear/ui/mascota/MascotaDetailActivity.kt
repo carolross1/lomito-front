@@ -28,6 +28,13 @@ import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 
+/**
+ * [Actividad para mostrar los detalles de una mascota específica]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Visualizar la información detallada de la mascota]
+ * - [Permitir al usuario alternar el estado de la mascota (PERDIDA / EN CASA)]
+ */
 class MascotaDetailActivity : ComponentActivity() {
 
     private val backendUrl = BuildConfig.BACKEND_URL
@@ -180,6 +187,24 @@ private val AccentRed = Color(0xFFE85D5D)
 private val AccentGreen = Color(0xFF4CD97B)
 private val AccentOrange = Color(0xFFFFA94D)
 
+/**
+ * [Pantalla de UI con el detalle de la mascota]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [nombre]: Nombre de la mascota
+ * - [especie]: Especie de la mascota
+ * - [raza]: Raza de la mascota
+ * - [edad]: Edad de la mascota
+ * - [color]: Color de la mascota
+ * - [peso]: Peso de la mascota
+ * - [fotoUrl]: URL de la foto de la mascota
+ * - [distanciaAlerta]: Distancia máxima permitida
+ * - [estado]: Estado actual de la mascota
+ * - [distanciaSimulada]: Distancia simulada o actual
+ * - [isUpdating]: Estado de actualización
+ * - [onBack]: Callback para volver atrás
+ * - [onCambiarEstado]: Callback para alternar el estado
+ */
 @Composable
 fun MascotaDetailScreen(
     nombre: String,

@@ -32,9 +32,11 @@ import com.lomito.seguro.tv.ui.theme.LomitoAlertRed
 import com.lomito.seguro.tv.ui.theme.LomitoTvTheme
 
 /**
- * Pantalla "Difusión de refugio" del diagrama de flujo: transmite el video
- * en vivo (o grabado) que el refugio publicó (`Refugio.videoUrl`), para que
- * la comunidad vea el estado del refugio directamente en la Smart TV.
+ * [Actividad de Difusión de Refugio para Android TV]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Transmitir el video en vivo o grabado del refugio en la Smart TV]
+ * - [Mostrar los detalles de contacto y horarios del refugio]
  */
 class RefugioDifusionActivity : ComponentActivity() {
 
@@ -60,6 +62,14 @@ class RefugioDifusionActivity : ComponentActivity() {
     }
 }
 
+/**
+ * [Pantalla componible de Difusión de Refugio]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - viewModel: [ViewModel que provee la información del refugio y URL del video]
+ * - refugioId: [Identificador del refugio a difundir]
+ * - onBackClick: [Callback para regresar a la pantalla anterior]
+ */
 @Composable
 fun RefugioDifusionScreen(viewModel: RefugioDifusionViewModel, refugioId: String, onBackClick: () -> Unit) {
     LaunchedEffect(refugioId) { viewModel.cargar(refugioId) }

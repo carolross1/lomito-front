@@ -33,6 +33,12 @@ import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 
+/**
+ * [Modelo de datos simplificado para la lista de mascotas]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Almacenar los datos básicos necesarios para mostrar en un listado]
+ */
 data class MascotaItem(
     val id: String,
     val nombre: String,
@@ -46,6 +52,13 @@ data class MascotaItem(
     val estado: String = "EN_CASA"
 )
 
+/**
+ * [Actividad para listar todas las mascotas del usuario]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Obtener la lista de mascotas desde el backend]
+ * - [Gestionar la actualización en tiempo real de su estado a través de broadcast y polling]
+ */
 class MascotaListActivity : ComponentActivity() {
     private var pollingJob: Job? = null
     private val backendUrl = BuildConfig.BACKEND_URL
@@ -251,6 +264,18 @@ private val AccentGreen = Color(0xFF4CD97B)
 private val AccentOrange = Color(0xFFFFA94D)
 private val AccentBlue = Color(0xFF4D9FFF)
 
+/**
+ * [Pantalla con la lista de mascotas del usuario]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [mascotas]: Lista de las mascotas
+ * - [distanciasSimuladas]: Mapa de distancias actuales por ID de mascota
+ * - [isLoading]: Estado de carga de la lista
+ * - [errorMessage]: Mensaje de error general
+ * - [onSelect]: Callback al seleccionar una mascota
+ * - [onBack]: Callback para regresar
+ * - [onRetry]: Callback para reintentar la conexión
+ */
 @Composable
 fun MascotaListScreen(
     mascotas: List<MascotaItem>,

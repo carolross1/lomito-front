@@ -18,6 +18,13 @@ import com.lomito.seguro.util.gone
 import com.lomito.seguro.util.visible
 import kotlinx.coroutines.launch
 
+/**
+ * [Fragmento para listar las notificaciones y alertas del usuario]
+ *
+ * Responsabilidades:
+ * - [Cargar las alertas asociadas al usuario actual]
+ * - [Permitir marcar alertas como leídas individual o globalmente]
+ */
 class AlertasFragment : Fragment() {
     private var _binding: FragmentAlertasBinding? = null
     private val binding get() = _binding!!

@@ -4,6 +4,12 @@ package com.lomito.seguro.wear.data
 import android.content.Context
 import android.content.SharedPreferences
 
+/**
+ * [Gestor de preferencias del reloj]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Guardar y recuperar datos locales como mascota activa, umbral y usuario]
+ */
 class WatchPreferences(context: Context) {
     private val prefs: SharedPreferences = context.getSharedPreferences("watch_prefs", Context.MODE_PRIVATE)
 

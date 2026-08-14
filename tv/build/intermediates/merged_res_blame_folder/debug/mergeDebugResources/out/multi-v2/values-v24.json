@@ -4,7 +4,7 @@
             "outputFile": "com.lomito.seguro.tv-mergeDebugResources-51:/values-v24/values-v24.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\carol\\.gradle\\caches\\transforms-4\\cec9da5f5766ced910144e6932ce48b3\\transformed\\media-1.6.0\\res\\values-v24\\values-v24.xml",
+                    "source": "C:\\Users\\ANDY\\.gradle\\caches\\transforms-4\\cec9da5f5766ced910144e6932ce48b3\\transformed\\media-1.6.0\\res\\values-v24\\values-v24.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",

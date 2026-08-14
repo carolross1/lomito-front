@@ -20,6 +20,13 @@ import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 
+/**
+ * [Servicio en primer plano para consultar el estado del simulador]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Ejecutar consultas periódicas al backend para obtener distancia]
+ * - [Notificar al usuario si la distancia supera el umbral configurado]
+ */
 class PollingService : Service() {
 
     private val backendUrl = BuildConfig.BACKEND_URL

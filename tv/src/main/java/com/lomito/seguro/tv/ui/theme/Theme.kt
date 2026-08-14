@@ -28,6 +28,12 @@ private val LomitoTvColorScheme = darkColorScheme(
     error = LomitoAlertRed
 )
 
+/**
+ * [Tema principal de la aplicación Lomito Seguro TV]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - content: [Contenido componible que será estilizado por el tema]
+ */
 @Composable
 fun LomitoTvTheme(content: @Composable () -> Unit) {
     MaterialTheme(

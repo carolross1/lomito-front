@@ -16,6 +16,13 @@ data class MascotaPerfilUiState(
     val reportes: List<ReporteVista> = emptyList()
 )
 
+/**
+ * [ViewModel del Perfil de Mascota]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Obtener y exponer la información detallada de la mascota]
+ * - [Cargar y ordenar el historial de reportes de la mascota]
+ */
 class MascotaPerfilViewModel(
     private val repo: LomitoTvRepository = LomitoTvRepository()
 ) : ViewModel() {

@@ -6,10 +6,11 @@ import com.lomito.seguro.tv.data.model.Refugio
 import com.lomito.seguro.tv.data.model.ReporteVista
 
 /**
- * Capa de datos del módulo TV. Cada función atrapa errores de red y devuelve
- * una lista vacía / null en vez de propagar la excepción, porque en una
- * pantalla comunitaria (sin usuario logueado que pueda reintentar) es
- * preferible mostrar "sin datos" a tronar la Activity.
+ * [Repositorio de datos para el módulo TV]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Proveer acceso a los datos de mascotas perdidas, reportes y refugios]
+ * - [Manejar errores de red devolviendo valores seguros para evitar crasheos en TV]
  */
 class LomitoTvRepository(private val api: com.lomito.seguro.tv.data.api.LomitoTvApi = RetrofitClient.api) {
 

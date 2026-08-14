@@ -5,6 +5,13 @@ import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
 
+/**
+ * [Interfaz de red para comunicarse con el backend de Lomito]
+ *
+ * Responsabilidades:
+ * - [Definir los endpoints de la API REST]
+ * - [Gestionar peticiones de autenticación, mascotas, reportes y alertas]
+ */
 interface LomitoApi {
 
     // FOTOS

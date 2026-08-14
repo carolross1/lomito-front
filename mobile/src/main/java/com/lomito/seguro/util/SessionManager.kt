@@ -4,6 +4,13 @@ package com.lomito.seguro.util
 import android.content.Context
 import android.content.SharedPreferences
 
+/**
+ * [Gestor de la sesión local del usuario]
+ *
+ * Responsabilidades:
+ * - [Almacenar y recuperar datos del usuario en SharedPreferences]
+ * - [Manejar las operaciones de login y logout locales]
+ */
 class SessionManager(context: Context) {
     private val prefs: SharedPreferences = context.getSharedPreferences("user_session", Context.MODE_PRIVATE)
 

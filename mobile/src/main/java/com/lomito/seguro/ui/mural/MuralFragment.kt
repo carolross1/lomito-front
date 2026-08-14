@@ -44,6 +44,13 @@ class MuralViewModel : ViewModel() {
     }
 }
 
+/**
+ * [Fragmento del mural de mascotas perdidas]
+ *
+ * Responsabilidades:
+ * - [Mostrar una cuadrícula con todas las mascotas en estado PERDIDA]
+ * - [Reaccionar a notificaciones de nuevas mascotas perdidas para actualizar la lista]
+ */
 class MuralFragment : Fragment() {
     private val viewModel: MuralViewModel by viewModels()
     private lateinit var adapter: MascotaPerdidaAdapter

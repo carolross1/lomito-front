@@ -12,6 +12,13 @@ import com.lomito.seguro.util.SessionManager
 import com.lomito.seguro.util.gone
 import com.lomito.seguro.util.visible
 
+/**
+ * [Fragmento principal (Home) de la aplicación]
+ *
+ * Responsabilidades:
+ * - [Mostrar la lista de mascotas del usuario logueado]
+ * - [Ofrecer navegación a las diferentes secciones de la app]
+ */
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!

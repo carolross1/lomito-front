@@ -12,9 +12,11 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 /**
- * Subconjunto de solo-lectura de la API de Lomito Seguro que necesita la
- * pantalla comunitaria de Smart TV: mural de mascotas perdidas/encontradas,
- * refugios locales y su historial de reportes/avistamientos.
+ * [Interfaz de red para la API de Lomito Seguro en TV]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Definir los endpoints necesarios para la app de TV]
+ * - [Proveer métodos de lectura de mascotas y creación de reportes]
  */
 interface LomitoTvApi {
 

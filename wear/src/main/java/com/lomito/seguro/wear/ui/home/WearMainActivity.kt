@@ -31,6 +31,13 @@ import com.lomito.seguro.wear.ui.dashboard.DashboardActivity
 import com.lomito.seguro.wear.ui.report.ReportActivity
 import com.lomito.seguro.wear.ui.selection.SelectionActivity
 
+/**
+ * [Actividad principal del reloj (Wear OS)]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Mostrar el estado de la conexión BLE y la distancia actual]
+ * - [Gestionar accesos a las funciones principales como alerta, reporte y cambio de mascota]
+ */
 class WearMainActivity : ComponentActivity() {
     private lateinit var viewModel: WatchViewModel
 
@@ -140,6 +147,17 @@ class WearMainActivity : ComponentActivity() {
     }
 }
 
+/**
+ * [Pantalla principal de la aplicación en el reloj]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [state]: Estado actual de la mascota y conexión BLE
+ * - [mascotaNombre]: Nombre de la mascota actual
+ * - [onAlertClick]: Acción al presionar el botón de alerta
+ * - [onReportClick]: Acción al presionar el botón de reporte
+ * - [onChangeMascota]: Acción para cambiar la mascota activa
+ * - [onDashboardClick]: Acción para ir al menú principal
+ */
 @Composable
 fun WearMainScreen(
     state: BleState,

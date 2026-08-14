@@ -16,6 +16,13 @@ import com.google.android.gms.wearable.WearableListenerService
 import com.lomito.seguro.wear.ui.alert.AlertActivity
 import org.json.JSONObject
 
+/**
+ * [Servicio de mensajería para comunicarse con la app móvil y backend]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Recibir eventos de conexión BLE y distancias]
+ * - [Sincronizar datos de mascotas y estado entre el reloj y el dispositivo móvil]
+ */
 class WearMessageService : WearableListenerService() {
 
     companion object {

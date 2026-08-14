@@ -16,6 +16,13 @@ import com.lomito.seguro.util.toAbsoluteUrl
 import com.lomito.seguro.util.toast
 import com.lomito.seguro.util.visible
 
+/**
+ * [Fragmento que muestra el detalle de una mascota]
+ *
+ * Responsabilidades:
+ * - [Cargar y mostrar los datos específicos de la mascota]
+ * - [Permitir editar o eliminar la mascota desde el menú superior]
+ */
 class MascotaDetailFragment : Fragment() {
     private var _binding: FragmentMascotaDetailBinding? = null
     private val binding get() = _binding!!

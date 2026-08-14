@@ -13,6 +13,13 @@ import com.lomito.seguro.R
 import com.lomito.seguro.databinding.FragmentLoginBinding
 import com.lomito.seguro.util.SessionManager
 
+/**
+ * [Fragmento de inicio de sesión]
+ *
+ * Responsabilidades:
+ * - [Capturar las credenciales del usuario]
+ * - [Realizar la petición de login y guardar la sesión si es exitosa]
+ */
 class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!

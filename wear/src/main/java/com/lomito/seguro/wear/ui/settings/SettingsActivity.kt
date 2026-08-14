@@ -25,6 +25,12 @@ import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 
+/**
+ * [Modelo para representar los ajustes de una mascota]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Mantener el estado de la configuración (ej. distancia de alerta)]
+ */
 data class MascotaSetting(
     val id: String,
     val nombre: String,
@@ -33,6 +39,13 @@ data class MascotaSetting(
     val ownerId: Int = 0
 )
 
+/**
+ * [Actividad para la configuración de preferencias en el reloj]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Cargar la lista de mascotas para cambiar su configuración individualmente]
+ * - [Actualizar el umbral de distancia y la preferencia de vibración]
+ */
 class SettingsActivity : ComponentActivity() {
     private val backendUrl = BuildConfig.BACKEND_URL
     private val userId = 2 // Usuario fijo por ahora

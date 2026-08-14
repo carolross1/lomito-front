@@ -39,6 +39,13 @@ import com.lomito.seguro.tv.ui.theme.LomitoOrange
 import com.lomito.seguro.tv.ui.theme.LomitoSurfaceAlt
 import com.lomito.seguro.tv.ui.theme.LomitoTvTheme
 
+/**
+ * [Actividad de Perfil Completo de Mascota para Android TV]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Mostrar el perfil detallado de la mascota]
+ * - [Mostrar el historial completo de reportes en un mapa y línea de tiempo]
+ */
 class MascotaPerfilActivity : ComponentActivity() {
 
     companion object {
@@ -59,6 +66,13 @@ class MascotaPerfilActivity : ComponentActivity() {
     }
 }
 
+/**
+ * [Pantalla componible del Perfil de Mascota]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - viewModel: [ViewModel que provee los datos del perfil]
+ * - mascotaId: [Identificador de la mascota a consultar]
+ */
 @Composable
 fun MascotaPerfilScreen(viewModel: MascotaPerfilViewModel, mascotaId: String) {
     LaunchedEffect(mascotaId) { viewModel.cargar(mascotaId) }

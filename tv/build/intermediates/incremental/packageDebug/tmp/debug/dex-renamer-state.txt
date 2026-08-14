@@ -1,14 +1,14 @@
-#Thu Aug 13 16:43:21 CST 2026
-base.0=C\:\\Users\\carol\\Downloads\\lomito-front-completo\\lomito-front\\tv\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
-base.1=C\:\\Users\\carol\\Downloads\\lomito-front-completo\\lomito-front\\tv\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex
-base.2=C\:\\Users\\carol\\Downloads\\lomito-front-completo\\lomito-front\\tv\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\10\\classes.dex
-base.3=C\:\\Users\\carol\\Downloads\\lomito-front-completo\\lomito-front\\tv\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\11\\classes.dex
-base.4=C\:\\Users\\carol\\Downloads\\lomito-front-completo\\lomito-front\\tv\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\15\\classes.dex
-base.5=C\:\\Users\\carol\\Downloads\\lomito-front-completo\\lomito-front\\tv\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\3\\classes.dex
-base.6=C\:\\Users\\carol\\Downloads\\lomito-front-completo\\lomito-front\\tv\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\4\\classes.dex
-base.7=C\:\\Users\\carol\\Downloads\\lomito-front-completo\\lomito-front\\tv\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\7\\classes.dex
-base.8=C\:\\Users\\carol\\Downloads\\lomito-front-completo\\lomito-front\\tv\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes2.dex
-base.9=C\:\\Users\\carol\\Downloads\\lomito-front-completo\\lomito-front\\tv\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes3.dex
+#Fri Aug 14 00:05:09 CST 2026
+base.0=C\:\\Users\\ANDY\\Documents\\UTNG\\INGENIERIA\\9no cuatrimestre\\Desarrollo para Dispositivos Inteligentes\\Unidad II\\Proyecto Lomito\\lomito-front\\tv\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
+base.1=C\:\\Users\\ANDY\\Documents\\UTNG\\INGENIERIA\\9no cuatrimestre\\Desarrollo para Dispositivos Inteligentes\\Unidad II\\Proyecto Lomito\\lomito-front\\tv\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex
+base.2=C\:\\Users\\ANDY\\Documents\\UTNG\\INGENIERIA\\9no cuatrimestre\\Desarrollo para Dispositivos Inteligentes\\Unidad II\\Proyecto Lomito\\lomito-front\\tv\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\10\\classes.dex
+base.3=C\:\\Users\\ANDY\\Documents\\UTNG\\INGENIERIA\\9no cuatrimestre\\Desarrollo para Dispositivos Inteligentes\\Unidad II\\Proyecto Lomito\\lomito-front\\tv\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\11\\classes.dex
+base.4=C\:\\Users\\ANDY\\Documents\\UTNG\\INGENIERIA\\9no cuatrimestre\\Desarrollo para Dispositivos Inteligentes\\Unidad II\\Proyecto Lomito\\lomito-front\\tv\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\15\\classes.dex
+base.5=C\:\\Users\\ANDY\\Documents\\UTNG\\INGENIERIA\\9no cuatrimestre\\Desarrollo para Dispositivos Inteligentes\\Unidad II\\Proyecto Lomito\\lomito-front\\tv\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\3\\classes.dex
+base.6=C\:\\Users\\ANDY\\Documents\\UTNG\\INGENIERIA\\9no cuatrimestre\\Desarrollo para Dispositivos Inteligentes\\Unidad II\\Proyecto Lomito\\lomito-front\\tv\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\4\\classes.dex
+base.7=C\:\\Users\\ANDY\\Documents\\UTNG\\INGENIERIA\\9no cuatrimestre\\Desarrollo para Dispositivos Inteligentes\\Unidad II\\Proyecto Lomito\\lomito-front\\tv\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\7\\classes.dex
+base.8=C\:\\Users\\ANDY\\Documents\\UTNG\\INGENIERIA\\9no cuatrimestre\\Desarrollo para Dispositivos Inteligentes\\Unidad II\\Proyecto Lomito\\lomito-front\\tv\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes2.dex
+base.9=C\:\\Users\\ANDY\\Documents\\UTNG\\INGENIERIA\\9no cuatrimestre\\Desarrollo para Dispositivos Inteligentes\\Unidad II\\Proyecto Lomito\\lomito-front\\tv\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes3.dex
 path.0=classes.dex
 path.1=0/classes.dex
 path.2=10/classes.dex

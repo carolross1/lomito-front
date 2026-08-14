@@ -23,6 +23,12 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 
+/**
+ * [Modelo de datos mínimo para la pantalla de selección]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Proveer la información necesaria para mostrar la lista inicial de selección]
+ */
 data class MascotaSeleccion(
     val id: String,
     val nombre: String,
@@ -31,6 +37,13 @@ data class MascotaSeleccion(
     val distanciaAlerta: Int = 50
 )
 
+/**
+ * [Actividad inicial para seleccionar la mascota a monitorear]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Cargar la lista de mascotas desde el backend]
+ * - [Guardar en SharedPreferences la mascota elegida y navegar a la pantalla principal]
+ */
 class SelectionActivity : ComponentActivity() {
     // Estado de la UI
     private var mascotasList = mutableStateListOf<MascotaSeleccion>()
