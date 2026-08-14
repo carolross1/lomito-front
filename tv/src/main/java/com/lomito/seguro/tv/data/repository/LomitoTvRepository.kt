@@ -44,9 +44,19 @@ class LomitoTvRepository(private val api: com.lomito.seguro.tv.data.api.LomitoTv
         }
     }
 
-    suspend fun confirmarReporte(reporteId: String): Boolean {
+    // ✅ Crea y confirma el avistamiento en un solo paso (usado por la TV).
+    // No depende de que exista un reporte previo para la mascota.
+    suspend fun reportarAvistamiento(mascotaId: String, contacto: String): Boolean {
         return try {
-            api.confirmarReporte(reporteId).isSuccessful
+            api.reportarAvistamientoTv(mapOf("mascota_id" to mascotaId, "contacto" to contacto)).isSuccessful
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    suspend fun confirmarReporte(reporteId: String, contacto: String): Boolean {
+        return try {
+            api.confirmarReporte(reporteId, mapOf("contacto" to contacto)).isSuccessful
         } catch (e: Exception) {
             false
         }

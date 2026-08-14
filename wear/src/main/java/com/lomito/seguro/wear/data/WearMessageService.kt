@@ -111,6 +111,22 @@ class WearMessageService : WearableListenerService() {
                 }
             }
 
+            // ✅ Alguien confirmó en la TV que vio a la mascota: vibra y
+            // muestra notificación en el watch (llega reenviado por el móvil,
+            // que es quien recibe la alerta del backend).
+            "/watch/avistamiento_confirmado" -> {
+                try {
+                    val json = JSONObject(String(event.data))
+                    val nombre = json.optString("mascotaNombre", "tu mascota")
+                    val mensaje = json.optString("mensaje", "Alguien confirmó un avistamiento")
+
+                    vibrar()
+                    mostrarNotificacionAvistamiento(nombre, mensaje)
+                } catch (e: Exception) {
+                    android.util.Log.e("WEAR_MSG", "❌ Error procesando avistamiento confirmado: ${e.message}")
+                }
+            }
+
             "/mascota/perdida/nueva" -> {
                 try {
                     val json = JSONObject(String(event.data))
@@ -205,6 +221,27 @@ class WearMessageService : WearableListenerService() {
             }
         } catch (e: Exception) {
             android.util.Log.e("WEAR_MSG", "❌ Error vibrando: ${e.message}")
+        }
+    }
+
+    private fun mostrarNotificacionAvistamiento(nombre: String, mensaje: String) {
+        try {
+            val mgr = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                mgr.createNotificationChannel(
+                    NotificationChannel(CHANNEL_ID, "Alertas Lomito", NotificationManager.IMPORTANCE_HIGH)
+                )
+            }
+            val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(android.R.drawable.ic_dialog_alert)
+                .setContentTitle("🐾 ¡Avistamiento de $nombre!")
+                .setContentText(mensaje)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setAutoCancel(true)
+                .build()
+            mgr.notify(1002, notification)
+        } catch (e: Exception) {
+            android.util.Log.e("WEAR_MSG", "❌ Error notificación de avistamiento: ${e.message}")
         }
     }
 
