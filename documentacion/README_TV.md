@@ -11,24 +11,23 @@ Esta guia documenta y desglosa la construccion del modulo **TV (Android TV)** de
 3. Como conectar la TV con el backend **Spring Boot** usando **Retrofit**.
 4. Como implementar el patron **MVVM** adaptado para Android TV con foco en D-pad navigation.
 
-## Arquitectura del Modulo TV
+## Arquitectura del Módulo TV
 
-\tv/
-+-- LomitoTvApp.kt       -> Application class
-+-- data/
-|   +-- api/             -> Interfaz Retrofit + Cliente HTTP
-|   +-- model/           -> Data classes del dominio TV
-|   +-- repository/      -> Repositorio de datos TV
-+-- ui/
-|   +-- dashboard/       -> Pantalla principal con lista de mascotas
-|   +-- detalle/         -> Vista de detalle de mascota
-|   +-- perfil/          -> Perfil de mascota en pantalla grande
-|   +-- refugio/         -> Difusion en vivo del refugio (ExoPlayer)
-|   +-- theme/           -> Tema visual Material Design para TV
-+-- util/                -> Utilidades y extensiones
-\
----
-
+```text
+tv/
+├── LomitoTvApp.kt        # Application class
+├── data/
+│   ├── api/              # Interfaz Retrofit + Cliente HTTP
+│   ├── model/            # Data classes del dominio TV
+│   └── repository/       # Repositorio de datos TV
+├── ui/
+│   ├── dashboard/        # Pantalla principal con lista de mascotas
+│   ├── detalle/          # Vista de detalle de mascota
+│   ├── perfil/           # Perfil de mascota en pantalla grande
+│   ├── refugio/          # Difusión en vivo del refugio (ExoPlayer)
+│   └── theme/            # Tema visual Material Design para TV
+└── util/                 # Utilidades y extensiones
+```
 ## FASE 1: `com/lomito/seguro/tv`
 
 ### Paso 1.1: `LomitoTvApp.kt`
