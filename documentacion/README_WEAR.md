@@ -12,26 +12,25 @@ Esta guia documenta y desglosa la construccion del modulo **Wear OS (Smartwatch)
 4. Como gestionar el **modo ambiente** de bajo consumo en el reloj.
 5. Como implementar alertas hapticas (vibracion) cuando la mascota supera el umbral de distancia.
 
-## Arquitectura del Modulo Wear
+## Arquitectura del Módulo Wear
 
-\wear/
-+-- data/
-|   +-- MascotaPerdida.kt        -> Modelo de datos
-|   +-- PollingService.kt        -> Servicio de polling al backend
-|   +-- WatchPreferences.kt      -> Persistencia local en el reloj
-|   +-- WatchViewModel.kt        -> ViewModel central del reloj
-|   +-- WearMessageService.kt    -> Mensajes desde el telefono
-+-- ui/
-    +-- alert/       -> Pantalla de alerta de proximidad
-    +-- dashboard/   -> Dashboard principal del reloj
-    +-- home/        -> Pantalla de inicio (WearMainActivity)
-    +-- mascota/     -> CRUD basico de mascotas desde el reloj
-    +-- report/      -> Reportes de avistamiento
-    +-- selection/   -> Pantalla de seleccion generica
-    +-- settings/    -> Configuracion (umbral, preferencias)
-\
----
-
+```text
+wear/
+├── data/
+│   ├── MascotaPerdida.kt      # Modelo de datos
+│   ├── PollingService.kt      # Servicio de polling al backend
+│   ├── WatchPreferences.kt    # Persistencia local en el reloj
+│   ├── WatchViewModel.kt      # ViewModel central del reloj
+│   └── WearMessageService.kt  # Mensajes desde el teléfono
+└── ui/
+    ├── alert/                 # Pantalla de alerta de proximidad
+    ├── dashboard/             # Dashboard principal del reloj
+    ├── home/                  # Pantalla de inicio (WearMainActivity)
+    ├── mascota/               # CRUD básico de mascotas desde el reloj
+    ├── report/                # Reportes de avistamiento
+    ├── selection/             # Pantalla de selección genérica
+    └── settings/              # Configuración (umbral, preferencias)
+```
 ## FASE 1: `com/lomito/seguro/wear/data`
 
 ### Paso 1.1: `MascotaPerdida.kt`
