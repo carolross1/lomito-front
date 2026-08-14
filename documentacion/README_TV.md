@@ -1,40 +1,32 @@
-# Guía Paso a Paso: Construyendo el Módulo TV (Android TV) de Lomito Seguro
+# Guia Paso a Paso: Construyendo el Modulo TV (Android TV) de Lomito Seguro
 
-Esta guía documenta y desglosa paso a paso la arquitectura, configuración y construcción completa del módulo **TV (Android TV)** de **Lomito Seguro**, explicando las decisiones técnicas, patrones de diseño y bloques de código esenciales para un proyecto profesional en **Kotlin** y **Jetpack Compose**.
+Esta guia documenta y desglosa la construccion del modulo **TV (Android TV)** de **Lomito Seguro**.
 
 ---
 
+## Objetivo de Esta Guia
 
-## Objetivo de Esta Guía
+1. Como construir una app para **Android TV** optimizada para control remoto y pantalla grande.
+2. Como integrar **ExoPlayer / Media3** para reproduccion de video en tiempo real (streaming HLS/RTSP).
+3. Como conectar la TV con el backend **Spring Boot** usando **Retrofit**.
+4. Como implementar el patron **MVVM** adaptado para Android TV con foco en D-pad navigation.
 
-Al estudiar y seguir esta guía, comprenderás:
+## Arquitectura del Modulo TV
 
-1. Cómo construir una app para **Android TV** optimizada para control remoto y pantalla grande.
-2. Cómo implementar **Leanback** con navegación por 5-way (D-pad) y enfoque visual.
-3. Cómo integrar **ExoPlayer / Media3** para reproducción de video en tiempo real (streaming HLS/RTSP).
-4. Cómo conectar la TV con el backend **Spring Boot** usando **Retrofit**.
-5. Cómo mostrar mapas estáticos y la ubicación del refugio en pantalla grande.
-6. Cómo implementar el patrón **MVVM** adaptado para Android TV.
-
-## Arquitectura del Módulo TV
-
-```
-tv/
-├── LomitoTvApp.kt       → Application class
-├── data/
-│   ├── api/             → Interfaz Retrofit + Cliente HTTP
-│   ├── model/           → Data classes del dominio TV
-│   └── repository/      → Repositorio de datos TV
-├── ui/
-│   ├── dashboard/       → Pantalla principal con lista de mascotas
-│   ├── detalle/         → Vista de detalle de mascota
-│   ├── perfil/          → Perfil de mascota en pantalla grande
-│   ├── refugio/         → Difusión en vivo del refugio
-│   └── theme/           → Tema visual Material Design para TV
-└── util/                → Utilidades y extensiones
-```
-
-
+\tv/
++-- LomitoTvApp.kt       -> Application class
++-- data/
+|   +-- api/             -> Interfaz Retrofit + Cliente HTTP
+|   +-- model/           -> Data classes del dominio TV
+|   +-- repository/      -> Repositorio de datos TV
++-- ui/
+|   +-- dashboard/       -> Pantalla principal con lista de mascotas
+|   +-- detalle/         -> Vista de detalle de mascota
+|   +-- perfil/          -> Perfil de mascota en pantalla grande
+|   +-- refugio/         -> Difusion en vivo del refugio (ExoPlayer)
+|   +-- theme/           -> Tema visual Material Design para TV
++-- util/                -> Utilidades y extensiones
+\
 ---
 
 ## FASE 1: `com/lomito/seguro/tv`
@@ -45,10 +37,8 @@ tv/
 
 ```kotlin
 // Paquete: com.lomito.seguro.tv
-// Paquete: com.lomito.seguro.tv
 package com.lomito.seguro.tv
 
-// Importa la dependencia necesaria: Application
 // Importa la dependencia necesaria: Application
 import android.app.Application
 
@@ -60,9 +50,7 @@ import android.app.Application
  * - [Servir como punto de entrada de la app en Android TV]
  */
 // Declaración de la clase LomitoTvApp
-// Declaración de la clase LomitoTvApp
 class LomitoTvApp : Application()
-
 ```
 
 ## FASE 2: `com/lomito/seguro/tv/data/api`
@@ -73,37 +61,26 @@ class LomitoTvApp : Application()
 
 ```kotlin
 // Paquete: com.lomito.seguro.tv.data.api
-// Paquete: com.lomito.seguro.tv.data.api
 package com.lomito.seguro.tv.data.api
 
 // Importa la dependencia necesaria: Mascota
-// Importa la dependencia necesaria: Mascota
 import com.lomito.seguro.tv.data.model.Mascota
-// Importa la dependencia necesaria: Refugio
 // Importa la dependencia necesaria: Refugio
 import com.lomito.seguro.tv.data.model.Refugio
 // Importa la dependencia necesaria: ReporteVista
-// Importa la dependencia necesaria: ReporteVista
 import com.lomito.seguro.tv.data.model.ReporteVista
-// Importa la dependencia necesaria: Response
 // Importa la dependencia necesaria: Response
 import retrofit2.Response
 // Importa la dependencia necesaria: Body
-// Importa la dependencia necesaria: Body
 import retrofit2.http.Body
-// Importa la dependencia necesaria: GET
 // Importa la dependencia necesaria: GET
 import retrofit2.http.GET
 // Importa la dependencia necesaria: Path
-// Importa la dependencia necesaria: Path
 import retrofit2.http.Path
-// Importa la dependencia necesaria: PUT
 // Importa la dependencia necesaria: PUT
 import retrofit2.http.PUT
 // Importa la dependencia necesaria: POST
-// Importa la dependencia necesaria: POST
 import retrofit2.http.POST
-// Importa la dependencia necesaria: Query
 // Importa la dependencia necesaria: Query
 import retrofit2.http.Query
 
@@ -114,7 +91,6 @@ import retrofit2.http.Query
  * - [Definir los endpoints necesarios para la app de TV]
  * - [Proveer métodos de lectura de mascotas y creación de reportes]
  */
-// Interfaz LomitoTvApi: contrato que deben cumplir las implementaciones
 // Interfaz LomitoTvApi: contrato que deben cumplir las implementaciones
 interface LomitoTvApi {
 
@@ -142,7 +118,6 @@ interface LomitoTvApi {
     @GET("refugios/{id}")
     suspend fun getRefugioById(@Path("id") id: String): Response<Refugio>
 }
-
 ```
 
 ### Paso 2.2: `RetrofitClient.kt`
@@ -151,44 +126,33 @@ interface LomitoTvApi {
 
 ```kotlin
 // Paquete: com.lomito.seguro.tv.data.api
-// Paquete: com.lomito.seguro.tv.data.api
 package com.lomito.seguro.tv.data.api
 
 // Importa el cliente HTTP OkHttp
-// Importa el cliente HTTP OkHttp
 import okhttp3.OkHttpClient
-// Importa la clase de logging de Android
 // Importa la clase de logging de Android
 import okhttp3.logging.HttpLoggingInterceptor
 // Importa el cliente Retrofit para peticiones HTTP
-// Importa el cliente Retrofit para peticiones HTTP
 import retrofit2.Retrofit
-// Importa el parser JSON
 // Importa el parser JSON
 import retrofit2.converter.gson.GsonConverterFactory
 // Importa la dependencia necesaria: TimeUnit
-// Importa la dependencia necesaria: TimeUnit
 import java.util.concurrent.TimeUnit
 
-// Singleton RetrofitClient: instancia única compartida en toda la aplicación
 // Singleton RetrofitClient: instancia única compartida en toda la aplicación
 object RetrofitClient {
     // Misma API que el módulo mobile. Para el emulador de Android Studio se usa 10.0.2.2 
     // en lugar de localhost. Si pruebas en TV física, pon la IP local de tu PC (ej. 192.168.x.x)
     // Constante SERVER_URL: valor fijo definido en tiempo de compilación
-    // Constante SERVER_URL: valor fijo definido en tiempo de compilación
     const val SERVER_URL = "http://10.0.2.2:3000"
-    // Constante BASE_URL: valor fijo definido en tiempo de compilación
     // Constante BASE_URL: valor fijo definido en tiempo de compilación
     private const val BASE_URL = "$SERVER_URL/api/"
 
-    // Constante loggingInterceptor: valor inmutable que no cambia tras su asignación
     // Constante loggingInterceptor: valor inmutable que no cambia tras su asignación
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
-    // Constante okHttpClient: valor inmutable que no cambia tras su asignación
     // Constante okHttpClient: valor inmutable que no cambia tras su asignación
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
@@ -196,7 +160,6 @@ object RetrofitClient {
         .readTimeout(15, TimeUnit.SECONDS)
         .build()
 
-    // Constante api: valor inmutable que no cambia tras su asignación
     // Constante api: valor inmutable que no cambia tras su asignación
     val api: LomitoTvApi by lazy {
         Retrofit.Builder()
@@ -207,7 +170,6 @@ object RetrofitClient {
             .create(LomitoTvApi::class.java)
     }
 }
-
 ```
 
 ## FASE 3: `com/lomito/seguro/tv/data/model`
@@ -218,10 +180,8 @@ object RetrofitClient {
 
 ```kotlin
 // Paquete: com.lomito.seguro.tv.data.model
-// Paquete: com.lomito.seguro.tv.data.model
 package com.lomito.seguro.tv.data.model
 
-// Importa la dependencia necesaria: SerializedName
 // Importa la dependencia necesaria: SerializedName
 import com.google.gson.annotations.SerializedName
 
@@ -233,42 +193,30 @@ import com.google.gson.annotations.SerializedName
  * - [Mapear los atributos desde el modelo remoto de datos]
  */
 // Clase de datos Mascota: modelo inmutable con propiedades de dominio
-// Clase de datos Mascota: modelo inmutable con propiedades de dominio
 data class Mascota(
-    // Constante id: valor inmutable que no cambia tras su asignación
     // Constante id: valor inmutable que no cambia tras su asignación
     val id: String = "",
     // Constante nombre: valor inmutable que no cambia tras su asignación
-    // Constante nombre: valor inmutable que no cambia tras su asignación
     val nombre: String = "",
-    // Constante especie: valor inmutable que no cambia tras su asignación
     // Constante especie: valor inmutable que no cambia tras su asignación
     val especie: String = "",
     // Constante raza: valor inmutable que no cambia tras su asignación
-    // Constante raza: valor inmutable que no cambia tras su asignación
     val raza: String = "",
-    // Constante edad: valor inmutable que no cambia tras su asignación
     // Constante edad: valor inmutable que no cambia tras su asignación
     val edad: Int = 0,
     // Constante color: valor inmutable que no cambia tras su asignación
-    // Constante color: valor inmutable que no cambia tras su asignación
     val color: String = "",
-    // Constante peso: valor inmutable que no cambia tras su asignación
     // Constante peso: valor inmutable que no cambia tras su asignación
     val peso: Double = 0.0,
     @SerializedName("foto_url") val fotoUrl: String? = null,
     @SerializedName("distancia_alerta") val distanciaAlerta: Int = 50,
     // Constante estado: valor inmutable que no cambia tras su asignación
-    // Constante estado: valor inmutable que no cambia tras su asignación
     val estado: String = "EN_CASA",
-    // Constante activa: valor inmutable que no cambia tras su asignación
     // Constante activa: valor inmutable que no cambia tras su asignación
     val activa: Boolean = true,
     @SerializedName("owner_id") val ownerId: String = "",
     // Constante latitud: valor inmutable que no cambia tras su asignación
-    // Constante latitud: valor inmutable que no cambia tras su asignación
     val latitud: Double? = null,
-    // Constante longitud: valor inmutable que no cambia tras su asignación
     // Constante longitud: valor inmutable que no cambia tras su asignación
     val longitud: Double? = null
 )
@@ -281,23 +229,17 @@ data class Mascota(
  * - [Vincular el reporte con una mascota y usuario específicos]
  */
 // Clase de datos ReporteVista: modelo inmutable con propiedades de dominio
-// Clase de datos ReporteVista: modelo inmutable con propiedades de dominio
 data class ReporteVista(
-    // Constante id: valor inmutable que no cambia tras su asignación
     // Constante id: valor inmutable que no cambia tras su asignación
     val id: String = "",
     @SerializedName("mascota_id") val mascotaId: String = "",
     @SerializedName("reportado_por_id") val reportadoPorId: String? = null,
     // Constante latitud: valor inmutable que no cambia tras su asignación
-    // Constante latitud: valor inmutable que no cambia tras su asignación
     val latitud: Double = 0.0,
-    // Constante longitud: valor inmutable que no cambia tras su asignación
     // Constante longitud: valor inmutable que no cambia tras su asignación
     val longitud: Double = 0.0,
     // Constante direccion: valor inmutable que no cambia tras su asignación
-    // Constante direccion: valor inmutable que no cambia tras su asignación
     val direccion: String = "",
-    // Constante timestamp: valor inmutable que no cambia tras su asignación
     // Constante timestamp: valor inmutable que no cambia tras su asignación
     val timestamp: String = ""
 )
@@ -310,27 +252,20 @@ data class ReporteVista(
  * - [Proporcionar enlaces a recursos multimedia del refugio]
  */
 // Clase de datos Refugio: modelo inmutable con propiedades de dominio
-// Clase de datos Refugio: modelo inmutable con propiedades de dominio
 data class Refugio(
-    // Constante id: valor inmutable que no cambia tras su asignación
     // Constante id: valor inmutable que no cambia tras su asignación
     val id: String = "",
     // Constante nombre: valor inmutable que no cambia tras su asignación
-    // Constante nombre: valor inmutable que no cambia tras su asignación
     val nombre: String = "",
-    // Constante direccion: valor inmutable que no cambia tras su asignación
     // Constante direccion: valor inmutable que no cambia tras su asignación
     val direccion: String = "",
     // Constante telefono: valor inmutable que no cambia tras su asignación
-    // Constante telefono: valor inmutable que no cambia tras su asignación
     val telefono: String = "",
-    // Constante horarios: valor inmutable que no cambia tras su asignación
     // Constante horarios: valor inmutable que no cambia tras su asignación
     val horarios: String = "",
     @SerializedName("video_url") val videoUrl: String? = null,
     @SerializedName("logo_url") val logoUrl: String? = null
 )
-
 ```
 
 ## FASE 4: `com/lomito/seguro/tv/data/repository`
@@ -341,19 +276,14 @@ data class Refugio(
 
 ```kotlin
 // Paquete: com.lomito.seguro.tv.data.repository
-// Paquete: com.lomito.seguro.tv.data.repository
 package com.lomito.seguro.tv.data.repository
 
 // Importa el cliente Retrofit para peticiones HTTP
-// Importa el cliente Retrofit para peticiones HTTP
 import com.lomito.seguro.tv.data.api.RetrofitClient
-// Importa la dependencia necesaria: Mascota
 // Importa la dependencia necesaria: Mascota
 import com.lomito.seguro.tv.data.model.Mascota
 // Importa la dependencia necesaria: Refugio
-// Importa la dependencia necesaria: Refugio
 import com.lomito.seguro.tv.data.model.Refugio
-// Importa la dependencia necesaria: ReporteVista
 // Importa la dependencia necesaria: ReporteVista
 import com.lomito.seguro.tv.data.model.ReporteVista
 
@@ -365,26 +295,19 @@ import com.lomito.seguro.tv.data.model.ReporteVista
  * - [Manejar errores de red devolviendo valores seguros para evitar crasheos en TV]
  */
 // Repositorio LomitoTvRepository: capa de datos que abstrae las fuentes de información
-// Repositorio LomitoTvRepository: capa de datos que abstrae las fuentes de información
 class LomitoTvRepository(private val api: com.lomito.seguro.tv.data.api.LomitoTvApi = RetrofitClient.api) {
 
     suspend fun getMuralMascotas(): List<Mascota> {
         // Retorna el valor al llamador de la función
-        // Retorna el valor al llamador de la función
         return try {
-            // Constante perdidas: valor inmutable que no cambia tras su asignación
             // Constante perdidas: valor inmutable que no cambia tras su asignación
             val perdidas = api.getMascotasByEstado("PERDIDA")
             // Constante encontradas: valor inmutable que no cambia tras su asignación
-            // Constante encontradas: valor inmutable que no cambia tras su asignación
             val encontradas = api.getMascotasByEstado("ENCONTRADA")
-            // Constante resultado: valor inmutable que no cambia tras su asignación
             // Constante resultado: valor inmutable que no cambia tras su asignación
             val resultado = mutableListOf<Mascota>()
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (perdidas.isSuccessful) resultado += perdidas.body().orEmpty()
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (encontradas.isSuccessful) resultado += encontradas.body().orEmpty()
             resultado
@@ -395,12 +318,9 @@ class LomitoTvRepository(private val api: com.lomito.seguro.tv.data.api.LomitoTv
 
     suspend fun getMascotaById(id: String): Mascota? {
         // Retorna el valor al llamador de la función
-        // Retorna el valor al llamador de la función
         return try {
             // Constante response: valor inmutable que no cambia tras su asignación
-            // Constante response: valor inmutable que no cambia tras su asignación
             val response = api.getMascotaById(id)
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (response.isSuccessful) response.body() else null
         } catch (e: Exception) {
@@ -410,12 +330,9 @@ class LomitoTvRepository(private val api: com.lomito.seguro.tv.data.api.LomitoTv
 
     suspend fun getReportesDeMascota(mascotaId: String): List<ReporteVista> {
         // Retorna el valor al llamador de la función
-        // Retorna el valor al llamador de la función
         return try {
             // Constante response: valor inmutable que no cambia tras su asignación
-            // Constante response: valor inmutable que no cambia tras su asignación
             val response = api.getReportesByMascota(mascotaId)
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (response.isSuccessful) response.body().orEmpty() else emptyList()
         } catch (e: Exception) {
@@ -427,7 +344,6 @@ class LomitoTvRepository(private val api: com.lomito.seguro.tv.data.api.LomitoTv
     // No depende de que exista un reporte previo para la mascota.
     suspend fun reportarAvistamiento(mascotaId: String, contacto: String): Boolean {
         // Retorna el valor al llamador de la función
-        // Retorna el valor al llamador de la función
         return try {
             api.reportarAvistamientoTv(mapOf("mascota_id" to mascotaId, "contacto" to contacto)).isSuccessful
         } catch (e: Exception) {
@@ -436,7 +352,6 @@ class LomitoTvRepository(private val api: com.lomito.seguro.tv.data.api.LomitoTv
     }
 
     suspend fun confirmarReporte(reporteId: String, contacto: String): Boolean {
-        // Retorna el valor al llamador de la función
         // Retorna el valor al llamador de la función
         return try {
             api.confirmarReporte(reporteId, mapOf("contacto" to contacto)).isSuccessful
@@ -447,12 +362,9 @@ class LomitoTvRepository(private val api: com.lomito.seguro.tv.data.api.LomitoTv
 
     suspend fun getRefugios(): List<Refugio> {
         // Retorna el valor al llamador de la función
-        // Retorna el valor al llamador de la función
         return try {
             // Constante response: valor inmutable que no cambia tras su asignación
-            // Constante response: valor inmutable que no cambia tras su asignación
             val response = api.getRefugios()
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (response.isSuccessful) response.body().orEmpty() else emptyList()
         } catch (e: Exception) {
@@ -462,12 +374,9 @@ class LomitoTvRepository(private val api: com.lomito.seguro.tv.data.api.LomitoTv
 
     suspend fun getRefugioById(id: String): Refugio? {
         // Retorna el valor al llamador de la función
-        // Retorna el valor al llamador de la función
         return try {
             // Constante response: valor inmutable que no cambia tras su asignación
-            // Constante response: valor inmutable que no cambia tras su asignación
             val response = api.getRefugioById(id)
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (response.isSuccessful) response.body() else null
         } catch (e: Exception) {
@@ -475,7 +384,6 @@ class LomitoTvRepository(private val api: com.lomito.seguro.tv.data.api.LomitoTv
         }
     }
 }
-
 ```
 
 ## FASE 5: `com/lomito/seguro/tv/ui/dashboard`
@@ -486,142 +394,96 @@ class LomitoTvRepository(private val api: com.lomito.seguro.tv.data.api.LomitoTv
 
 ```kotlin
 // Paquete: com.lomito.seguro.tv.ui.dashboard
-// Paquete: com.lomito.seguro.tv.ui.dashboard
 package com.lomito.seguro.tv.ui.dashboard
 
 // Importa la clase Intent para navegación entre componentes
-// Importa la clase Intent para navegación entre componentes
 import android.content.Intent
-// Importa el contenedor de datos Bundle
 // Importa el contenedor de datos Bundle
 import android.os.Bundle
 // Importa la dependencia necesaria: ComponentActivity
-// Importa la dependencia necesaria: ComponentActivity
 import androidx.activity.ComponentActivity
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.activity.compose.setContent
 // Importa la dependencia necesaria: viewModels
-// Importa la dependencia necesaria: viewModels
 import androidx.activity.viewModels
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.background
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.Arrangement
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.Box
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.Column
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.aspectRatio
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.fillMaxSize
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.fillMaxWidth
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.height
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.padding
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.width
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.shape.RoundedCornerShape
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.runtime.Composable
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.runtime.collectAsState
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.runtime.getValue
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.Alignment
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.Modifier
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.graphics.Color
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.layout.ContentScale
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.text.font.FontWeight
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.text.style.TextOverflow
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.dp
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.sp
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.lazy.LazyRow
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.lazy.items
-// Importa la dependencia necesaria: Card
 // Importa la dependencia necesaria: Card
 import androidx.tv.material3.Card
 // Importa la dependencia necesaria: CardDefaults
-// Importa la dependencia necesaria: CardDefaults
 import androidx.tv.material3.CardDefaults
-// Importa la dependencia necesaria: MaterialTheme
 // Importa la dependencia necesaria: MaterialTheme
 import androidx.tv.material3.MaterialTheme
 // Importa la dependencia necesaria: Surface
-// Importa la dependencia necesaria: Surface
 import androidx.tv.material3.Surface
-// Importa la dependencia necesaria: Text
 // Importa la dependencia necesaria: Text
 import androidx.tv.material3.Text
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import coil.compose.AsyncImage
-// Importa la dependencia necesaria: Mascota
 // Importa la dependencia necesaria: Mascota
 import com.lomito.seguro.tv.data.model.Mascota
 // Importa la dependencia necesaria: Refugio
-// Importa la dependencia necesaria: Refugio
 import com.lomito.seguro.tv.data.model.Refugio
-// Importa la dependencia necesaria: MascotaDetalleActivity
 // Importa la dependencia necesaria: MascotaDetalleActivity
 import com.lomito.seguro.tv.ui.detalle.MascotaDetalleActivity
 // Importa la dependencia necesaria: RefugioDifusionActivity
-// Importa la dependencia necesaria: RefugioDifusionActivity
 import com.lomito.seguro.tv.ui.refugio.RefugioDifusionActivity
-// Importa la dependencia necesaria: LomitoFoundGreen
 // Importa la dependencia necesaria: LomitoFoundGreen
 import com.lomito.seguro.tv.ui.theme.LomitoFoundGreen
 // Importa la dependencia necesaria: LomitoAlertRed
-// Importa la dependencia necesaria: LomitoAlertRed
 import com.lomito.seguro.tv.ui.theme.LomitoAlertRed
-// Importa la dependencia necesaria: LomitoOrange
 // Importa la dependencia necesaria: LomitoOrange
 import com.lomito.seguro.tv.ui.theme.LomitoOrange
 // Importa la dependencia necesaria: LomitoSurfaceAlt
-// Importa la dependencia necesaria: LomitoSurfaceAlt
 import com.lomito.seguro.tv.ui.theme.LomitoSurfaceAlt
 // Importa la dependencia necesaria: LomitoTvTheme
-// Importa la dependencia necesaria: LomitoTvTheme
 import com.lomito.seguro.tv.ui.theme.LomitoTvTheme
-// Importa la dependencia necesaria: toAbsoluteUrl
 // Importa la dependencia necesaria: toAbsoluteUrl
 import com.lomito.seguro.tv.util.toAbsoluteUrl
 
@@ -633,20 +495,15 @@ import com.lomito.seguro.tv.util.toAbsoluteUrl
  * - [Mostrar el directorio de refugios locales]
  */
 // Activity DashboardActivity: pantalla principal que gestiona el ciclo de vida
-// Activity DashboardActivity: pantalla principal que gestiona el ciclo de vida
 class DashboardActivity : ComponentActivity() {
 
-    // Constante viewModel: valor inmutable que no cambia tras su asignación
     // Constante viewModel: valor inmutable que no cambia tras su asignación
     private val viewModel: DashboardViewModel by viewModels()
 
     // Método del ciclo de vida: inicializa la actividad y configura la UI
-    // Método del ciclo de vida: inicializa la actividad y configura la UI
     override fun onCreate(savedInstanceState: Bundle?) {
         // Invoca la implementación del método en la clase padre
-        // Invoca la implementación del método en la clase padre
         super.onCreate(savedInstanceState)
-        // Define el árbol de UI con Jetpack Compose como contenido de la Activity
         // Define el árbol de UI con Jetpack Compose como contenido de la Activity
         setContent {
             LomitoTvTheme {
@@ -679,16 +536,13 @@ class DashboardActivity : ComponentActivity() {
  * - onRefugioClick: [Callback al seleccionar un refugio]
  */
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
-// Función DashboardScreen: define la lógica de esta operación
 // Función DashboardScreen: define la lógica de esta operación
 fun DashboardScreen(
     viewModel: DashboardViewModel,
     onMascotaClick: (Mascota) -> Unit,
     onRefugioClick: (Refugio) -> Unit
 ) {
-    // Constante state: valor inmutable que no cambia tras su asignación
     // Constante state: valor inmutable que no cambia tras su asignación
     val state by viewModel.uiState.collectAsState()
 
@@ -712,7 +566,6 @@ fun DashboardScreen(
                     fontSize = 18.sp
                 )
                 Box(modifier = Modifier.padding(top = 16.dp)) {
-                    // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
                     // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
                     when {
                         state.cargando -> Text(
@@ -741,7 +594,6 @@ fun DashboardScreen(
                 )
                 Box(modifier = Modifier.padding(top = 16.dp)) {
                     // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
-                    // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
                     when {
                         state.cargando -> Text(
                             text = "Cargando refugios…",
@@ -764,7 +616,6 @@ fun DashboardScreen(
 }
 
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun DashboardHeader() {
     Column {
@@ -783,10 +634,8 @@ private fun DashboardHeader() {
 }
 
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun MascotaMuralCard(mascota: Mascota, onClick: () -> Unit) {
-    // Constante perdida: valor inmutable que no cambia tras su asignación
     // Constante perdida: valor inmutable que no cambia tras su asignación
     val perdida = mascota.estado.equals("PERDIDA", ignoreCase = true)
 
@@ -838,7 +687,6 @@ private fun MascotaMuralCard(mascota: Mascota, onClick: () -> Unit) {
 }
 
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun RefugioCard(refugio: Refugio, onClick: () -> Unit) {
     Card(
@@ -871,7 +719,6 @@ private fun RefugioCard(refugio: Refugio, onClick: () -> Unit) {
                 modifier = Modifier.padding(top = 6.dp)
             )
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (!refugio.videoUrl.isNullOrBlank()) {
                 Text(
                     text = "● EN VIVO",
@@ -885,7 +732,6 @@ private fun RefugioCard(refugio: Refugio, onClick: () -> Unit) {
     }
 }
 
-// Anotación que marca esta función como una función de composición de UI
 // Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun EstadoBadge(texto: String, color: Color, modifier: Modifier = Modifier) {
@@ -903,7 +749,6 @@ private fun EstadoBadge(texto: String, color: Color, modifier: Modifier = Modifi
         )
     }
 }
-
 ```
 
 ### Paso 5.2: `DashboardViewModel.kt`
@@ -912,56 +757,40 @@ private fun EstadoBadge(texto: String, color: Color, modifier: Modifier = Modifi
 
 ```kotlin
 // Paquete: com.lomito.seguro.tv.ui.dashboard
-// Paquete: com.lomito.seguro.tv.ui.dashboard
 package com.lomito.seguro.tv.ui.dashboard
 
 // Importa la clase base ViewModel del ciclo de vida
-// Importa la clase base ViewModel del ciclo de vida
 import androidx.lifecycle.ViewModel
-// Importa la dependencia necesaria: viewModelScope
 // Importa la dependencia necesaria: viewModelScope
 import androidx.lifecycle.viewModelScope
 // Importa la dependencia necesaria: Mascota
-// Importa la dependencia necesaria: Mascota
 import com.lomito.seguro.tv.data.model.Mascota
-// Importa la dependencia necesaria: Refugio
 // Importa la dependencia necesaria: Refugio
 import com.lomito.seguro.tv.data.model.Refugio
 // Importa la dependencia necesaria: LomitoTvRepository
-// Importa la dependencia necesaria: LomitoTvRepository
 import com.lomito.seguro.tv.data.repository.LomitoTvRepository
-// Importa soporte para corrutinas de Kotlin
 // Importa soporte para corrutinas de Kotlin
 import kotlinx.coroutines.delay
 // Importa el observable de datos reactivos
-// Importa el observable de datos reactivos
 import kotlinx.coroutines.flow.MutableStateFlow
-// Importa el observable de datos reactivos
 // Importa el observable de datos reactivos
 import kotlinx.coroutines.flow.StateFlow
 // Importa el observable de datos reactivos
-// Importa el observable de datos reactivos
 import kotlinx.coroutines.flow.asStateFlow
-// Importa soporte para corrutinas de Kotlin
 // Importa soporte para corrutinas de Kotlin
 import kotlinx.coroutines.launch
 
 // Clase de datos DashboardUiState: modelo inmutable con propiedades de dominio
-// Clase de datos DashboardUiState: modelo inmutable con propiedades de dominio
 data class DashboardUiState(
-    // Constante cargando: valor inmutable que no cambia tras su asignación
     // Constante cargando: valor inmutable que no cambia tras su asignación
     val cargando: Boolean = true,
     // Constante mascotas: valor inmutable que no cambia tras su asignación
-    // Constante mascotas: valor inmutable que no cambia tras su asignación
     val mascotas: List<Mascota> = emptyList(),
-    // Constante refugios: valor inmutable que no cambia tras su asignación
     // Constante refugios: valor inmutable que no cambia tras su asignación
     val refugios: List<Refugio> = emptyList()
 )
 
 /** Cada cuánto se refresca el mural sin interacción del usuario (pantalla comunitaria). */
-// Constante AUTO_REFRESH_MS: valor fijo definido en tiempo de compilación
 // Constante AUTO_REFRESH_MS: valor fijo definido en tiempo de compilación
 private const val AUTO_REFRESH_MS = 30_000L
 
@@ -973,17 +802,13 @@ private const val AUTO_REFRESH_MS = 30_000L
  * - [Manejar la lógica de auto-refresco periódico]
  */
 // ViewModel DashboardViewModel: gestiona el estado y la lógica de negocio de la pantalla
-// ViewModel DashboardViewModel: gestiona el estado y la lógica de negocio de la pantalla
 class DashboardViewModel(
-    // Constante repo: valor inmutable que no cambia tras su asignación
     // Constante repo: valor inmutable que no cambia tras su asignación
     private val repo: LomitoTvRepository = LomitoTvRepository()
 ) : ViewModel() {
 
     // Constante _uiState: valor inmutable que no cambia tras su asignación
-    // Constante _uiState: valor inmutable que no cambia tras su asignación
     private val _uiState = MutableStateFlow(DashboardUiState())
-    // Constante uiState: valor inmutable que no cambia tras su asignación
     // Constante uiState: valor inmutable que no cambia tras su asignación
     val uiState: StateFlow<DashboardUiState> = _uiState.asStateFlow()
 
@@ -993,16 +818,12 @@ class DashboardViewModel(
     }
 
     // Función cargar: define la lógica de esta operación
-    // Función cargar: define la lógica de esta operación
     fun cargar() {
-        // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
         // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(cargando = true)
             // Constante mascotas: valor inmutable que no cambia tras su asignación
-            // Constante mascotas: valor inmutable que no cambia tras su asignación
             val mascotas = repo.getMuralMascotas()
-            // Constante refugios: valor inmutable que no cambia tras su asignación
             // Constante refugios: valor inmutable que no cambia tras su asignación
             val refugios = repo.getRefugios()
             _uiState.value = DashboardUiState(cargando = false, mascotas = mascotas, refugios = refugios)
@@ -1011,14 +832,11 @@ class DashboardViewModel(
 
     private fun autoRefresh() {
         // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
-        // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
         viewModelScope.launch {
             while (true) {
                 delay(AUTO_REFRESH_MS)
                 // Constante mascotas: valor inmutable que no cambia tras su asignación
-                // Constante mascotas: valor inmutable que no cambia tras su asignación
                 val mascotas = repo.getMuralMascotas()
-                // Constante refugios: valor inmutable que no cambia tras su asignación
                 // Constante refugios: valor inmutable que no cambia tras su asignación
                 val refugios = repo.getRefugios()
                 _uiState.value = _uiState.value.copy(mascotas = mascotas, refugios = refugios)
@@ -1026,7 +844,6 @@ class DashboardViewModel(
         }
     }
 }
-
 ```
 
 ## FASE 6: `com/lomito/seguro/tv/ui/detalle`
@@ -1038,64 +855,44 @@ class DashboardViewModel(
 ```kotlin
 // MapaView.kt - OSMDroid con SSL ignorado
 // Paquete: com.lomito.seguro.tv.ui.detalle
-// Paquete: com.lomito.seguro.tv.ui.detalle
 package com.lomito.seguro.tv.ui.detalle
 
 // Importa el contexto de Android
-// Importa el contexto de Android
 import android.content.Context
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.runtime.Composable
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.runtime.remember
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.Modifier
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.platform.LocalContext
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.viewinterop.AndroidView
 // Importa la dependencia necesaria: ReporteVista
-// Importa la dependencia necesaria: ReporteVista
 import com.lomito.seguro.tv.data.model.ReporteVista
-// Importa la dependencia necesaria: Configuration
 // Importa la dependencia necesaria: Configuration
 import org.osmdroid.config.Configuration
 // Importa la dependencia necesaria: TileSourceFactory
-// Importa la dependencia necesaria: TileSourceFactory
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
-// Importa la dependencia necesaria: GeoPoint
 // Importa la dependencia necesaria: GeoPoint
 import org.osmdroid.util.GeoPoint
 // Importa componentes de la interfaz gráfica
-// Importa componentes de la interfaz gráfica
 import org.osmdroid.views.MapView
-// Importa la dependencia necesaria: Marker
 // Importa la dependencia necesaria: Marker
 import org.osmdroid.views.overlay.Marker
 // Importa la dependencia necesaria: Polyline
-// Importa la dependencia necesaria: Polyline
 import org.osmdroid.views.overlay.Polyline
-// Importa la dependencia necesaria: File
 // Importa la dependencia necesaria: File
 import java.io.File
 // Importa la dependencia necesaria: HttpsURLConnection
-// Importa la dependencia necesaria: HttpsURLConnection
 import javax.net.ssl.HttpsURLConnection
-// Importa el contexto de Android
 // Importa el contexto de Android
 import javax.net.ssl.SSLContext
 // Importa la dependencia necesaria: TrustManager
-// Importa la dependencia necesaria: TrustManager
 import javax.net.ssl.TrustManager
 // Importa la dependencia necesaria: X509TrustManager
-// Importa la dependencia necesaria: X509TrustManager
 import javax.net.ssl.X509TrustManager
-// Importa la dependencia necesaria: X509Certificate
 // Importa la dependencia necesaria: X509Certificate
 import java.security.cert.X509Certificate
 
@@ -1109,9 +906,7 @@ import java.security.cert.X509Certificate
  * - modifier: [Modificador para el componente visual]
  */
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
-// Función MapaView: define la lógica de esta operación
 // Función MapaView: define la lógica de esta operación
 fun MapaView(
     lat: Double,
@@ -1120,28 +915,21 @@ fun MapaView(
     modifier: Modifier = Modifier
 ) {
     // Constante context: valor inmutable que no cambia tras su asignación
-    // Constante context: valor inmutable que no cambia tras su asignación
     val context = LocalContext.current
 
     // ✅ Configuración para ignorar SSL (solo para desarrollo)
     remember {
         // Bloque try-catch: maneja posibles excepciones en el código crítico
-        // Bloque try-catch: maneja posibles excepciones en el código crítico
         try {
-            // Constante trustAllCerts: valor inmutable que no cambia tras su asignación
             // Constante trustAllCerts: valor inmutable que no cambia tras su asignación
             val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
                 // Sobreescribe la función checkClientTrusted de la clase padre
-                // Sobreescribe la función checkClientTrusted de la clase padre
                 override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {}
-                // Sobreescribe la función checkServerTrusted de la clase padre
                 // Sobreescribe la función checkServerTrusted de la clase padre
                 override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {}
                 // Sobreescribe la función getAcceptedIssuers de la clase padre
-                // Sobreescribe la función getAcceptedIssuers de la clase padre
                 override fun getAcceptedIssuers(): Array<X509Certificate> = arrayOf()
             })
-            // Constante sslContext: valor inmutable que no cambia tras su asignación
             // Constante sslContext: valor inmutable que no cambia tras su asignación
             val sslContext = SSLContext.getInstance("TLS")
             sslContext.init(null, trustAllCerts, java.security.SecureRandom())
@@ -1153,7 +941,6 @@ fun MapaView(
 
         Configuration.getInstance().load(
             context,
-            // Accede al almacenamiento clave-valor persistente de la aplicación
             // Accede al almacenamiento clave-valor persistente de la aplicación
             context.getSharedPreferences("osmdroid", Context.MODE_PRIVATE)
         )
@@ -1179,21 +966,16 @@ fun MapaView(
             mapView.overlays.clear()
 
             // Constante puntos: valor inmutable que no cambia tras su asignación
-            // Constante puntos: valor inmutable que no cambia tras su asignación
             val puntos = mutableListOf<GeoPoint>()
 
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (reportes.isNotEmpty()) {
                 // Itera sobre cada elemento de la colección y ejecuta el bloque
-                // Itera sobre cada elemento de la colección y ejecuta el bloque
                 reportes.forEach { reporte ->
-                    // Constante punto: valor inmutable que no cambia tras su asignación
                     // Constante punto: valor inmutable que no cambia tras su asignación
                     val punto = GeoPoint(reporte.latitud, reporte.longitud)
                     puntos.add(punto)
 
-                    // Constante marker: valor inmutable que no cambia tras su asignación
                     // Constante marker: valor inmutable que no cambia tras su asignación
                     val marker = Marker(mapView)
                     marker.position = punto
@@ -1203,11 +985,9 @@ fun MapaView(
                 }
             } else {
                 // Constante punto: valor inmutable que no cambia tras su asignación
-                // Constante punto: valor inmutable que no cambia tras su asignación
                 val punto = GeoPoint(lat, lng)
                 puntos.add(punto)
 
-                // Constante marker: valor inmutable que no cambia tras su asignación
                 // Constante marker: valor inmutable que no cambia tras su asignación
                 val marker = Marker(mapView)
                 marker.position = punto
@@ -1216,12 +996,9 @@ fun MapaView(
             }
 
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (puntos.size > 1) {
                 // Constante polyline: valor inmutable que no cambia tras su asignación
-                // Constante polyline: valor inmutable que no cambia tras su asignación
                 val polyline = Polyline()
-                // Itera sobre cada elemento de la colección y ejecuta el bloque
                 // Itera sobre cada elemento de la colección y ejecuta el bloque
                 puntos.forEach { punto ->
                     polyline.addPoint(punto)
@@ -1231,7 +1008,6 @@ fun MapaView(
                 mapView.overlays.add(polyline)
             }
 
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (puntos.isNotEmpty()) {
                 mapView.controller.setCenter(puntos.first())
@@ -1250,142 +1026,96 @@ fun MapaView(
 
 ```kotlin
 // Paquete: com.lomito.seguro.tv.ui.detalle
-// Paquete: com.lomito.seguro.tv.ui.detalle
 package com.lomito.seguro.tv.ui.detalle
 
 // Importa la clase Intent para navegación entre componentes
-// Importa la clase Intent para navegación entre componentes
 import android.content.Intent
-// Importa el contenedor de datos Bundle
 // Importa el contenedor de datos Bundle
 import android.os.Bundle
 // Importa la dependencia necesaria: ComponentActivity
-// Importa la dependencia necesaria: ComponentActivity
 import androidx.activity.ComponentActivity
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.activity.compose.setContent
 // Importa la dependencia necesaria: viewModels
-// Importa la dependencia necesaria: viewModels
 import androidx.activity.viewModels
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.background
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.Arrangement
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.Box
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.Column
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.Row
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.Spacer
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.fillMaxHeight
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.fillMaxSize
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.fillMaxWidth
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.height
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.padding
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.size
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.width
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.shape.RoundedCornerShape
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.runtime.Composable
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.runtime.LaunchedEffect
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.runtime.collectAsState
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.runtime.getValue
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.Alignment
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.Modifier
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.draw.clip
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.layout.ContentScale
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.text.font.FontWeight
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.dp
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.sp
 // Importa la dependencia necesaria: Button
-// Importa la dependencia necesaria: Button
 import androidx.tv.material3.Button
-// Importa la dependencia necesaria: MaterialTheme
 // Importa la dependencia necesaria: MaterialTheme
 import androidx.tv.material3.MaterialTheme
 // Importa la dependencia necesaria: Surface
-// Importa la dependencia necesaria: Surface
 import androidx.tv.material3.Surface
-// Importa la dependencia necesaria: SurfaceDefaults
 // Importa la dependencia necesaria: SurfaceDefaults
 import androidx.tv.material3.SurfaceDefaults
 // Importa la dependencia necesaria: Text
-// Importa la dependencia necesaria: Text
 import androidx.tv.material3.Text
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import coil.compose.AsyncImage
 // Importa la dependencia necesaria: Mascota
-// Importa la dependencia necesaria: Mascota
 import com.lomito.seguro.tv.data.model.Mascota
-// Importa la dependencia necesaria: ReporteVista
 // Importa la dependencia necesaria: ReporteVista
 import com.lomito.seguro.tv.data.model.ReporteVista
 // Importa la dependencia necesaria: MascotaPerfilActivity
-// Importa la dependencia necesaria: MascotaPerfilActivity
 import com.lomito.seguro.tv.ui.perfil.MascotaPerfilActivity
-// Importa la dependencia necesaria: LomitoAlertRed
 // Importa la dependencia necesaria: LomitoAlertRed
 import com.lomito.seguro.tv.ui.theme.LomitoAlertRed
 // Importa la dependencia necesaria: LomitoFoundGreen
-// Importa la dependencia necesaria: LomitoFoundGreen
 import com.lomito.seguro.tv.ui.theme.LomitoFoundGreen
-// Importa la dependencia necesaria: LomitoOrange
 // Importa la dependencia necesaria: LomitoOrange
 import com.lomito.seguro.tv.ui.theme.LomitoOrange
 // Importa la dependencia necesaria: LomitoSurfaceAlt
-// Importa la dependencia necesaria: LomitoSurfaceAlt
 import com.lomito.seguro.tv.ui.theme.LomitoSurfaceAlt
 // Importa la dependencia necesaria: LomitoTvTheme
-// Importa la dependencia necesaria: LomitoTvTheme
 import com.lomito.seguro.tv.ui.theme.LomitoTvTheme
-// Importa la dependencia necesaria: toAbsoluteUrl
 // Importa la dependencia necesaria: toAbsoluteUrl
 import com.lomito.seguro.tv.util.toAbsoluteUrl
 
@@ -1397,30 +1127,23 @@ import com.lomito.seguro.tv.util.toAbsoluteUrl
  * - [Permitir confirmar avistamientos solicitando número de contacto]
  */
 // Activity MascotaDetalleActivity: pantalla principal que gestiona el ciclo de vida
-// Activity MascotaDetalleActivity: pantalla principal que gestiona el ciclo de vida
 class MascotaDetalleActivity : ComponentActivity() {
 
     companion object {
-        // Constante EXTRA_MASCOTA_ID: valor fijo definido en tiempo de compilación
         // Constante EXTRA_MASCOTA_ID: valor fijo definido en tiempo de compilación
         const val EXTRA_MASCOTA_ID = "mascota_id"
     }
 
     // Constante viewModel: valor inmutable que no cambia tras su asignación
-    // Constante viewModel: valor inmutable que no cambia tras su asignación
     private val viewModel: MascotaDetalleViewModel by viewModels()
 
     // Método del ciclo de vida: inicializa la actividad y configura la UI
-    // Método del ciclo de vida: inicializa la actividad y configura la UI
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Invoca la implementación del método en la clase padre
         // Invoca la implementación del método en la clase padre
         super.onCreate(savedInstanceState)
         // Constante mascotaId: valor inmutable que no cambia tras su asignación
-        // Constante mascotaId: valor inmutable que no cambia tras su asignación
         val mascotaId = intent.getStringExtra(EXTRA_MASCOTA_ID).orEmpty()
 
-        // Define el árbol de UI con Jetpack Compose como contenido de la Activity
         // Define el árbol de UI con Jetpack Compose como contenido de la Activity
         setContent {
             LomitoTvTheme {
@@ -1448,9 +1171,7 @@ class MascotaDetalleActivity : ComponentActivity() {
  * - onVerPerfilCompleto: [Callback para navegar al perfil completo]
  */
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
-// Función MascotaDetalleScreen: define la lógica de esta operación
 // Función MascotaDetalleScreen: define la lógica de esta operación
 fun MascotaDetalleScreen(
     viewModel: MascotaDetalleViewModel,
@@ -1458,7 +1179,6 @@ fun MascotaDetalleScreen(
     onVerPerfilCompleto: () -> Unit
 ) {
     LaunchedEffect(mascotaId) { viewModel.cargar(mascotaId) }
-    // Constante state: valor inmutable que no cambia tras su asignación
     // Constante state: valor inmutable que no cambia tras su asignación
     val state by viewModel.uiState.collectAsState()
 
@@ -1468,7 +1188,6 @@ fun MascotaDetalleScreen(
             .background(MaterialTheme.colorScheme.background)
             .padding(48.dp)
     ) {
-        // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
         // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
         when {
             state.cargando -> Text(
@@ -1489,7 +1208,6 @@ fun MascotaDetalleScreen(
         }
 
         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (state.mostrandoDialogoContacto) {
             DialogoContacto(
                 numero = state.numeroContacto,
@@ -1500,7 +1218,6 @@ fun MascotaDetalleScreen(
             )
         }
 
-        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (state.mostrandoConfirmacionEnvio || state.errorEnvio) {
             DialogoResultadoEnvio(
@@ -1513,7 +1230,6 @@ fun MascotaDetalleScreen(
 }
 
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun MascotaDetalleContenido(
     mascota: Mascota,
@@ -1522,7 +1238,6 @@ private fun MascotaDetalleContenido(
     onAyudar: () -> Unit,
     onVerPerfilCompleto: () -> Unit
 ) {
-    // Constante perdida: valor inmutable que no cambia tras su asignación
     // Constante perdida: valor inmutable que no cambia tras su asignación
     val perdida = mascota.estado.equals("PERDIDA", ignoreCase = true)
 
@@ -1593,7 +1308,6 @@ private fun MascotaDetalleContenido(
 }
 
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun InfoRow(label: String, valor: String) {
     Column(modifier = Modifier.padding(top = 18.dp)) {
@@ -1618,7 +1332,6 @@ private fun InfoRow(label: String, valor: String) {
  * en vez de un campo de texto con teclado del sistema (mismo criterio que se
  * usó para el teclado del módulo wear).
  */
-// Anotación que marca esta función como una función de composición de UI
 // Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun DialogoContacto(
@@ -1647,7 +1360,6 @@ private fun DialogoContacto(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // Constante filas: valor inmutable que no cambia tras su asignación
-                // Constante filas: valor inmutable que no cambia tras su asignación
                 val filas = listOf(
                     listOf("1", "2", "3"),
                     listOf("4", "5", "6"),
@@ -1656,13 +1368,10 @@ private fun DialogoContacto(
                 )
                 Column {
                     // Itera sobre cada elemento de la colección y ejecuta el bloque
-                    // Itera sobre cada elemento de la colección y ejecuta el bloque
                     filas.forEach { fila ->
                         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                             // Itera sobre cada elemento de la colección y ejecuta el bloque
-                            // Itera sobre cada elemento de la colección y ejecuta el bloque
                             fila.forEach { tecla ->
-                                // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                 // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                 if (tecla.isEmpty()) {
                                     Spacer(modifier = Modifier.size(56.dp))
@@ -1738,7 +1447,6 @@ private fun DialogoContacto(
  * o si algo falló y debe intentar de nuevo.
  */
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun DialogoResultadoEnvio(
     exito: Boolean,
@@ -1789,65 +1497,45 @@ private fun DialogoResultadoEnvio(
 
 ```kotlin
 // Paquete: com.lomito.seguro.tv.ui.detalle
-// Paquete: com.lomito.seguro.tv.ui.detalle
 package com.lomito.seguro.tv.ui.detalle
 
 // Importa la clase base ViewModel del ciclo de vida
-// Importa la clase base ViewModel del ciclo de vida
 import androidx.lifecycle.ViewModel
-// Importa la dependencia necesaria: viewModelScope
 // Importa la dependencia necesaria: viewModelScope
 import androidx.lifecycle.viewModelScope
 // Importa la dependencia necesaria: Mascota
-// Importa la dependencia necesaria: Mascota
 import com.lomito.seguro.tv.data.model.Mascota
-// Importa la dependencia necesaria: ReporteVista
 // Importa la dependencia necesaria: ReporteVista
 import com.lomito.seguro.tv.data.model.ReporteVista
 // Importa la dependencia necesaria: LomitoTvRepository
-// Importa la dependencia necesaria: LomitoTvRepository
 import com.lomito.seguro.tv.data.repository.LomitoTvRepository
-// Importa el observable de datos reactivos
 // Importa el observable de datos reactivos
 import kotlinx.coroutines.flow.MutableStateFlow
 // Importa el observable de datos reactivos
-// Importa el observable de datos reactivos
 import kotlinx.coroutines.flow.StateFlow
 // Importa el observable de datos reactivos
-// Importa el observable de datos reactivos
 import kotlinx.coroutines.flow.asStateFlow
-// Importa soporte para corrutinas de Kotlin
 // Importa soporte para corrutinas de Kotlin
 import kotlinx.coroutines.launch
 
 // Clase de datos MascotaDetalleUiState: modelo inmutable con propiedades de dominio
-// Clase de datos MascotaDetalleUiState: modelo inmutable con propiedades de dominio
 data class MascotaDetalleUiState(
-    // Constante cargando: valor inmutable que no cambia tras su asignación
     // Constante cargando: valor inmutable que no cambia tras su asignación
     val cargando: Boolean = true,
     // Constante mascota: valor inmutable que no cambia tras su asignación
-    // Constante mascota: valor inmutable que no cambia tras su asignación
     val mascota: Mascota? = null,
-    // Constante ultimoReporte: valor inmutable que no cambia tras su asignación
     // Constante ultimoReporte: valor inmutable que no cambia tras su asignación
     val ultimoReporte: ReporteVista? = null,
     // Constante mascotaId: valor inmutable que no cambia tras su asignación
-    // Constante mascotaId: valor inmutable que no cambia tras su asignación
     val mascotaId: String = "",
-    // Constante enviando: valor inmutable que no cambia tras su asignación
     // Constante enviando: valor inmutable que no cambia tras su asignación
     val enviando: Boolean = false,
     // Constante mostrandoDialogoContacto: valor inmutable que no cambia tras su asignación
-    // Constante mostrandoDialogoContacto: valor inmutable que no cambia tras su asignación
     val mostrandoDialogoContacto: Boolean = false,
-    // Constante mostrandoConfirmacionEnvio: valor inmutable que no cambia tras su asignación
     // Constante mostrandoConfirmacionEnvio: valor inmutable que no cambia tras su asignación
     val mostrandoConfirmacionEnvio: Boolean = false,
     // Constante errorEnvio: valor inmutable que no cambia tras su asignación
-    // Constante errorEnvio: valor inmutable que no cambia tras su asignación
     val errorEnvio: Boolean = false,
-    // Constante numeroContacto: valor inmutable que no cambia tras su asignación
     // Constante numeroContacto: valor inmutable que no cambia tras su asignación
     val numeroContacto: String = ""
 )
@@ -1860,31 +1548,23 @@ data class MascotaDetalleUiState(
  * - [Gestionar la lógica de envío de nuevos reportes de avistamiento]
  */
 // ViewModel MascotaDetalleViewModel: gestiona el estado y la lógica de negocio de la pantalla
-// ViewModel MascotaDetalleViewModel: gestiona el estado y la lógica de negocio de la pantalla
 class MascotaDetalleViewModel(
-    // Constante repo: valor inmutable que no cambia tras su asignación
     // Constante repo: valor inmutable que no cambia tras su asignación
     private val repo: LomitoTvRepository = LomitoTvRepository()
 ) : ViewModel() {
 
     // Constante _uiState: valor inmutable que no cambia tras su asignación
-    // Constante _uiState: valor inmutable que no cambia tras su asignación
     private val _uiState = MutableStateFlow(MascotaDetalleUiState())
-    // Constante uiState: valor inmutable que no cambia tras su asignación
     // Constante uiState: valor inmutable que no cambia tras su asignación
     val uiState: StateFlow<MascotaDetalleUiState> = _uiState.asStateFlow()
 
     // Función cargar: define la lógica de esta operación
-    // Función cargar: define la lógica de esta operación
     fun cargar(mascotaId: String) {
-        // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
         // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(cargando = true)
             // Constante mascota: valor inmutable que no cambia tras su asignación
-            // Constante mascota: valor inmutable que no cambia tras su asignación
             val mascota = repo.getMascotaById(mascotaId)
-            // Constante reportes: valor inmutable que no cambia tras su asignación
             // Constante reportes: valor inmutable que no cambia tras su asignación
             val reportes = repo.getReportesDeMascota(mascotaId)
             _uiState.value = MascotaDetalleUiState(
@@ -1899,24 +1579,19 @@ class MascotaDetalleViewModel(
     // ✅ El botón "Ayudar" ya no confirma directo: primero abre el teclado
     // numérico para pedir un contacto con el que el dueño pueda comunicarse.
     // Función abrirDialogoContacto: define la lógica de esta operación
-    // Función abrirDialogoContacto: define la lógica de esta operación
     fun abrirDialogoContacto() {
         _uiState.value = _uiState.value.copy(mostrandoDialogoContacto = true, numeroContacto = "")
     }
 
-    // Función cerrarDialogoContacto: define la lógica de esta operación
     // Función cerrarDialogoContacto: define la lógica de esta operación
     fun cerrarDialogoContacto() {
         _uiState.value = _uiState.value.copy(mostrandoDialogoContacto = false, numeroContacto = "")
     }
 
     // Función agregarDigito: define la lógica de esta operación
-    // Función agregarDigito: define la lógica de esta operación
     fun agregarDigito(digito: String) {
         // Constante actual: valor inmutable que no cambia tras su asignación
-        // Constante actual: valor inmutable que no cambia tras su asignación
         val actual = _uiState.value.numeroContacto
-        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (actual.length < 10) {
             _uiState.value = _uiState.value.copy(numeroContacto = actual + digito)
@@ -1924,12 +1599,9 @@ class MascotaDetalleViewModel(
     }
 
     // Función borrarDigito: define la lógica de esta operación
-    // Función borrarDigito: define la lógica de esta operación
     fun borrarDigito() {
         // Constante actual: valor inmutable que no cambia tras su asignación
-        // Constante actual: valor inmutable que no cambia tras su asignación
         val actual = _uiState.value.numeroContacto
-        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (actual.isNotEmpty()) {
             _uiState.value = _uiState.value.copy(numeroContacto = actual.dropLast(1))
@@ -1941,22 +1613,16 @@ class MascotaDetalleViewModel(
     // contra ese id fallaba en silencio y nunca avisaba al dueño). Ahora
     // crea el reporte y lo confirma en un solo paso.
     // Función confirmarAvistamiento: define la lógica de esta operación
-    // Función confirmarAvistamiento: define la lógica de esta operación
     fun confirmarAvistamiento() {
-        // Constante mascotaId: valor inmutable que no cambia tras su asignación
         // Constante mascotaId: valor inmutable que no cambia tras su asignación
         val mascotaId = _uiState.value.mascotaId
         // Constante contacto: valor inmutable que no cambia tras su asignación
-        // Constante contacto: valor inmutable que no cambia tras su asignación
         val contacto = _uiState.value.numeroContacto
-        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (mascotaId.isBlank() || contacto.length < 10) return
         // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
-        // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(enviando = true, mostrandoDialogoContacto = false)
-            // Constante ok: valor inmutable que no cambia tras su asignación
             // Constante ok: valor inmutable que no cambia tras su asignación
             val ok = repo.reportarAvistamiento(mascotaId, contacto)
             _uiState.value = _uiState.value.copy(
@@ -1968,12 +1634,10 @@ class MascotaDetalleViewModel(
     }
 
     // Función cerrarConfirmacionEnvio: define la lógica de esta operación
-    // Función cerrarConfirmacionEnvio: define la lógica de esta operación
     fun cerrarConfirmacionEnvio() {
         _uiState.value = _uiState.value.copy(mostrandoConfirmacionEnvio = false, errorEnvio = false)
     }
 }
-
 ```
 
 ## FASE 7: `com/lomito/seguro/tv/ui/perfil`
@@ -1984,121 +1648,82 @@ class MascotaDetalleViewModel(
 
 ```kotlin
 // Paquete: com.lomito.seguro.tv.ui.perfil
-// Paquete: com.lomito.seguro.tv.ui.perfil
 package com.lomito.seguro.tv.ui.perfil
 
 // Importa el contenedor de datos Bundle
-// Importa el contenedor de datos Bundle
 import android.os.Bundle
-// Importa la dependencia necesaria: ComponentActivity
 // Importa la dependencia necesaria: ComponentActivity
 import androidx.activity.ComponentActivity
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.activity.compose.setContent
-// Importa la dependencia necesaria: viewModels
 // Importa la dependencia necesaria: viewModels
 import androidx.activity.viewModels
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.background
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.Box
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.Column
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.Row
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.Spacer
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.aspectRatio
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.fillMaxHeight
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.fillMaxSize
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.fillMaxWidth
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.height
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.padding
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.width
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.lazy.LazyColumn
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.lazy.items
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.shape.RoundedCornerShape
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.runtime.Composable
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.runtime.LaunchedEffect
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.runtime.collectAsState
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.runtime.getValue
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.Modifier
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.draw.clip
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.text.font.FontWeight
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.dp
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.sp
 // Importa la dependencia necesaria: MaterialTheme
-// Importa la dependencia necesaria: MaterialTheme
 import androidx.tv.material3.MaterialTheme
-// Importa la dependencia necesaria: Surface
 // Importa la dependencia necesaria: Surface
 import androidx.tv.material3.Surface
 // Importa la dependencia necesaria: Text
-// Importa la dependencia necesaria: Text
 import androidx.tv.material3.Text
-// Importa la dependencia necesaria: Mascota
 // Importa la dependencia necesaria: Mascota
 import com.lomito.seguro.tv.data.model.Mascota
 // Importa la dependencia necesaria: ReporteVista
-// Importa la dependencia necesaria: ReporteVista
 import com.lomito.seguro.tv.data.model.ReporteVista
-// Importa componentes de la interfaz gráfica
 // Importa componentes de la interfaz gráfica
 import com.lomito.seguro.tv.ui.detalle.MapaView
 // Importa la dependencia necesaria: LomitoAlertRed
-// Importa la dependencia necesaria: LomitoAlertRed
 import com.lomito.seguro.tv.ui.theme.LomitoAlertRed
-// Importa la dependencia necesaria: LomitoOrange
 // Importa la dependencia necesaria: LomitoOrange
 import com.lomito.seguro.tv.ui.theme.LomitoOrange
 // Importa la dependencia necesaria: LomitoSurfaceAlt
-// Importa la dependencia necesaria: LomitoSurfaceAlt
 import com.lomito.seguro.tv.ui.theme.LomitoSurfaceAlt
-// Importa la dependencia necesaria: LomitoTvTheme
 // Importa la dependencia necesaria: LomitoTvTheme
 import com.lomito.seguro.tv.ui.theme.LomitoTvTheme
 
@@ -2110,30 +1735,23 @@ import com.lomito.seguro.tv.ui.theme.LomitoTvTheme
  * - [Mostrar el historial completo de reportes en un mapa y línea de tiempo]
  */
 // Activity MascotaPerfilActivity: pantalla principal que gestiona el ciclo de vida
-// Activity MascotaPerfilActivity: pantalla principal que gestiona el ciclo de vida
 class MascotaPerfilActivity : ComponentActivity() {
 
     companion object {
-        // Constante EXTRA_MASCOTA_ID: valor fijo definido en tiempo de compilación
         // Constante EXTRA_MASCOTA_ID: valor fijo definido en tiempo de compilación
         const val EXTRA_MASCOTA_ID = "mascota_id"
     }
 
     // Constante viewModel: valor inmutable que no cambia tras su asignación
-    // Constante viewModel: valor inmutable que no cambia tras su asignación
     private val viewModel: MascotaPerfilViewModel by viewModels()
 
     // Método del ciclo de vida: inicializa la actividad y configura la UI
-    // Método del ciclo de vida: inicializa la actividad y configura la UI
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Invoca la implementación del método en la clase padre
         // Invoca la implementación del método en la clase padre
         super.onCreate(savedInstanceState)
         // Constante mascotaId: valor inmutable que no cambia tras su asignación
-        // Constante mascotaId: valor inmutable que no cambia tras su asignación
         val mascotaId = intent.getStringExtra(EXTRA_MASCOTA_ID).orEmpty()
 
-        // Define el árbol de UI con Jetpack Compose como contenido de la Activity
         // Define el árbol de UI con Jetpack Compose como contenido de la Activity
         setContent {
             LomitoTvTheme {
@@ -2151,13 +1769,10 @@ class MascotaPerfilActivity : ComponentActivity() {
  * - mascotaId: [Identificador de la mascota a consultar]
  */
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
-// Función MascotaPerfilScreen: define la lógica de esta operación
 // Función MascotaPerfilScreen: define la lógica de esta operación
 fun MascotaPerfilScreen(viewModel: MascotaPerfilViewModel, mascotaId: String) {
     LaunchedEffect(mascotaId) { viewModel.cargar(mascotaId) }
-    // Constante state: valor inmutable que no cambia tras su asignación
     // Constante state: valor inmutable que no cambia tras su asignación
     val state by viewModel.uiState.collectAsState()
 
@@ -2167,7 +1782,6 @@ fun MascotaPerfilScreen(viewModel: MascotaPerfilViewModel, mascotaId: String) {
             .background(MaterialTheme.colorScheme.background)
             .padding(48.dp)
     ) {
-        // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
         // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
         when {
             state.cargando -> Text(
@@ -2184,20 +1798,15 @@ fun MascotaPerfilScreen(viewModel: MascotaPerfilViewModel, mascotaId: String) {
 }
 
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun MascotaPerfilContenido(mascota: Mascota, reportes: List<ReporteVista>) {
-    // Constante perdida: valor inmutable que no cambia tras su asignación
     // Constante perdida: valor inmutable que no cambia tras su asignación
     val perdida = mascota.estado.equals("PERDIDA", ignoreCase = true)
 
     // Constante ultimoReporte: valor inmutable que no cambia tras su asignación
-    // Constante ultimoReporte: valor inmutable que no cambia tras su asignación
     val ultimoReporte = reportes.maxByOrNull { it.timestamp }
     // Constante lat: valor inmutable que no cambia tras su asignación
-    // Constante lat: valor inmutable que no cambia tras su asignación
     val lat = ultimoReporte?.latitud ?: mascota.latitud
-    // Constante lng: valor inmutable que no cambia tras su asignación
     // Constante lng: valor inmutable que no cambia tras su asignación
     val lng = ultimoReporte?.longitud ?: mascota.longitud
 
@@ -2241,7 +1850,6 @@ private fun MascotaPerfilContenido(mascota: Mascota, reportes: List<ReporteVista
                     modifier = Modifier.padding(bottom = 12.dp)
                 )
                 // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                 if (reportes.isEmpty()) {
                     Text(
                         text = "Aún no hay avistamientos reportados.",
@@ -2267,7 +1875,6 @@ private fun MascotaPerfilContenido(mascota: Mascota, reportes: List<ReporteVista
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
 
-                // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                 // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                 if (lat != null && lng != null) {
                     MapaView(
@@ -2309,7 +1916,6 @@ private fun MascotaPerfilContenido(mascota: Mascota, reportes: List<ReporteVista
 }
 
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun ReporteRow(reporte: ReporteVista) {
     Row(
@@ -2347,47 +1953,33 @@ private fun ReporteRow(reporte: ReporteVista) {
 
 ```kotlin
 // Paquete: com.lomito.seguro.tv.ui.perfil
-// Paquete: com.lomito.seguro.tv.ui.perfil
 package com.lomito.seguro.tv.ui.perfil
 
 // Importa la clase base ViewModel del ciclo de vida
-// Importa la clase base ViewModel del ciclo de vida
 import androidx.lifecycle.ViewModel
-// Importa la dependencia necesaria: viewModelScope
 // Importa la dependencia necesaria: viewModelScope
 import androidx.lifecycle.viewModelScope
 // Importa la dependencia necesaria: Mascota
-// Importa la dependencia necesaria: Mascota
 import com.lomito.seguro.tv.data.model.Mascota
-// Importa la dependencia necesaria: ReporteVista
 // Importa la dependencia necesaria: ReporteVista
 import com.lomito.seguro.tv.data.model.ReporteVista
 // Importa la dependencia necesaria: LomitoTvRepository
-// Importa la dependencia necesaria: LomitoTvRepository
 import com.lomito.seguro.tv.data.repository.LomitoTvRepository
-// Importa el observable de datos reactivos
 // Importa el observable de datos reactivos
 import kotlinx.coroutines.flow.MutableStateFlow
 // Importa el observable de datos reactivos
-// Importa el observable de datos reactivos
 import kotlinx.coroutines.flow.StateFlow
 // Importa el observable de datos reactivos
-// Importa el observable de datos reactivos
 import kotlinx.coroutines.flow.asStateFlow
-// Importa soporte para corrutinas de Kotlin
 // Importa soporte para corrutinas de Kotlin
 import kotlinx.coroutines.launch
 
 // Clase de datos MascotaPerfilUiState: modelo inmutable con propiedades de dominio
-// Clase de datos MascotaPerfilUiState: modelo inmutable con propiedades de dominio
 data class MascotaPerfilUiState(
-    // Constante cargando: valor inmutable que no cambia tras su asignación
     // Constante cargando: valor inmutable que no cambia tras su asignación
     val cargando: Boolean = true,
     // Constante mascota: valor inmutable que no cambia tras su asignación
-    // Constante mascota: valor inmutable que no cambia tras su asignación
     val mascota: Mascota? = null,
-    // Constante reportes: valor inmutable que no cambia tras su asignación
     // Constante reportes: valor inmutable que no cambia tras su asignación
     val reportes: List<ReporteVista> = emptyList()
 )
@@ -2400,38 +1992,29 @@ data class MascotaPerfilUiState(
  * - [Cargar y ordenar el historial de reportes de la mascota]
  */
 // ViewModel MascotaPerfilViewModel: gestiona el estado y la lógica de negocio de la pantalla
-// ViewModel MascotaPerfilViewModel: gestiona el estado y la lógica de negocio de la pantalla
 class MascotaPerfilViewModel(
-    // Constante repo: valor inmutable que no cambia tras su asignación
     // Constante repo: valor inmutable que no cambia tras su asignación
     private val repo: LomitoTvRepository = LomitoTvRepository()
 ) : ViewModel() {
 
     // Constante _uiState: valor inmutable que no cambia tras su asignación
-    // Constante _uiState: valor inmutable que no cambia tras su asignación
     private val _uiState = MutableStateFlow(MascotaPerfilUiState())
-    // Constante uiState: valor inmutable que no cambia tras su asignación
     // Constante uiState: valor inmutable que no cambia tras su asignación
     val uiState: StateFlow<MascotaPerfilUiState> = _uiState.asStateFlow()
 
     // Función cargar: define la lógica de esta operación
-    // Función cargar: define la lógica de esta operación
     fun cargar(mascotaId: String) {
-        // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
         // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(cargando = true)
             // Constante mascota: valor inmutable que no cambia tras su asignación
-            // Constante mascota: valor inmutable que no cambia tras su asignación
             val mascota = repo.getMascotaById(mascotaId)
-            // Constante reportes: valor inmutable que no cambia tras su asignación
             // Constante reportes: valor inmutable que no cambia tras su asignación
             val reportes = repo.getReportesDeMascota(mascotaId).sortedByDescending { it.timestamp }
             _uiState.value = MascotaPerfilUiState(cargando = false, mascota = mascota, reportes = reportes)
         }
     }
 }
-
 ```
 
 ## FASE 8: `com/lomito/seguro/tv/ui/refugio`
@@ -2442,97 +2025,66 @@ class MascotaPerfilViewModel(
 
 ```kotlin
 // Paquete: com.lomito.seguro.tv.ui.refugio
-// Paquete: com.lomito.seguro.tv.ui.refugio
 package com.lomito.seguro.tv.ui.refugio
 
 // Importa el contexto de Android
-// Importa el contexto de Android
 import android.content.Context
-// Importa la dependencia necesaria: Uri
 // Importa la dependencia necesaria: Uri
 import android.net.Uri
 // Importa el contenedor de datos Bundle
-// Importa el contenedor de datos Bundle
 import android.os.Bundle
-// Importa la dependencia necesaria: ComponentActivity
 // Importa la dependencia necesaria: ComponentActivity
 import androidx.activity.ComponentActivity
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.activity.compose.setContent
-// Importa la dependencia necesaria: viewModels
 // Importa la dependencia necesaria: viewModels
 import androidx.activity.viewModels
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.background
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.Box
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.Column
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.fillMaxSize
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.padding
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.runtime.Composable
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.runtime.LaunchedEffect
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.runtime.collectAsState
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.runtime.getValue
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.Alignment
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.Modifier
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.text.font.FontWeight
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.dp
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.sp
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.viewinterop.AndroidView
-// Importa el reproductor multimedia ExoPlayer
 // Importa el reproductor multimedia ExoPlayer
 import androidx.media3.common.MediaItem
 // Importa el reproductor multimedia ExoPlayer
-// Importa el reproductor multimedia ExoPlayer
 import androidx.media3.exoplayer.ExoPlayer
-// Importa componentes de la interfaz gráfica
 // Importa componentes de la interfaz gráfica
 import androidx.media3.ui.PlayerView
 // Importa la dependencia necesaria: Button
-// Importa la dependencia necesaria: Button
 import androidx.tv.material3.Button
-// Importa la dependencia necesaria: MaterialTheme
 // Importa la dependencia necesaria: MaterialTheme
 import androidx.tv.material3.MaterialTheme
 // Importa la dependencia necesaria: Text
-// Importa la dependencia necesaria: Text
 import androidx.tv.material3.Text
-// Importa la dependencia necesaria: Refugio
 // Importa la dependencia necesaria: Refugio
 import com.lomito.seguro.tv.data.model.Refugio
 // Importa la dependencia necesaria: LomitoAlertRed
-// Importa la dependencia necesaria: LomitoAlertRed
 import com.lomito.seguro.tv.ui.theme.LomitoAlertRed
-// Importa la dependencia necesaria: LomitoTvTheme
 // Importa la dependencia necesaria: LomitoTvTheme
 import com.lomito.seguro.tv.ui.theme.LomitoTvTheme
 
@@ -2544,30 +2096,23 @@ import com.lomito.seguro.tv.ui.theme.LomitoTvTheme
  * - [Mostrar los detalles de contacto y horarios del refugio]
  */
 // Activity RefugioDifusionActivity: pantalla principal que gestiona el ciclo de vida
-// Activity RefugioDifusionActivity: pantalla principal que gestiona el ciclo de vida
 class RefugioDifusionActivity : ComponentActivity() {
 
     companion object {
-        // Constante EXTRA_REFUGIO_ID: valor fijo definido en tiempo de compilación
         // Constante EXTRA_REFUGIO_ID: valor fijo definido en tiempo de compilación
         const val EXTRA_REFUGIO_ID = "refugio_id"
     }
 
     // Constante viewModel: valor inmutable que no cambia tras su asignación
-    // Constante viewModel: valor inmutable que no cambia tras su asignación
     private val viewModel: RefugioDifusionViewModel by viewModels()
 
     // Método del ciclo de vida: inicializa la actividad y configura la UI
-    // Método del ciclo de vida: inicializa la actividad y configura la UI
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Invoca la implementación del método en la clase padre
         // Invoca la implementación del método en la clase padre
         super.onCreate(savedInstanceState)
         // Constante refugioId: valor inmutable que no cambia tras su asignación
-        // Constante refugioId: valor inmutable que no cambia tras su asignación
         val refugioId = intent.getStringExtra(EXTRA_REFUGIO_ID).orEmpty()
 
-        // Define el árbol de UI con Jetpack Compose como contenido de la Activity
         // Define el árbol de UI con Jetpack Compose como contenido de la Activity
         setContent {
             LomitoTvTheme {
@@ -2590,13 +2135,10 @@ class RefugioDifusionActivity : ComponentActivity() {
  * - onBackClick: [Callback para regresar a la pantalla anterior]
  */
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
-// Función RefugioDifusionScreen: define la lógica de esta operación
 // Función RefugioDifusionScreen: define la lógica de esta operación
 fun RefugioDifusionScreen(viewModel: RefugioDifusionViewModel, refugioId: String, onBackClick: () -> Unit) {
     LaunchedEffect(refugioId) { viewModel.cargar(refugioId) }
-    // Constante state: valor inmutable que no cambia tras su asignación
     // Constante state: valor inmutable que no cambia tras su asignación
     val state by viewModel.uiState.collectAsState()
 
@@ -2605,7 +2147,6 @@ fun RefugioDifusionScreen(viewModel: RefugioDifusionViewModel, refugioId: String
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
         // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
         when {
             state.cargando -> Text(
@@ -2629,7 +2170,6 @@ fun RefugioDifusionScreen(viewModel: RefugioDifusionViewModel, refugioId: String
 }
 
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun RefugioDifusionContenido(refugio: Refugio, onBackClick: () -> Unit) {
     Box(modifier = Modifier.fillMaxSize()) {
@@ -2639,21 +2179,17 @@ private fun RefugioDifusionContenido(refugio: Refugio, onBackClick: () -> Unit) 
                 PlayerView(context).apply {
                     useController = true
                     // Configura el reproductor multimedia ExoPlayer para streaming de video
-                    // Configura el reproductor multimedia ExoPlayer para streaming de video
                     player = ExoPlayer.Builder(context).build().apply {
-                        // Configura el reproductor multimedia ExoPlayer para streaming de video
                         // Configura el reproductor multimedia ExoPlayer para streaming de video
                         setMediaItem(MediaItem.fromUri(Uri.parse(refugio.videoUrl)))
                         prepare()
                         playWhenReady = true
-                        // Configura el reproductor multimedia ExoPlayer para streaming de video
                         // Configura el reproductor multimedia ExoPlayer para streaming de video
                         repeatMode = ExoPlayer.REPEAT_MODE_ALL
                     }
                 }
             },
             onRelease = { playerView ->
-                // Libera los recursos del reproductor multimedia
                 // Libera los recursos del reproductor multimedia
                 playerView.player?.release()
             }
@@ -2690,7 +2226,6 @@ private fun RefugioDifusionContenido(refugio: Refugio, onBackClick: () -> Unit) 
         }
     }
 }
-
 ```
 
 ### Paso 8.2: `RefugioDifusionViewModel.kt`
@@ -2699,41 +2234,29 @@ private fun RefugioDifusionContenido(refugio: Refugio, onBackClick: () -> Unit) 
 
 ```kotlin
 // Paquete: com.lomito.seguro.tv.ui.refugio
-// Paquete: com.lomito.seguro.tv.ui.refugio
 package com.lomito.seguro.tv.ui.refugio
 
 // Importa la clase base ViewModel del ciclo de vida
-// Importa la clase base ViewModel del ciclo de vida
 import androidx.lifecycle.ViewModel
-// Importa la dependencia necesaria: viewModelScope
 // Importa la dependencia necesaria: viewModelScope
 import androidx.lifecycle.viewModelScope
 // Importa la dependencia necesaria: Refugio
-// Importa la dependencia necesaria: Refugio
 import com.lomito.seguro.tv.data.model.Refugio
-// Importa la dependencia necesaria: LomitoTvRepository
 // Importa la dependencia necesaria: LomitoTvRepository
 import com.lomito.seguro.tv.data.repository.LomitoTvRepository
 // Importa el observable de datos reactivos
-// Importa el observable de datos reactivos
 import kotlinx.coroutines.flow.MutableStateFlow
-// Importa el observable de datos reactivos
 // Importa el observable de datos reactivos
 import kotlinx.coroutines.flow.StateFlow
 // Importa el observable de datos reactivos
-// Importa el observable de datos reactivos
 import kotlinx.coroutines.flow.asStateFlow
-// Importa soporte para corrutinas de Kotlin
 // Importa soporte para corrutinas de Kotlin
 import kotlinx.coroutines.launch
 
 // Clase de datos RefugioDifusionUiState: modelo inmutable con propiedades de dominio
-// Clase de datos RefugioDifusionUiState: modelo inmutable con propiedades de dominio
 data class RefugioDifusionUiState(
     // Constante cargando: valor inmutable que no cambia tras su asignación
-    // Constante cargando: valor inmutable que no cambia tras su asignación
     val cargando: Boolean = true,
-    // Constante refugio: valor inmutable que no cambia tras su asignación
     // Constante refugio: valor inmutable que no cambia tras su asignación
     val refugio: Refugio? = null
 )
@@ -2746,28 +2269,21 @@ data class RefugioDifusionUiState(
  * - [Proveer la URL del video del refugio para su reproducción en la TV]
  */
 // ViewModel RefugioDifusionViewModel: gestiona el estado y la lógica de negocio de la pantalla
-// ViewModel RefugioDifusionViewModel: gestiona el estado y la lógica de negocio de la pantalla
 class RefugioDifusionViewModel(
-    // Constante repo: valor inmutable que no cambia tras su asignación
     // Constante repo: valor inmutable que no cambia tras su asignación
     private val repo: LomitoTvRepository = LomitoTvRepository()
 ) : ViewModel() {
 
     // Constante _uiState: valor inmutable que no cambia tras su asignación
-    // Constante _uiState: valor inmutable que no cambia tras su asignación
     private val _uiState = MutableStateFlow(RefugioDifusionUiState())
-    // Constante uiState: valor inmutable que no cambia tras su asignación
     // Constante uiState: valor inmutable que no cambia tras su asignación
     val uiState: StateFlow<RefugioDifusionUiState> = _uiState.asStateFlow()
 
     // Función cargar: define la lógica de esta operación
-    // Función cargar: define la lógica de esta operación
     fun cargar(refugioId: String) {
-        // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
         // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(cargando = true)
-            // Constante refugio: valor inmutable que no cambia tras su asignación
             // Constante refugio: valor inmutable que no cambia tras su asignación
             val refugio = repo.getRefugioById(refugioId)
             // ✅ AHORA USA EL videoUrl QUE VIENE DE LA BASE DE DATOS
@@ -2775,7 +2291,6 @@ class RefugioDifusionViewModel(
         }
     }
 }
-
 ```
 
 ## FASE 9: `com/lomito/seguro/tv/ui/theme`
@@ -2786,51 +2301,36 @@ class RefugioDifusionViewModel(
 
 ```kotlin
 // Paquete: com.lomito.seguro.tv.ui.theme
-// Paquete: com.lomito.seguro.tv.ui.theme
 package com.lomito.seguro.tv.ui.theme
 
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.runtime.Composable
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.graphics.Color
 // Importa la dependencia necesaria: MaterialTheme
-// Importa la dependencia necesaria: MaterialTheme
 import androidx.tv.material3.MaterialTheme
-// Importa la dependencia necesaria: darkColorScheme
 // Importa la dependencia necesaria: darkColorScheme
 import androidx.tv.material3.darkColorScheme
 
 // Constante LomitoOrange: valor inmutable que no cambia tras su asignación
-// Constante LomitoOrange: valor inmutable que no cambia tras su asignación
 val LomitoOrange = Color(0xFFFF8A00)
-// Constante LomitoOrangeVariant: valor inmutable que no cambia tras su asignación
 // Constante LomitoOrangeVariant: valor inmutable que no cambia tras su asignación
 val LomitoOrangeVariant = Color(0xFFFFB454)
 // Constante LomitoBackground: valor inmutable que no cambia tras su asignación
-// Constante LomitoBackground: valor inmutable que no cambia tras su asignación
 val LomitoBackground = Color(0xFF121212)
-// Constante LomitoSurface: valor inmutable que no cambia tras su asignación
 // Constante LomitoSurface: valor inmutable que no cambia tras su asignación
 val LomitoSurface = Color(0xFF1E1E1E)
 // Constante LomitoSurfaceAlt: valor inmutable que no cambia tras su asignación
-// Constante LomitoSurfaceAlt: valor inmutable que no cambia tras su asignación
 val LomitoSurfaceAlt = Color(0xFF262626)
-// Constante LomitoOnSurface: valor inmutable que no cambia tras su asignación
 // Constante LomitoOnSurface: valor inmutable que no cambia tras su asignación
 val LomitoOnSurface = Color(0xFFF5F5F5)
 // Constante LomitoOnSurfaceMuted: valor inmutable que no cambia tras su asignación
-// Constante LomitoOnSurfaceMuted: valor inmutable que no cambia tras su asignación
 val LomitoOnSurfaceMuted = Color(0xFFA0A0A0)
-// Constante LomitoAlertRed: valor inmutable que no cambia tras su asignación
 // Constante LomitoAlertRed: valor inmutable que no cambia tras su asignación
 val LomitoAlertRed = Color(0xFFE53935)
 // Constante LomitoFoundGreen: valor inmutable que no cambia tras su asignación
-// Constante LomitoFoundGreen: valor inmutable que no cambia tras su asignación
 val LomitoFoundGreen = Color(0xFF4CAF50)
 
-// Constante LomitoTvColorScheme: valor inmutable que no cambia tras su asignación
 // Constante LomitoTvColorScheme: valor inmutable que no cambia tras su asignación
 private val LomitoTvColorScheme = darkColorScheme(
     primary = LomitoOrange,
@@ -2852,9 +2352,7 @@ private val LomitoTvColorScheme = darkColorScheme(
  * - content: [Contenido componible que será estilizado por el tema]
  */
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
-// Función LomitoTvTheme: define la lógica de esta operación
 // Función LomitoTvTheme: define la lógica de esta operación
 fun LomitoTvTheme(content: @Composable () -> Unit) {
     MaterialTheme(
@@ -2862,7 +2360,6 @@ fun LomitoTvTheme(content: @Composable () -> Unit) {
         content = content
     )
 }
-
 ```
 
 ## FASE 10: `com/lomito/seguro/tv/util`
@@ -2873,10 +2370,8 @@ fun LomitoTvTheme(content: @Composable () -> Unit) {
 
 ```kotlin
 // Paquete: com.lomito.seguro.tv.util
-// Paquete: com.lomito.seguro.tv.util
 package com.lomito.seguro.tv.util
 
-// Importa el cliente Retrofit para peticiones HTTP
 // Importa el cliente Retrofit para peticiones HTTP
 import com.lomito.seguro.tv.data.api.RetrofitClient
 
@@ -2888,17 +2383,12 @@ import com.lomito.seguro.tv.data.api.RetrofitClient
  * - [Retornar la URL original si ya es absoluta]
  */
 // Función String: define la lógica de esta operación
-// Función String: define la lógica de esta operación
 fun String?.toAbsoluteUrl(): String? {
-    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
     // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
     if (this.isNullOrEmpty()) return null
     // Retorna el valor al llamador de la función
-    // Retorna el valor al llamador de la función
     return if (startsWith("http://") || startsWith("https://")) this
-    // Accede al cliente Retrofit singleton para realizar peticiones de red
     // Accede al cliente Retrofit singleton para realizar peticiones de red
     else RetrofitClient.SERVER_URL + (if (startsWith("/")) this else "/$this")
 }
-
 ```

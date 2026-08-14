@@ -1,42 +1,35 @@
-# Guía Paso a Paso: Construyendo el Módulo Wear OS (Smartwatch) de Lomito Seguro
+# Guia Paso a Paso: Construyendo el Modulo Wear OS (Smartwatch) de Lomito Seguro
 
-Esta guía documenta y desglosa paso a paso la arquitectura, configuración y construcción completa del módulo **Wear OS (Smartwatch)** de **Lomito Seguro**, explicando las decisiones técnicas, patrones de diseño y bloques de código esenciales para un proyecto profesional en **Kotlin** y **Jetpack Compose**.
+Esta guia documenta y desglosa la construccion del modulo **Wear OS (Smartwatch)** de **Lomito Seguro**.
 
 ---
 
+## Objetivo de Esta Guia
 
-## Objetivo de Esta Guía
+1. Como construir una app para **Wear OS** con **Wear Compose** optimizada para pantalla circular pequena.
+2. Como implementar comunicacion bidireccional con el telefono usando **Wearable Data Layer API**.
+3. Como implementar **polling** de datos del backend desde el smartwatch.
+4. Como gestionar el **modo ambiente** de bajo consumo en el reloj.
+5. Como implementar alertas hapticas (vibracion) cuando la mascota supera el umbral de distancia.
 
-Al estudiar y seguir esta guía, comprenderás:
+## Arquitectura del Modulo Wear
 
-1. Cómo construir una app para **Wear OS** con **Wear Compose** optimizada para pantalla circular pequeña.
-2. Cómo implementar comunicación bidireccional con el teléfono usando **Wearable Data Layer API** (MessageClient y DataClient).
-3. Cómo implementar **polling** de datos del backend desde el smartwatch.
-4. Cómo gestionar el **modo ambiente** de bajo consumo en el reloj.
-5. Cómo implementar alertas hápticas (vibración) cuando la mascota supera el umbral de distancia.
-6. Cómo persistir configuraciones en el reloj con **SharedPreferences**.
-
-## Arquitectura del Módulo Wear
-
-```
-wear/
-├── data/
-│   ├── MascotaPerdida.kt        → Modelo de datos para mascotas perdidas
-│   ├── PollingService.kt        → Servicio de polling al backend
-│   ├── WatchPreferences.kt      → Persistencia local en el reloj
-│   ├── WatchViewModel.kt        → ViewModel central del reloj
-│   └── WearMessageService.kt   → Servicio de mensajes desde el teléfono
-└── ui/
-    ├── alert/       → Pantalla de alerta de proximidad
-    ├── dashboard/   → Dashboard principal del reloj
-    ├── home/        → Pantalla de inicio (WearMainActivity)
-    ├── mascota/     → CRUD básico de mascotas desde el reloj
-    ├── report/      → Reportes de avistamiento y mascotas perdidas
-    ├── selection/   → Pantalla de selección genérica
-    └── settings/    → Configuración del reloj (umbral, preferencias)
-```
-
-
+\wear/
++-- data/
+|   +-- MascotaPerdida.kt        -> Modelo de datos
+|   +-- PollingService.kt        -> Servicio de polling al backend
+|   +-- WatchPreferences.kt      -> Persistencia local en el reloj
+|   +-- WatchViewModel.kt        -> ViewModel central del reloj
+|   +-- WearMessageService.kt    -> Mensajes desde el telefono
++-- ui/
+    +-- alert/       -> Pantalla de alerta de proximidad
+    +-- dashboard/   -> Dashboard principal del reloj
+    +-- home/        -> Pantalla de inicio (WearMainActivity)
+    +-- mascota/     -> CRUD basico de mascotas desde el reloj
+    +-- report/      -> Reportes de avistamiento
+    +-- selection/   -> Pantalla de seleccion generica
+    +-- settings/    -> Configuracion (umbral, preferencias)
+\
 ---
 
 ## FASE 1: `com/lomito/seguro/wear/data`
@@ -46,7 +39,6 @@ wear/
 **Modelo de mascota perdida (Wear)**. Data class que representa una mascota perdida en el contexto del smartwatch.
 
 ```kotlin
-// Paquete: com.lomito.seguro.wear.data.models
 // Paquete: com.lomito.seguro.wear.data.models
 package com.lomito.seguro.wear.data.models
 
@@ -61,70 +53,56 @@ package com.lomito.seguro.wear.data.models
  * o almacenados localmente que representan a una mascota reportada como perdida.
  */
 // Clase de datos MascotaPerdida: modelo inmutable con propiedades de dominio
-// Clase de datos MascotaPerdida: modelo inmutable con propiedades de dominio
 data class MascotaPerdida(
     // Identificador único de la mascota
-    // Constante id: valor inmutable que no cambia tras su asignación
     // Constante id: valor inmutable que no cambia tras su asignación
     val id: String,
     
     // Nombre de la mascota
     // Constante nombre: valor inmutable que no cambia tras su asignación
-    // Constante nombre: valor inmutable que no cambia tras su asignación
     val nombre: String,
     
     // Especie de la mascota (ej. Perro, Gato)
-    // Constante especie: valor inmutable que no cambia tras su asignación
     // Constante especie: valor inmutable que no cambia tras su asignación
     val especie: String,
     
     // Raza de la mascota, valor por defecto cadena vacía
     // Constante raza: valor inmutable que no cambia tras su asignación
-    // Constante raza: valor inmutable que no cambia tras su asignación
     val raza: String = "",
     
     // Color principal de la mascota
-    // Constante color: valor inmutable que no cambia tras su asignación
     // Constante color: valor inmutable que no cambia tras su asignación
     val color: String = "",
     
     // URL de la fotografía de la mascota, puede ser nulo si no tiene
     // Constante fotoUrl: valor inmutable que no cambia tras su asignación
-    // Constante fotoUrl: valor inmutable que no cambia tras su asignación
     val fotoUrl: String? = null,
     
     // Distancia configurada para activar la alerta en metros, por defecto 50m
-    // Constante distanciaAlerta: valor inmutable que no cambia tras su asignación
     // Constante distanciaAlerta: valor inmutable que no cambia tras su asignación
     val distanciaAlerta: Int = 50,
     
     // Estado actual de la mascota, por defecto "PERDIDA"
     // Constante estado: valor inmutable que no cambia tras su asignación
-    // Constante estado: valor inmutable que no cambia tras su asignación
     val estado: String = "PERDIDA",
     
     // Identificador único del dueño de la mascota
-    // Constante ownerId: valor inmutable que no cambia tras su asignación
     // Constante ownerId: valor inmutable que no cambia tras su asignación
     val ownerId: String = "",
     
     // Nombre completo o de contacto del dueño
     // Constante duenoNombre: valor inmutable que no cambia tras su asignación
-    // Constante duenoNombre: valor inmutable que no cambia tras su asignación
     val duenoNombre: String = "",
     
     // Teléfono de contacto del dueño para reportes
-    // Constante duenoTelefono: valor inmutable que no cambia tras su asignación
     // Constante duenoTelefono: valor inmutable que no cambia tras su asignación
     val duenoTelefono: String = "",
     
     // Latitud de la última ubicación conocida de la mascota, puede ser nulo
     // Constante ultimaUbicacionLat: valor inmutable que no cambia tras su asignación
-    // Constante ultimaUbicacionLat: valor inmutable que no cambia tras su asignación
     val ultimaUbicacionLat: Double? = null,
     
     // Longitud de la última ubicación conocida de la mascota, puede ser nulo
-    // Constante ultimaUbicacionLng: valor inmutable que no cambia tras su asignación
     // Constante ultimaUbicacionLng: valor inmutable que no cambia tras su asignación
     val ultimaUbicacionLng: Double? = null
 )
@@ -136,64 +114,44 @@ data class MascotaPerdida(
 
 ```kotlin
 // Paquete: com.lomito.seguro.wear.data
-// Paquete: com.lomito.seguro.wear.data
 package com.lomito.seguro.wear.data
-// Importa la dependencia necesaria: BuildConfig
 // Importa la dependencia necesaria: BuildConfig
 import com.lomito.seguro.wear.BuildConfig
 
 // Importa las clases para manejo de notificaciones
-// Importa las clases para manejo de notificaciones
 import android.app.NotificationChannel
-// Importa las clases para manejo de notificaciones
 // Importa las clases para manejo de notificaciones
 import android.app.NotificationManager
 // Importa la clase Intent para navegación entre componentes
-// Importa la clase Intent para navegación entre componentes
 import android.app.PendingIntent
-// Importa la dependencia necesaria: Service
 // Importa la dependencia necesaria: Service
 import android.app.Service
 // Importa el contexto de Android
-// Importa el contexto de Android
 import android.content.Context
-// Importa la clase Intent para navegación entre componentes
 // Importa la clase Intent para navegación entre componentes
 import android.content.Intent
 // Importa la dependencia necesaria: Build
-// Importa la dependencia necesaria: Build
 import android.os.Build
-// Importa el contenedor de datos Bundle
 // Importa el contenedor de datos Bundle
 import android.os.Bundle
 // Importa la dependencia necesaria: IBinder
-// Importa la dependencia necesaria: IBinder
 import android.os.IBinder
-// Importa la dependencia necesaria: VibrationEffect
 // Importa la dependencia necesaria: VibrationEffect
 import android.os.VibrationEffect
 // Importa la dependencia necesaria: Vibrator
-// Importa la dependencia necesaria: Vibrator
 import android.os.Vibrator
-// Importa las clases para manejo de notificaciones
 // Importa las clases para manejo de notificaciones
 import androidx.core.app.NotificationCompat
 // Importa la dependencia necesaria: AlertActivity
-// Importa la dependencia necesaria: AlertActivity
 import com.lomito.seguro.wear.ui.alert.AlertActivity
-// Importa la dependencia necesaria: DashboardActivity
 // Importa la dependencia necesaria: DashboardActivity
 import com.lomito.seguro.wear.ui.dashboard.DashboardActivity
 // Importa soporte para corrutinas de Kotlin
-// Importa soporte para corrutinas de Kotlin
 import kotlinx.coroutines.*
-// Importa el parser JSON
 // Importa el parser JSON
 import org.json.JSONObject
 // Importa la dependencia necesaria: HttpURLConnection
-// Importa la dependencia necesaria: HttpURLConnection
 import java.net.HttpURLConnection
-// Importa la dependencia necesaria: URL
 // Importa la dependencia necesaria: URL
 import java.net.URL
 
@@ -205,50 +163,36 @@ import java.net.URL
  * - [Notificar al usuario si la distancia supera el umbral configurado]
  */
 // Servicio PollingService: componente en background para tareas de larga duración
-// Servicio PollingService: componente en background para tareas de larga duración
 class PollingService : Service() {
 
     // Constante backendUrl: valor inmutable que no cambia tras su asignación
-    // Constante backendUrl: valor inmutable que no cambia tras su asignación
     private val backendUrl = BuildConfig.BACKEND_URL
-    // Variable pollingJob: almacena el estado mutable de este componente
     // Variable pollingJob: almacena el estado mutable de este componente
     private var pollingJob: Job? = null
 
     companion object {
         // Constante CHANNEL_ID: valor fijo definido en tiempo de compilación
-        // Constante CHANNEL_ID: valor fijo definido en tiempo de compilación
         const val CHANNEL_ID = "lomito_polling"
-        // Constante NOTIF_ID: valor fijo definido en tiempo de compilación
         // Constante NOTIF_ID: valor fijo definido en tiempo de compilación
         const val NOTIF_ID = 2001
         // Variable distanciaActual: almacena el estado mutable de este componente
-        // Variable distanciaActual: almacena el estado mutable de este componente
         var distanciaActual: Int = 0
-        // Variable umbralActual: almacena el estado mutable de este componente
         // Variable umbralActual: almacena el estado mutable de este componente
         var umbralActual: Int = 50
         // Variable mascotaIdActual: almacena el estado mutable de este componente
-        // Variable mascotaIdActual: almacena el estado mutable de este componente
         var mascotaIdActual: String = ""
-        // Variable mascotaNombreActual: almacena el estado mutable de este componente
         // Variable mascotaNombreActual: almacena el estado mutable de este componente
         var mascotaNombreActual: String = ""
         // Variable alertaMostrada: almacena el estado mutable de este componente
-        // Variable alertaMostrada: almacena el estado mutable de este componente
         var alertaMostrada: Boolean = false
         // Variable ultimaDistanciaAlerta: almacena el estado mutable de este componente
-        // Variable ultimaDistanciaAlerta: almacena el estado mutable de este componente
         var ultimaDistanciaAlerta: Int = 0
-        // Constante INCREMENTO_MINIMO: valor fijo definido en tiempo de compilación
         // Constante INCREMENTO_MINIMO: valor fijo definido en tiempo de compilación
         private const val INCREMENTO_MINIMO = 20
     }
 
     // Método del ciclo de vida: inicializa la actividad y configura la UI
-    // Método del ciclo de vida: inicializa la actividad y configura la UI
     override fun onCreate() {
-        // Invoca la implementación del método en la clase padre
         // Invoca la implementación del método en la clase padre
         super.onCreate()
         crearCanalNotificacion()
@@ -257,34 +201,26 @@ class PollingService : Service() {
     }
 
     // Sobreescribe la función onStartCommand de la clase padre
-    // Sobreescribe la función onStartCommand de la clase padre
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Retorna el valor al llamador de la función
         // Retorna el valor al llamador de la función
         return START_STICKY
     }
 
     // Sobreescribe la función onBind de la clase padre
-    // Sobreescribe la función onBind de la clase padre
     override fun onBind(intent: Intent?): IBinder? = null
 
     private fun iniciarPolling() {
         // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
-        // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
         pollingJob = CoroutineScope(Dispatchers.IO + SupervisorJob()).launch {
             while (isActive) {
                 // Bloque try-catch: maneja posibles excepciones en el código crítico
-                // Bloque try-catch: maneja posibles excepciones en el código crítico
                 try {
-                    // Constante prefs: valor inmutable que no cambia tras su asignación
                     // Constante prefs: valor inmutable que no cambia tras su asignación
                     val prefs = applicationContext.getSharedPreferences("watch_prefs", Context.MODE_PRIVATE)
                     mascotaNombreActual = prefs.getString("mascota_activa_nombre", "Tu mascota") ?: "Tu mascota"
 
                     // Constante url: valor inmutable que no cambia tras su asignación
-                    // Constante url: valor inmutable que no cambia tras su asignación
                     val url = URL("$backendUrl/api/simulador/estado")
-                    // Constante conn: valor inmutable que no cambia tras su asignación
                     // Constante conn: valor inmutable que no cambia tras su asignación
                     val conn = url.openConnection() as HttpURLConnection
                     conn.connectTimeout = 2000
@@ -292,21 +228,15 @@ class PollingService : Service() {
                     conn.requestMethod = "GET"
 
                     // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     if (conn.responseCode == HttpURLConnection.HTTP_OK) {
-                        // Constante response: valor inmutable que no cambia tras su asignación
                         // Constante response: valor inmutable que no cambia tras su asignación
                         val response = conn.inputStream.bufferedReader().readText()
                         // Constante json: valor inmutable que no cambia tras su asignación
-                        // Constante json: valor inmutable que no cambia tras su asignación
                         val json = JSONObject(response)
-                        // Constante distancia: valor inmutable que no cambia tras su asignación
                         // Constante distancia: valor inmutable que no cambia tras su asignación
                         val distancia = json.optInt("distancia", 0)
                         // Constante umbral: valor inmutable que no cambia tras su asignación
-                        // Constante umbral: valor inmutable que no cambia tras su asignación
                         val umbral = json.optInt("umbral", 50)
-                        // Constante mascotaId: valor inmutable que no cambia tras su asignación
                         // Constante mascotaId: valor inmutable que no cambia tras su asignación
                         val mascotaId = json.optString("mascotaId", "")
 
@@ -323,43 +253,31 @@ class PollingService : Service() {
                         })
 
                         // Registro de evento en el log de Android para depuración
-                        // Registro de evento en el log de Android para depuración
                         android.util.Log.d("POLLING_SVC", "📡 distancia=$distancia umbral=$umbral mascota=$mascotaNombreActual")
 
-                        // Cambia el contexto de ejecución de la corrutina (ej. a IO para operaciones de red)
                         // Cambia el contexto de ejecución de la corrutina (ej. a IO para operaciones de red)
                         withContext(Dispatchers.Main) {
                             // ✅ Evaluar condiciones
                             // Constante incremento: valor inmutable que no cambia tras su asignación
-                            // Constante incremento: valor inmutable que no cambia tras su asignación
                             val incremento = distancia - ultimaDistanciaAlerta
-                            // Constante superaUmbral: valor inmutable que no cambia tras su asignación
                             // Constante superaUmbral: valor inmutable que no cambia tras su asignación
                             val superaUmbral = distancia > umbral
                             // Constante distanciaValida: valor inmutable que no cambia tras su asignación
-                            // Constante distanciaValida: valor inmutable que no cambia tras su asignación
                             val distanciaValida = distancia > 0
-                            // Constante tieneMascota: valor inmutable que no cambia tras su asignación
                             // Constante tieneMascota: valor inmutable que no cambia tras su asignación
                             val tieneMascota = mascotaId.isNotEmpty()
                             // Constante alertaNoActiva: valor inmutable que no cambia tras su asignación
-                            // Constante alertaNoActiva: valor inmutable que no cambia tras su asignación
                             val alertaNoActiva = !alertaMostrada
                             // Constante esPrimeraAlerta: valor inmutable que no cambia tras su asignación
-                            // Constante esPrimeraAlerta: valor inmutable que no cambia tras su asignación
                             val esPrimeraAlerta = ultimaDistanciaAlerta == 0
-                            // Constante aumentoSignificativo: valor inmutable que no cambia tras su asignación
                             // Constante aumentoSignificativo: valor inmutable que no cambia tras su asignación
                             val aumentoSignificativo = incremento >= INCREMENTO_MINIMO
 
                             // ✅ Determinar si debe mostrar alerta (sin usar if como expresión)
                             // Variable debeMostrar: almacena el estado mutable de este componente
-                            // Variable debeMostrar: almacena el estado mutable de este componente
                             var debeMostrar = false
                             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                             if (superaUmbral && distanciaValida && tieneMascota && alertaNoActiva) {
-                                // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                 // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                 if (esPrimeraAlerta || aumentoSignificativo) {
                                     debeMostrar = true
@@ -367,17 +285,14 @@ class PollingService : Service() {
                             }
 
                             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                             if (debeMostrar) {
                                 // ✅ Mostrar alerta
                                 alertaMostrada = true
                                 ultimaDistanciaAlerta = distancia
                                 // Registro de evento en el log de Android para depuración
-                                // Registro de evento en el log de Android para depuración
                                 android.util.Log.d("POLLING_SVC", "🚨 Abriendo AlertActivity (incremento: $incremento m)")
                                 vibrar()
 
-                                // Constante intent: valor inmutable que no cambia tras su asignación
                                 // Constante intent: valor inmutable que no cambia tras su asignación
                                 val intent = Intent(applicationContext, AlertActivity::class.java).apply {
                                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or
@@ -392,7 +307,6 @@ class PollingService : Service() {
                             } else {
                                 // ✅ Resetear cuando la distancia es segura
                                 // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                                // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                 if (distancia <= umbral || distancia == 0) {
                                     alertaMostrada = false
                                 }
@@ -400,9 +314,7 @@ class PollingService : Service() {
 
                             // ✅ Logs para debugging
                             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                             if (distancia > umbral && alertaMostrada) {
-                                // Registro de evento en el log de Android para depuración
                                 // Registro de evento en el log de Android para depuración
                                 android.util.Log.d("POLLING_SVC", "⏳ Alerta ya mostrada. Distancia actual: $distancia")
                             }
@@ -410,7 +322,6 @@ class PollingService : Service() {
                     }
                     conn.disconnect()
                 } catch (e: Exception) {
-                    // Registro de evento en el log de Android para depuración
                     // Registro de evento en el log de Android para depuración
                     android.util.Log.e("POLLING_SVC", "Error: ${e.message}")
                 }
@@ -421,15 +332,11 @@ class PollingService : Service() {
 
     private fun vibrar() {
         // Bloque try-catch: maneja posibles excepciones en el código crítico
-        // Bloque try-catch: maneja posibles excepciones en el código crítico
         try {
-            // Constante vibrator: valor inmutable que no cambia tras su asignación
             // Constante vibrator: valor inmutable que no cambia tras su asignación
             val vibrator = getSystemService(VIBRATOR_SERVICE) as Vibrator
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                // Activa la vibración háptica del smartwatch para retroalimentación táctil
                 // Activa la vibración háptica del smartwatch para retroalimentación táctil
                 vibrator.vibrate(
                     VibrationEffect.createWaveform(longArrayOf(0, 300, 100, 300, 100, 600), -1)
@@ -437,11 +344,9 @@ class PollingService : Service() {
             } else {
                 @Suppress("DEPRECATION")
                 // Activa la vibración háptica del smartwatch para retroalimentación táctil
-                // Activa la vibración háptica del smartwatch para retroalimentación táctil
                 vibrator.vibrate(longArrayOf(0, 300, 100, 300, 100, 600), -1)
             }
         } catch (e: Exception) {
-            // Registro de evento en el log de Android para depuración
             // Registro de evento en el log de Android para depuración
             android.util.Log.e("POLLING_SVC", "Error vibrando: ${e.message}")
         }
@@ -449,15 +354,11 @@ class PollingService : Service() {
 
     private fun crearCanalNotificacion() {
         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // Constante mgr: valor inmutable que no cambia tras su asignación
             // Constante mgr: valor inmutable que no cambia tras su asignación
             val mgr = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             // Crea el canal de notificación requerido en Android 8.0+
-            // Crea el canal de notificación requerido en Android 8.0+
             mgr.createNotificationChannel(
-                // Crea el canal de notificación requerido en Android 8.0+
                 // Crea el canal de notificación requerido en Android 8.0+
                 NotificationChannel(
                     CHANNEL_ID,
@@ -470,7 +371,6 @@ class PollingService : Service() {
 
     private fun crearNotificacion(texto: String) =
         // Construye la notificación con sus propiedades visuales y de comportamiento
-        // Construye la notificación con sus propiedades visuales y de comportamiento
         NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_menu_mylocation)
             .setContentTitle("Lomito Seguro")
@@ -479,9 +379,7 @@ class PollingService : Service() {
             .build()
 
     // Método del ciclo de vida: se limpia la actividad antes de destruirse
-    // Método del ciclo de vida: se limpia la actividad antes de destruirse
     override fun onDestroy() {
-        // Invoca la implementación del método en la clase padre
         // Invoca la implementación del método en la clase padre
         super.onDestroy()
         pollingJob?.cancel()
@@ -497,13 +395,10 @@ class PollingService : Service() {
 ```kotlin
 // wear/data/WatchPreferences.kt
 // Paquete: com.lomito.seguro.wear.data
-// Paquete: com.lomito.seguro.wear.data
 package com.lomito.seguro.wear.data
 
 // Importa el contexto de Android
-// Importa el contexto de Android
 import android.content.Context
-// Importa SharedPreferences para persistencia local
 // Importa SharedPreferences para persistencia local
 import android.content.SharedPreferences
 
@@ -515,10 +410,8 @@ import android.content.SharedPreferences
  * - [Proveer una interfaz simplificada para acceder a SharedPreferences en la app de Wear OS]
  */
 // Declaración de la clase WatchPreferences
-// Declaración de la clase WatchPreferences
 class WatchPreferences(context: Context) {
     // Instancia de SharedPreferences utilizada para guardar datos locales
-    // Constante prefs: valor inmutable que no cambia tras su asignación
     // Constante prefs: valor inmutable que no cambia tras su asignación
     private val prefs: SharedPreferences = context.getSharedPreferences("watch_prefs", Context.MODE_PRIVATE)
 
@@ -526,18 +419,14 @@ class WatchPreferences(context: Context) {
     companion object {
         // Clave para guardar el ID de la mascota activa
         // Constante KEY_MASCOTA_ACTIVA_ID: valor fijo definido en tiempo de compilación
-        // Constante KEY_MASCOTA_ACTIVA_ID: valor fijo definido en tiempo de compilación
         private const val KEY_MASCOTA_ACTIVA_ID = "mascota_activa_id"
         // Clave para guardar el nombre de la mascota activa
-        // Constante KEY_MASCOTA_ACTIVA_NOMBRE: valor fijo definido en tiempo de compilación
         // Constante KEY_MASCOTA_ACTIVA_NOMBRE: valor fijo definido en tiempo de compilación
         private const val KEY_MASCOTA_ACTIVA_NOMBRE = "mascota_activa_nombre"
         // Clave para guardar la distancia umbral de la mascota
         // Constante KEY_MASCOTA_UMBRAL: valor fijo definido en tiempo de compilación
-        // Constante KEY_MASCOTA_UMBRAL: valor fijo definido en tiempo de compilación
         private const val KEY_MASCOTA_UMBRAL = "mascota_umbral"
         // Clave para guardar el ID del usuario
-        // Constante KEY_USER_ID: valor fijo definido en tiempo de compilación
         // Constante KEY_USER_ID: valor fijo definido en tiempo de compilación
         private const val KEY_USER_ID = "user_id"
     }
@@ -547,10 +436,8 @@ class WatchPreferences(context: Context) {
      * Si no existe, devuelve una cadena vacía.
      */
     // Variable mascotaActivaId: almacena el estado mutable de este componente
-    // Variable mascotaActivaId: almacena el estado mutable de este componente
     var mascotaActivaId: String
         get() = prefs.getString(KEY_MASCOTA_ACTIVA_ID, "") ?: ""
-        // Inicia el editor para modificar los SharedPreferences
         // Inicia el editor para modificar los SharedPreferences
         set(value) = prefs.edit().putString(KEY_MASCOTA_ACTIVA_ID, value).apply()
 
@@ -559,10 +446,8 @@ class WatchPreferences(context: Context) {
      * Si no existe, devuelve "Mascota" por defecto.
      */
     // Variable mascotaActivaNombre: almacena el estado mutable de este componente
-    // Variable mascotaActivaNombre: almacena el estado mutable de este componente
     var mascotaActivaNombre: String
         get() = prefs.getString(KEY_MASCOTA_ACTIVA_NOMBRE, "Mascota") ?: "Mascota"
-        // Inicia el editor para modificar los SharedPreferences
         // Inicia el editor para modificar los SharedPreferences
         set(value) = prefs.edit().putString(KEY_MASCOTA_ACTIVA_NOMBRE, value).apply()
 
@@ -571,10 +456,8 @@ class WatchPreferences(context: Context) {
      * Si no existe, devuelve 50 por defecto.
      */
     // Variable mascotaUmbral: almacena el estado mutable de este componente
-    // Variable mascotaUmbral: almacena el estado mutable de este componente
     var mascotaUmbral: Int
         get() = prefs.getInt(KEY_MASCOTA_UMBRAL, 50)
-        // Inicia el editor para modificar los SharedPreferences
         // Inicia el editor para modificar los SharedPreferences
         set(value) = prefs.edit().putInt(KEY_MASCOTA_UMBRAL, value).apply()
 
@@ -583,10 +466,8 @@ class WatchPreferences(context: Context) {
      * Si no existe, devuelve "usuario_123" por defecto.
      */
     // Variable userId: almacena el estado mutable de este componente
-    // Variable userId: almacena el estado mutable de este componente
     var userId: String
         get() = prefs.getString(KEY_USER_ID, "usuario_123") ?: "usuario_123"
-        // Inicia el editor para modificar los SharedPreferences
         // Inicia el editor para modificar los SharedPreferences
         set(value) = prefs.edit().putString(KEY_USER_ID, value).apply()
 }
@@ -599,19 +480,14 @@ class WatchPreferences(context: Context) {
 ```kotlin
 // wear/data/WatchViewModel.kt
 // Paquete: com.lomito.seguro.wear.data
-// Paquete: com.lomito.seguro.wear.data
 package com.lomito.seguro.wear.data
 
 // Importa la dependencia necesaria: Application
-// Importa la dependencia necesaria: Application
 import android.app.Application
-// Importa la clase base ViewModel del ciclo de vida
 // Importa la clase base ViewModel del ciclo de vida
 import androidx.lifecycle.AndroidViewModel
 // Importa el observable de datos reactivos
-// Importa el observable de datos reactivos
 import androidx.lifecycle.LiveData
-// Importa el observable de datos reactivos
 // Importa el observable de datos reactivos
 import androidx.lifecycle.MutableLiveData
 
@@ -625,18 +501,13 @@ import androidx.lifecycle.MutableLiveData
  * - [superaUmbral]: Indica si supera el umbral permitido
  */
 // Clase de datos BleState: modelo inmutable con propiedades de dominio
-// Clase de datos BleState: modelo inmutable con propiedades de dominio
 data class BleState(
-    // Constante distancia: valor inmutable que no cambia tras su asignación
     // Constante distancia: valor inmutable que no cambia tras su asignación
     val distancia: Int = 0,
     // Constante mascotaId: valor inmutable que no cambia tras su asignación
-    // Constante mascotaId: valor inmutable que no cambia tras su asignación
     val mascotaId: String = "",
     // Constante umbral: valor inmutable que no cambia tras su asignación
-    // Constante umbral: valor inmutable que no cambia tras su asignación
     val umbral: Int = 50,
-    // Constante superaUmbral: valor inmutable que no cambia tras su asignación
     // Constante superaUmbral: valor inmutable que no cambia tras su asignación
     val superaUmbral: Boolean = false
 )
@@ -648,12 +519,9 @@ data class BleState(
  * - [Mantener el estado de BLE y actualizar la UI de manera reactiva]
  */
 // ViewModel WatchViewModel: gestiona el estado y la lógica de negocio de la pantalla
-// ViewModel WatchViewModel: gestiona el estado y la lógica de negocio de la pantalla
 class WatchViewModel(app: Application) : AndroidViewModel(app) {
     // Constante _bleState: valor inmutable que no cambia tras su asignación
-    // Constante _bleState: valor inmutable que no cambia tras su asignación
     private val _bleState = MutableLiveData(BleState())
-    // Constante bleState: valor inmutable que no cambia tras su asignación
     // Constante bleState: valor inmutable que no cambia tras su asignación
     val bleState: LiveData<BleState> = _bleState
 
@@ -667,9 +535,7 @@ class WatchViewModel(app: Application) : AndroidViewModel(app) {
      * - [superaUmbral]: Estado de alerta
      */
     // Función actualizarEstado: define la lógica de esta operación
-    // Función actualizarEstado: define la lógica de esta operación
     fun actualizarEstado(distancia: Int, mascotaId: String, umbral: Int, superaUmbral: Boolean) {
-        // Registro de evento en el log de Android para depuración
         // Registro de evento en el log de Android para depuración
         android.util.Log.d("WATCH_VM", "Actualizando: distancia=$distancia, mascotaId=$mascotaId, umbral=$umbral")
         _bleState.postValue(BleState(distancia, mascotaId, umbral, superaUmbral))
@@ -683,52 +549,36 @@ class WatchViewModel(app: Application) : AndroidViewModel(app) {
 
 ```kotlin
 // Paquete: com.lomito.seguro.wear.data
-// Paquete: com.lomito.seguro.wear.data
 package com.lomito.seguro.wear.data
 
 // Importa las clases para manejo de notificaciones
-// Importa las clases para manejo de notificaciones
 import android.app.NotificationChannel
-// Importa las clases para manejo de notificaciones
 // Importa las clases para manejo de notificaciones
 import android.app.NotificationManager
 // Importa el contexto de Android
-// Importa el contexto de Android
 import android.content.Context
-// Importa la clase Intent para navegación entre componentes
 // Importa la clase Intent para navegación entre componentes
 import android.content.Intent
 // Importa la dependencia necesaria: Build
-// Importa la dependencia necesaria: Build
 import android.os.Build
-// Importa la dependencia necesaria: VibrationEffect
 // Importa la dependencia necesaria: VibrationEffect
 import android.os.VibrationEffect
 // Importa la dependencia necesaria: Vibrator
-// Importa la dependencia necesaria: Vibrator
 import android.os.Vibrator
-// Importa las clases para manejo de notificaciones
 // Importa las clases para manejo de notificaciones
 import androidx.core.app.NotificationCompat
 // Importa la API de comunicación con Wear OS
-// Importa la API de comunicación con Wear OS
 import com.google.android.gms.wearable.DataEvent
-// Importa la API de comunicación con Wear OS
 // Importa la API de comunicación con Wear OS
 import com.google.android.gms.wearable.DataEventBuffer
 // Importa la API de comunicación con Wear OS
-// Importa la API de comunicación con Wear OS
 import com.google.android.gms.wearable.DataMapItem
-// Importa la API de comunicación con Wear OS
 // Importa la API de comunicación con Wear OS
 import com.google.android.gms.wearable.MessageEvent
 // Importa la API de comunicación con Wear OS
-// Importa la API de comunicación con Wear OS
 import com.google.android.gms.wearable.WearableListenerService
 // Importa la dependencia necesaria: AlertActivity
-// Importa la dependencia necesaria: AlertActivity
 import com.lomito.seguro.wear.ui.alert.AlertActivity
-// Importa el parser JSON
 // Importa el parser JSON
 import org.json.JSONObject
 
@@ -740,47 +590,35 @@ import org.json.JSONObject
  * - [Sincronizar datos de mascotas y estado entre el reloj y el dispositivo móvil]
  */
 // Servicio WearMessageService: componente en background para tareas de larga duración
-// Servicio WearMessageService: componente en background para tareas de larga duración
 class WearMessageService : WearableListenerService() {
 
     companion object {
         // Constante CHANNEL_ID: valor fijo definido en tiempo de compilación
-        // Constante CHANNEL_ID: valor fijo definido en tiempo de compilación
         const val CHANNEL_ID = "lomito_alertas"
 
         // Variable distancia: almacena el estado mutable de este componente
-        // Variable distancia: almacena el estado mutable de este componente
         var distancia: Int = 0
-        // Variable mascotaId: almacena el estado mutable de este componente
         // Variable mascotaId: almacena el estado mutable de este componente
         var mascotaId: String = ""
         // Variable umbral: almacena el estado mutable de este componente
-        // Variable umbral: almacena el estado mutable de este componente
         var umbral: Int = 50
-        // Variable superaUmbral: almacena el estado mutable de este componente
         // Variable superaUmbral: almacena el estado mutable de este componente
         var superaUmbral: Boolean = false
 
-        // Variable onUpdate: almacena el estado mutable de este componente
         // Variable onUpdate: almacena el estado mutable de este componente
         var onUpdate: ((Int, String, Int, Boolean) -> Unit)? = null
     }
 
     // Callback que se ejecuta cuando llega un mensaje desde el dispositivo Wear
-    // Callback que se ejecuta cuando llega un mensaje desde el dispositivo Wear
     override fun onMessageReceived(event: MessageEvent) {
-        // Registro de evento en el log de Android para depuración
         // Registro de evento en el log de Android para depuración
         android.util.Log.d("WEAR_MSG", "📩 Mensaje recibido en path: ${event.path}")
 
         // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
-        // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
         when (event.path) {
             "/ble/distancia" -> {
                 // Bloque try-catch: maneja posibles excepciones en el código crítico
-                // Bloque try-catch: maneja posibles excepciones en el código crítico
                 try {
-                    // Constante json: valor inmutable que no cambia tras su asignación
                     // Constante json: valor inmutable que no cambia tras su asignación
                     val json = JSONObject(String(event.data))
 
@@ -789,7 +627,6 @@ class WearMessageService : WearableListenerService() {
                     umbral = json.optInt("umbral", 50)
                     superaUmbral = json.optBoolean("superaUmbral", false)
 
-                    // Registro de evento en el log de Android para depuración
                     // Registro de evento en el log de Android para depuración
                     android.util.Log.d("WEAR_MSG", "📊 Distancia: $distancia, Umbral: $umbral, Supera: $superaUmbral")
 
@@ -804,7 +641,6 @@ class WearMessageService : WearableListenerService() {
                     })
 
                     // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     if (superaUmbral) {
                         vibrar()
                         mostrarNotificacion(distancia, mascotaId)
@@ -815,28 +651,21 @@ class WearMessageService : WearableListenerService() {
                     }
                 } catch (e: Exception) {
                     // Registro de evento en el log de Android para depuración
-                    // Registro de evento en el log de Android para depuración
                     android.util.Log.e("WEAR_MSG", "❌ Error procesando mensaje BLE: ${e.message}")
                 }
             }
 
             "/watch/user_id" -> {
                 // Bloque try-catch: maneja posibles excepciones en el código crítico
-                // Bloque try-catch: maneja posibles excepciones en el código crítico
                 try {
-                    // Constante json: valor inmutable que no cambia tras su asignación
                     // Constante json: valor inmutable que no cambia tras su asignación
                     val json = JSONObject(String(event.data))
                     // Constante userId: valor inmutable que no cambia tras su asignación
-                    // Constante userId: valor inmutable que no cambia tras su asignación
                     val userId = json.getString("userId")
-                    // Constante prefs: valor inmutable que no cambia tras su asignación
                     // Constante prefs: valor inmutable que no cambia tras su asignación
                     val prefs = applicationContext.getSharedPreferences("watch_prefs", Context.MODE_PRIVATE)
                     // Inicia el editor para modificar los SharedPreferences
-                    // Inicia el editor para modificar los SharedPreferences
                     prefs.edit().putString("user_id", userId).apply()
-                    // Registro de evento en el log de Android para depuración
                     // Registro de evento en el log de Android para depuración
                     android.util.Log.d("USER_ID", "✅ userId $userId guardado")
                     sendBroadcast(Intent("com.lomito.seguro.wear.USER_ID_UPDATED").apply {
@@ -845,32 +674,24 @@ class WearMessageService : WearableListenerService() {
                     })
                 } catch (e: Exception) {
                     // Registro de evento en el log de Android para depuración
-                    // Registro de evento en el log de Android para depuración
                     android.util.Log.e("USER_ID", "❌ Error: ${e.message}")
                 }
             }
 
             "/watch/reporte" -> {
                 // Bloque try-catch: maneja posibles excepciones en el código crítico
-                // Bloque try-catch: maneja posibles excepciones en el código crítico
                 try {
-                    // Constante json: valor inmutable que no cambia tras su asignación
                     // Constante json: valor inmutable que no cambia tras su asignación
                     val json = JSONObject(String(event.data))
                     // Constante mascotaId: valor inmutable que no cambia tras su asignación
-                    // Constante mascotaId: valor inmutable que no cambia tras su asignación
                     val mascotaId = json.getString("mascotaId")
-                    // Constante latitud: valor inmutable que no cambia tras su asignación
                     // Constante latitud: valor inmutable que no cambia tras su asignación
                     val latitud = json.getDouble("latitud")
                     // Constante longitud: valor inmutable que no cambia tras su asignación
-                    // Constante longitud: valor inmutable que no cambia tras su asignación
                     val longitud = json.getDouble("longitud")
-                    // Constante direccion: valor inmutable que no cambia tras su asignación
                     // Constante direccion: valor inmutable que no cambia tras su asignación
                     val direccion = json.optString("direccion", "")
 
-                    // Constante payload: valor inmutable que no cambia tras su asignación
                     // Constante payload: valor inmutable que no cambia tras su asignación
                     val payload = JSONObject().apply {
                         put("tipo", "AVISTAMIENTO_REPORTADO")
@@ -881,22 +702,17 @@ class WearMessageService : WearableListenerService() {
                     }.toString().toByteArray()
 
                     // Usa la API de Wearable para comunicación con dispositivos Wear OS
-                    // Usa la API de Wearable para comunicación con dispositivos Wear OS
                     com.google.android.gms.wearable.Wearable.getNodeClient(applicationContext).connectedNodes
                         .addOnSuccessListener { nodeList ->
                             // Itera sobre cada elemento de la colección y ejecuta el bloque
-                            // Itera sobre cada elemento de la colección y ejecuta el bloque
                             nodeList.forEach { node ->
                                 // Usa la API de Wearable para comunicación con dispositivos Wear OS
-                                // Usa la API de Wearable para comunicación con dispositivos Wear OS
                                 com.google.android.gms.wearable.Wearable.getMessageClient(applicationContext)
-                                    // Envía un mensaje al dispositivo Wear OS conectado
                                     // Envía un mensaje al dispositivo Wear OS conectado
                                     .sendMessage(node.id, "/watch/avistamiento", payload)
                             }
                         }
                 } catch (e: Exception) {
-                    // Registro de evento en el log de Android para depuración
                     // Registro de evento en el log de Android para depuración
                     android.util.Log.e("WEAR_MSG", "❌ Error procesando reporte: ${e.message}")
                 }
@@ -907,15 +723,11 @@ class WearMessageService : WearableListenerService() {
             // que es quien recibe la alerta del backend).
             "/watch/avistamiento_confirmado" -> {
                 // Bloque try-catch: maneja posibles excepciones en el código crítico
-                // Bloque try-catch: maneja posibles excepciones en el código crítico
                 try {
-                    // Constante json: valor inmutable que no cambia tras su asignación
                     // Constante json: valor inmutable que no cambia tras su asignación
                     val json = JSONObject(String(event.data))
                     // Constante nombre: valor inmutable que no cambia tras su asignación
-                    // Constante nombre: valor inmutable que no cambia tras su asignación
                     val nombre = json.optString("mascotaNombre", "tu mascota")
-                    // Constante mensaje: valor inmutable que no cambia tras su asignación
                     // Constante mensaje: valor inmutable que no cambia tras su asignación
                     val mensaje = json.optString("mensaje", "Alguien confirmó un avistamiento")
 
@@ -923,26 +735,20 @@ class WearMessageService : WearableListenerService() {
                     mostrarNotificacionAvistamiento(nombre, mensaje)
                 } catch (e: Exception) {
                     // Registro de evento en el log de Android para depuración
-                    // Registro de evento en el log de Android para depuración
                     android.util.Log.e("WEAR_MSG", "❌ Error procesando avistamiento confirmado: ${e.message}")
                 }
             }
 
             "/mascota/perdida/nueva" -> {
                 // Bloque try-catch: maneja posibles excepciones en el código crítico
-                // Bloque try-catch: maneja posibles excepciones en el código crítico
                 try {
-                    // Constante json: valor inmutable que no cambia tras su asignación
                     // Constante json: valor inmutable que no cambia tras su asignación
                     val json = JSONObject(String(event.data))
                     // Constante nombre: valor inmutable que no cambia tras su asignación
-                    // Constante nombre: valor inmutable que no cambia tras su asignación
                     val nombre = json.getString("nombre")
-                    // Registro de evento en el log de Android para depuración
                     // Registro de evento en el log de Android para depuración
                     android.util.Log.d("WEAR_MSG", "🐾 Nueva mascota perdida: $nombre")
 
-                    // Constante payload: valor inmutable que no cambia tras su asignación
                     // Constante payload: valor inmutable que no cambia tras su asignación
                     val payload = JSONObject().apply {
                         put("tipo", "NUEVA_MASCOTA_PERDIDA")
@@ -950,22 +756,17 @@ class WearMessageService : WearableListenerService() {
                     }.toString().toByteArray()
 
                     // Usa la API de Wearable para comunicación con dispositivos Wear OS
-                    // Usa la API de Wearable para comunicación con dispositivos Wear OS
                     com.google.android.gms.wearable.Wearable.getNodeClient(applicationContext).connectedNodes
                         .addOnSuccessListener { nodeList ->
                             // Itera sobre cada elemento de la colección y ejecuta el bloque
-                            // Itera sobre cada elemento de la colección y ejecuta el bloque
                             nodeList.forEach { node ->
                                 // Usa la API de Wearable para comunicación con dispositivos Wear OS
-                                // Usa la API de Wearable para comunicación con dispositivos Wear OS
                                 com.google.android.gms.wearable.Wearable.getMessageClient(applicationContext)
-                                    // Envía un mensaje al dispositivo Wear OS conectado
                                     // Envía un mensaje al dispositivo Wear OS conectado
                                     .sendMessage(node.id, "/mascota/perdida/nueva", payload)
                             }
                         }
                 } catch (e: Exception) {
-                    // Registro de evento en el log de Android para depuración
                     // Registro de evento en el log de Android para depuración
                     android.util.Log.e("WEAR_MSG", "❌ Error: ${e.message}")
                 }
@@ -973,52 +774,39 @@ class WearMessageService : WearableListenerService() {
 
             "/watch/mascotas" -> {
                 // Bloque try-catch: maneja posibles excepciones en el código crítico
-                // Bloque try-catch: maneja posibles excepciones en el código crítico
                 try {
-                    // Constante json: valor inmutable que no cambia tras su asignación
                     // Constante json: valor inmutable que no cambia tras su asignación
                     val json = JSONObject(String(event.data))
                     // Constante mascotas: valor inmutable que no cambia tras su asignación
-                    // Constante mascotas: valor inmutable que no cambia tras su asignación
                     val mascotas = json.getJSONArray("mascotas")
-                    // Constante prefs: valor inmutable que no cambia tras su asignación
                     // Constante prefs: valor inmutable que no cambia tras su asignación
                     val prefs = applicationContext.getSharedPreferences("watch_prefs", Context.MODE_PRIVATE)
                     // Inicia el editor para modificar los SharedPreferences
-                    // Inicia el editor para modificar los SharedPreferences
                     prefs.edit().putString("mascotas_data", mascotas.toString()).apply()
                 } catch (e: Exception) {
-                    // Registro de evento en el log de Android para depuración
                     // Registro de evento en el log de Android para depuración
                     android.util.Log.e("WEAR_MSG", "❌ Error procesando lista de mascotas: ${e.message}")
                 }
             }
 
             // Registro de evento en el log de Android para depuración
-            // Registro de evento en el log de Android para depuración
             else -> android.util.Log.d("WEAR_MSG", "⚠️ Path desconocido: ${event.path}")
         }
     }
 
     // Sobreescribe la función onDataChanged de la clase padre
-    // Sobreescribe la función onDataChanged de la clase padre
     override fun onDataChanged(dataEvents: DataEventBuffer) {
-        // Registro de evento en el log de Android para depuración
         // Registro de evento en el log de Android para depuración
         android.util.Log.d("WEAR_MSG", "📊 DataChanged recibido")
 
         // Itera sobre cada elemento de la colección y ejecuta el bloque
-        // Itera sobre cada elemento de la colección y ejecuta el bloque
         dataEvents.forEach { event ->
             // Bloque try-catch: maneja posibles excepciones en el código crítico
-            // Bloque try-catch: maneja posibles excepciones en el código crítico
             try {
-                // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                 // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                 if (event.type == DataEvent.TYPE_CHANGED &&
                     event.dataItem.uri.path == "/ble/distancia") {
 
-                    // Constante dataMap: valor inmutable que no cambia tras su asignación
                     // Constante dataMap: valor inmutable que no cambia tras su asignación
                     val dataMap = DataMapItem.fromDataItem(event.dataItem).dataMap
 
@@ -1027,7 +815,6 @@ class WearMessageService : WearableListenerService() {
                     umbral = dataMap.getInt("umbral", 50)
                     superaUmbral = dataMap.getBoolean("superaUmbral", false)
 
-                    // Registro de evento en el log de Android para depuración
                     // Registro de evento en el log de Android para depuración
                     android.util.Log.d("WEAR_MSG", "📊 DataClient: Distancia=$distancia, Supera=$superaUmbral")
 
@@ -1042,7 +829,6 @@ class WearMessageService : WearableListenerService() {
                     })
 
                     // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     if (superaUmbral) {
                         vibrar()
                         mostrarNotificacion(distancia, mascotaId)
@@ -1054,7 +840,6 @@ class WearMessageService : WearableListenerService() {
                 }
             } catch (e: Exception) {
                 // Registro de evento en el log de Android para depuración
-                // Registro de evento en el log de Android para depuración
                 android.util.Log.e("WEAR_MSG", "❌ Error procesando DataChanged: ${e.message}")
             }
         }
@@ -1063,15 +848,11 @@ class WearMessageService : WearableListenerService() {
 
     private fun vibrar() {
         // Bloque try-catch: maneja posibles excepciones en el código crítico
-        // Bloque try-catch: maneja posibles excepciones en el código crítico
         try {
-            // Constante vibrator: valor inmutable que no cambia tras su asignación
             // Constante vibrator: valor inmutable que no cambia tras su asignación
             val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                // Activa la vibración háptica del smartwatch para retroalimentación táctil
                 // Activa la vibración háptica del smartwatch para retroalimentación táctil
                 vibrator.vibrate(
                     VibrationEffect.createWaveform(longArrayOf(0, 300, 100, 300, 100, 600), -1)
@@ -1079,11 +860,9 @@ class WearMessageService : WearableListenerService() {
             } else {
                 @Suppress("DEPRECATION")
                 // Activa la vibración háptica del smartwatch para retroalimentación táctil
-                // Activa la vibración háptica del smartwatch para retroalimentación táctil
                 vibrator.vibrate(longArrayOf(0, 300, 100, 300, 100, 600), -1)
             }
         } catch (e: Exception) {
-            // Registro de evento en el log de Android para depuración
             // Registro de evento en el log de Android para depuración
             android.util.Log.e("WEAR_MSG", "❌ Error vibrando: ${e.message}")
         }
@@ -1091,23 +870,17 @@ class WearMessageService : WearableListenerService() {
 
     private fun mostrarNotificacionAvistamiento(nombre: String, mensaje: String) {
         // Bloque try-catch: maneja posibles excepciones en el código crítico
-        // Bloque try-catch: maneja posibles excepciones en el código crítico
         try {
-            // Constante mgr: valor inmutable que no cambia tras su asignación
             // Constante mgr: valor inmutable que no cambia tras su asignación
             val mgr = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 // Crea el canal de notificación requerido en Android 8.0+
-                // Crea el canal de notificación requerido en Android 8.0+
                 mgr.createNotificationChannel(
-                    // Crea el canal de notificación requerido en Android 8.0+
                     // Crea el canal de notificación requerido en Android 8.0+
                     NotificationChannel(CHANNEL_ID, "Alertas Lomito", NotificationManager.IMPORTANCE_HIGH)
                 )
             }
-            // Constante notification: valor inmutable que no cambia tras su asignación
             // Constante notification: valor inmutable que no cambia tras su asignación
             val notification = NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(android.R.drawable.ic_dialog_alert)
@@ -1117,10 +890,8 @@ class WearMessageService : WearableListenerService() {
                 .setAutoCancel(true)
                 .build()
             // Muestra la notificación al usuario en la barra de estado
-            // Muestra la notificación al usuario en la barra de estado
             mgr.notify(1002, notification)
         } catch (e: Exception) {
-            // Registro de evento en el log de Android para depuración
             // Registro de evento en el log de Android para depuración
             android.util.Log.e("WEAR_MSG", "❌ Error notificación de avistamiento: ${e.message}")
         }
@@ -1128,23 +899,17 @@ class WearMessageService : WearableListenerService() {
 
     private fun mostrarNotificacion(distancia: Int, mascotaId: String) {
         // Bloque try-catch: maneja posibles excepciones en el código crítico
-        // Bloque try-catch: maneja posibles excepciones en el código crítico
         try {
-            // Constante mgr: valor inmutable que no cambia tras su asignación
             // Constante mgr: valor inmutable que no cambia tras su asignación
             val mgr = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 // Crea el canal de notificación requerido en Android 8.0+
-                // Crea el canal de notificación requerido en Android 8.0+
                 mgr.createNotificationChannel(
-                    // Crea el canal de notificación requerido en Android 8.0+
                     // Crea el canal de notificación requerido en Android 8.0+
                     NotificationChannel(CHANNEL_ID, "Alertas Lomito", NotificationManager.IMPORTANCE_HIGH)
                 )
             }
-            // Constante notification: valor inmutable que no cambia tras su asignación
             // Constante notification: valor inmutable que no cambia tras su asignación
             val notification = NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(android.R.drawable.ic_dialog_alert)
@@ -1154,22 +919,17 @@ class WearMessageService : WearableListenerService() {
                 .setAutoCancel(true)
                 .build()
             // Muestra la notificación al usuario en la barra de estado
-            // Muestra la notificación al usuario en la barra de estado
             mgr.notify(1001, notification)
         } catch (e: Exception) {
-            // Registro de evento en el log de Android para depuración
             // Registro de evento en el log de Android para depuración
             android.util.Log.e("WEAR_MSG", "❌ Error notificación: ${e.message}")
         }
     }
 
     // Método del ciclo de vida: se limpia la actividad antes de destruirse
-    // Método del ciclo de vida: se limpia la actividad antes de destruirse
     override fun onDestroy() {
         // Invoca la implementación del método en la clase padre
-        // Invoca la implementación del método en la clase padre
         super.onDestroy()
-        // Registro de evento en el log de Android para depuración
         // Registro de evento en el log de Android para depuración
         android.util.Log.d("WEAR_MSG", "🛑 WearMessageService destruido")
     }
@@ -1184,103 +944,70 @@ class WearMessageService : WearableListenerService() {
 
 ```kotlin
 // Paquete: com.lomito.seguro.wear.ui.alert
-// Paquete: com.lomito.seguro.wear.ui.alert
 package com.lomito.seguro.wear.ui.alert
 
 // Importa las clases para manejo de notificaciones
-// Importa las clases para manejo de notificaciones
 import android.app.NotificationChannel
-// Importa las clases para manejo de notificaciones
 // Importa las clases para manejo de notificaciones
 import android.app.NotificationManager
 // Importa la clase Intent para navegación entre componentes
-// Importa la clase Intent para navegación entre componentes
 import android.app.PendingIntent
-// Importa el contexto de Android
 // Importa el contexto de Android
 import android.content.Context
 // Importa la clase Intent para navegación entre componentes
-// Importa la clase Intent para navegación entre componentes
 import android.content.Intent
-// Importa la dependencia necesaria: Build
 // Importa la dependencia necesaria: Build
 import android.os.Build
 // Importa el contenedor de datos Bundle
-// Importa el contenedor de datos Bundle
 import android.os.Bundle
-// Importa la dependencia necesaria: WindowManager
 // Importa la dependencia necesaria: WindowManager
 import android.view.WindowManager
 // Importa la dependencia necesaria: ComponentActivity
-// Importa la dependencia necesaria: ComponentActivity
 import androidx.activity.ComponentActivity
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.activity.compose.setContent
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.animation.core.*
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.background
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.border
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.*
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.shape.CircleShape
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.runtime.*
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.Alignment
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.Modifier
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.draw.clip
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.graphics.Color
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.text.font.FontWeight
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.text.style.TextAlign
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.dp
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.sp
 // Importa las clases para manejo de notificaciones
-// Importa las clases para manejo de notificaciones
 import androidx.core.app.NotificationCompat
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.wear.compose.material.*
 // Importa la dependencia necesaria: Tasks
-// Importa la dependencia necesaria: Tasks
 import com.google.android.gms.tasks.Tasks
-// Importa la API de comunicación con Wear OS
 // Importa la API de comunicación con Wear OS
 import com.google.android.gms.wearable.Node
 // Importa la API de comunicación con Wear OS
-// Importa la API de comunicación con Wear OS
 import com.google.android.gms.wearable.Wearable
-// Importa la dependencia necesaria: PollingService
 // Importa la dependencia necesaria: PollingService
 import com.lomito.seguro.wear.data.PollingService
 // Importa la dependencia necesaria: DashboardActivity
-// Importa la dependencia necesaria: DashboardActivity
 import com.lomito.seguro.wear.ui.dashboard.DashboardActivity
-// Importa soporte para corrutinas de Kotlin
 // Importa soporte para corrutinas de Kotlin
 import kotlinx.coroutines.*
 
@@ -1292,22 +1019,17 @@ import kotlinx.coroutines.*
  * - [Responder al aumento crítico de la distancia con vibración y sonidos]
  */
 // Activity AlertActivity: pantalla principal que gestiona el ciclo de vida
-// Activity AlertActivity: pantalla principal que gestiona el ciclo de vida
 class AlertActivity : ComponentActivity() {
 
     companion object {
         // Constante ALERT_CHANNEL_ID: valor fijo definido en tiempo de compilación
-        // Constante ALERT_CHANNEL_ID: valor fijo definido en tiempo de compilación
         const val ALERT_CHANNEL_ID = "lomito_alert_channel"
-        // Constante ALERT_NOTIF_ID: valor fijo definido en tiempo de compilación
         // Constante ALERT_NOTIF_ID: valor fijo definido en tiempo de compilación
         const val ALERT_NOTIF_ID = 3001
     }
 
     // Método del ciclo de vida: inicializa la actividad y configura la UI
-    // Método del ciclo de vida: inicializa la actividad y configura la UI
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Invoca la implementación del método en la clase padre
         // Invoca la implementación del método en la clase padre
         super.onCreate(savedInstanceState)
 
@@ -1323,22 +1045,17 @@ class AlertActivity : ComponentActivity() {
 
         // Obtener datos del intent
         // Constante mascotaNombre: valor inmutable que no cambia tras su asignación
-        // Constante mascotaNombre: valor inmutable que no cambia tras su asignación
         val mascotaNombre = intent.getStringExtra("mascota_nombre")
             ?: PollingService.mascotaNombreActual
             ?: "Tu mascota"
 
         // Constante distanciaInicial: valor inmutable que no cambia tras su asignación
-        // Constante distanciaInicial: valor inmutable que no cambia tras su asignación
         val distanciaInicial = intent.getIntExtra("distancia", PollingService.distanciaActual)
-        // Constante incremento: valor inmutable que no cambia tras su asignación
         // Constante incremento: valor inmutable que no cambia tras su asignación
         val incremento = intent.getIntExtra("incremento", 0)
 
         // Define el árbol de UI con Jetpack Compose como contenido de la Activity
-        // Define el árbol de UI con Jetpack Compose como contenido de la Activity
         setContent {
-            // Variable distancia: almacena el estado mutable de este componente
             // Variable distancia: almacena el estado mutable de este componente
             var distancia by remember { mutableStateOf(distanciaInicial) }
 
@@ -1367,7 +1084,6 @@ class AlertActivity : ComponentActivity() {
 
                     // Ir al Dashboard
                     // Constante intent: valor inmutable que no cambia tras su asignación
-                    // Constante intent: valor inmutable que no cambia tras su asignación
                     val intent = Intent(this, DashboardActivity::class.java).apply {
                         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
                     }
@@ -1389,9 +1105,7 @@ class AlertActivity : ComponentActivity() {
      */
     private fun enviarAlertaAlMovil(mascotaId: String, mascotaNombre: String, distancia: Int) {
         // Bloque try-catch: maneja posibles excepciones en el código crítico
-        // Bloque try-catch: maneja posibles excepciones en el código crítico
         try {
-            // Constante json: valor inmutable que no cambia tras su asignación
             // Constante json: valor inmutable que no cambia tras su asignación
             val json = org.json.JSONObject().apply {
                 put("tipo", "ALERTA_MASCOTA")
@@ -1402,51 +1116,39 @@ class AlertActivity : ComponentActivity() {
             }
 
             // Constante payload: valor inmutable que no cambia tras su asignación
-            // Constante payload: valor inmutable que no cambia tras su asignación
             val payload = json.toString().toByteArray()
 
             // Enviar a todos los nodos conectados
             // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
-            // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
             CoroutineScope(Dispatchers.IO).launch {
-                // Bloque try-catch: maneja posibles excepciones en el código crítico
                 // Bloque try-catch: maneja posibles excepciones en el código crítico
                 try {
                     // ✅ Obtener nodos conectados correctamente
                     // Constante nodeClient: valor inmutable que no cambia tras su asignación
-                    // Constante nodeClient: valor inmutable que no cambia tras su asignación
                     val nodeClient = Wearable.getNodeClient(applicationContext)
-                    // Constante connectedNodes: valor inmutable que no cambia tras su asignación
                     // Constante connectedNodes: valor inmutable que no cambia tras su asignación
                     val connectedNodes = Tasks.await(nodeClient.connectedNodes)
 
                     // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     if (connectedNodes.isNotEmpty()) {
                         // Itera sobre cada elemento de la colección y ejecuta el bloque
-                        // Itera sobre cada elemento de la colección y ejecuta el bloque
                         connectedNodes.forEach { node ->
-                            // Constante messageClient: valor inmutable que no cambia tras su asignación
                             // Constante messageClient: valor inmutable que no cambia tras su asignación
                             val messageClient = Wearable.getMessageClient(applicationContext)
                             Tasks.await(
                                 // Envía un mensaje al dispositivo Wear OS conectado
-                                // Envía un mensaje al dispositivo Wear OS conectado
                                 messageClient.sendMessage(node.id, "/alerta/mascota", payload)
                             )
-                            // Registro de evento en el log de Android para depuración
                             // Registro de evento en el log de Android para depuración
                             android.util.Log.d("ALERT_ACTIVITY", "✅ Alerta enviada al móvil: ${node.displayName}")
                         }
                     } else {
-                        // Registro de evento en el log de Android para depuración
                         // Registro de evento en el log de Android para depuración
                         android.util.Log.e("ALERT_ACTIVITY", "⚠️ No hay nodos conectados")
                         // Guardar alerta pendiente
                         guardarAlertaPendiente(mascotaId, mascotaNombre, distancia)
                     }
                 } catch (e: Exception) {
-                    // Registro de evento en el log de Android para depuración
                     // Registro de evento en el log de Android para depuración
                     android.util.Log.e("ALERT_ACTIVITY", "❌ Error enviando alerta: ${e.message}")
                     // Si hay error, guardar pendiente
@@ -1455,10 +1157,8 @@ class AlertActivity : ComponentActivity() {
             }
 
             // Registro de evento en el log de Android para depuración
-            // Registro de evento en el log de Android para depuración
             android.util.Log.d("ALERT_ACTIVITY", "📤 Enviando alerta: $mascotaNombre - $distancia m")
         } catch (e: Exception) {
-            // Registro de evento en el log de Android para depuración
             // Registro de evento en el log de Android para depuración
             android.util.Log.e("ALERT_ACTIVITY", "❌ Error preparando alerta: ${e.message}")
         }
@@ -1469,12 +1169,9 @@ class AlertActivity : ComponentActivity() {
      */
     private fun guardarAlertaPendiente(mascotaId: String, mascotaNombre: String, distancia: Int) {
         // Bloque try-catch: maneja posibles excepciones en el código crítico
-        // Bloque try-catch: maneja posibles excepciones en el código crítico
         try {
             // Constante prefs: valor inmutable que no cambia tras su asignación
-            // Constante prefs: valor inmutable que no cambia tras su asignación
             val prefs = getSharedPreferences("alert_pending", MODE_PRIVATE)
-            // Inicia el editor para modificar los SharedPreferences
             // Inicia el editor para modificar los SharedPreferences
             prefs.edit().apply {
                 putString("pending_mascota_id", mascotaId)
@@ -1484,10 +1181,8 @@ class AlertActivity : ComponentActivity() {
                 apply()
             }
             // Registro de evento en el log de Android para depuración
-            // Registro de evento en el log de Android para depuración
             android.util.Log.d("ALERT_ACTIVITY", "💾 Alerta guardada como pendiente")
         } catch (e: Exception) {
-            // Registro de evento en el log de Android para depuración
             // Registro de evento en el log de Android para depuración
             android.util.Log.e("ALERT_ACTIVITY", "Error guardando alerta: ${e.message}")
         }
@@ -1498,9 +1193,7 @@ class AlertActivity : ComponentActivity() {
      */
     private fun crearCanalNotificacionAlerta() {
         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // Constante channel: valor inmutable que no cambia tras su asignación
             // Constante channel: valor inmutable que no cambia tras su asignación
             val channel = NotificationChannel(
                 ALERT_CHANNEL_ID,
@@ -1512,9 +1205,7 @@ class AlertActivity : ComponentActivity() {
                 vibrationPattern = longArrayOf(0, 300, 200, 300)
             }
             // Constante manager: valor inmutable que no cambia tras su asignación
-            // Constante manager: valor inmutable que no cambia tras su asignación
             val manager = getSystemService(NotificationManager::class.java)
-            // Crea el canal de notificación requerido en Android 8.0+
             // Crea el canal de notificación requerido en Android 8.0+
             manager.createNotificationChannel(channel)
         }
@@ -1525,15 +1216,12 @@ class AlertActivity : ComponentActivity() {
      */
     private fun enviarNotificacionLocal(mascotaNombre: String, distancia: Int, incremento: Int) {
         // Bloque try-catch: maneja posibles excepciones en el código crítico
-        // Bloque try-catch: maneja posibles excepciones en el código crítico
         try {
-            // Constante intent: valor inmutable que no cambia tras su asignación
             // Constante intent: valor inmutable que no cambia tras su asignación
             val intent = Intent(this, DashboardActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             }
 
-            // Constante pendingIntent: valor inmutable que no cambia tras su asignación
             // Constante pendingIntent: valor inmutable que no cambia tras su asignación
             val pendingIntent = PendingIntent.getActivity(
                 this,
@@ -1543,14 +1231,12 @@ class AlertActivity : ComponentActivity() {
             )
 
             // Constante textoNotificacion: valor inmutable que no cambia tras su asignación
-            // Constante textoNotificacion: valor inmutable que no cambia tras su asignación
             val textoNotificacion = if (incremento > 0) {
                 "$mascotaNombre se ha alejado a $distancia metros (+$incremento m)"
             } else {
                 "$mascotaNombre se ha alejado a $distancia metros"
             }
 
-            // Constante notification: valor inmutable que no cambia tras su asignación
             // Constante notification: valor inmutable que no cambia tras su asignación
             val notification = NotificationCompat.Builder(this, ALERT_CHANNEL_ID)
                 .setContentTitle("🚨 ¡Alerta de Mascota!")
@@ -1563,17 +1249,13 @@ class AlertActivity : ComponentActivity() {
                 .build()
 
             // Constante manager: valor inmutable que no cambia tras su asignación
-            // Constante manager: valor inmutable que no cambia tras su asignación
             val manager = getSystemService(NotificationManager::class.java)
-            // Muestra la notificación al usuario en la barra de estado
             // Muestra la notificación al usuario en la barra de estado
             manager.notify(ALERT_NOTIF_ID, notification)
 
             // Registro de evento en el log de Android para depuración
-            // Registro de evento en el log de Android para depuración
             android.util.Log.d("ALERT_ACTIVITY", "✅ Notificación local enviada")
         } catch (e: Exception) {
-            // Registro de evento en el log de Android para depuración
             // Registro de evento en el log de Android para depuración
             android.util.Log.e("ALERT_ACTIVITY", "Error enviando notificación local: ${e.message}")
         }
@@ -1591,9 +1273,7 @@ class AlertActivity : ComponentActivity() {
  * - [onIgnorar]: Callback al ignorar la alerta
  */
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
-// Función AlertScreen: define la lógica de esta operación
 // Función AlertScreen: define la lógica de esta operación
 fun AlertScreen(
     distancia: Int,
@@ -1602,7 +1282,6 @@ fun AlertScreen(
     onAceptar: () -> Unit,
     onIgnorar: () -> Unit
 ) {
-    // Constante borderAlpha: valor inmutable que no cambia tras su asignación
     // Constante borderAlpha: valor inmutable que no cambia tras su asignación
     val borderAlpha by rememberInfiniteTransition(label = "border").animateFloat(
         initialValue = 0.4f,
@@ -1660,7 +1339,6 @@ fun AlertScreen(
                     color = Color.White
                 )
 
-                // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                 // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                 if (incremento > 0) {
                     Spacer(Modifier.height(2.dp))
@@ -1722,100 +1400,68 @@ fun AlertScreen(
 
 ```kotlin
 // Paquete: com.lomito.seguro.wear.ui.dashboard
-// Paquete: com.lomito.seguro.wear.ui.dashboard
 package com.lomito.seguro.wear.ui.dashboard
 
 // Importa la dependencia necesaria: Manifest
-// Importa la dependencia necesaria: Manifest
 import android.Manifest
-// Importa la clase Intent para navegación entre componentes
 // Importa la clase Intent para navegación entre componentes
 import android.content.Intent
 // Importa la dependencia necesaria: PackageManager
-// Importa la dependencia necesaria: PackageManager
 import android.content.pm.PackageManager
-// Importa la dependencia necesaria: Build
 // Importa la dependencia necesaria: Build
 import android.os.Build
 // Importa el contenedor de datos Bundle
-// Importa el contenedor de datos Bundle
 import android.os.Bundle
-// Importa la dependencia necesaria: ComponentActivity
 // Importa la dependencia necesaria: ComponentActivity
 import androidx.activity.ComponentActivity
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.activity.compose.setContent
-// Importa la dependencia necesaria: ActivityCompat
 // Importa la dependencia necesaria: ActivityCompat
 import androidx.core.app.ActivityCompat
 // Importa el contexto de Android
-// Importa el contexto de Android
 import androidx.core.content.ContextCompat
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.background
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.*
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.lazy.grid.GridCells
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.lazy.grid.items
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.shape.CircleShape
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.shape.RoundedCornerShape
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.runtime.*
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.Alignment
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.Modifier
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.graphics.Brush
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.graphics.Color
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.text.font.FontWeight
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.text.style.TextAlign
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.dp
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.sp
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.wear.compose.material.*
 // Importa la dependencia necesaria: PollingService
-// Importa la dependencia necesaria: PollingService
 import com.lomito.seguro.wear.data.PollingService
-// Importa la dependencia necesaria: MarcarPerdidaActivity
 // Importa la dependencia necesaria: MarcarPerdidaActivity
 import com.lomito.seguro.wear.ui.mascota.MarcarPerdidaActivity
 // Importa la dependencia necesaria: MascotaListActivity
-// Importa la dependencia necesaria: MascotaListActivity
 import com.lomito.seguro.wear.ui.mascota.MascotaListActivity
 // Importa la dependencia necesaria: ReportarAvistamientoActivity
-// Importa la dependencia necesaria: ReportarAvistamientoActivity
 import com.lomito.seguro.wear.ui.report.ReportarAvistamientoActivity
-// Importa la dependencia necesaria: SettingsActivity
 // Importa la dependencia necesaria: SettingsActivity
 import com.lomito.seguro.wear.ui.settings.SettingsActivity
 
@@ -1829,18 +1475,13 @@ import com.lomito.seguro.wear.ui.settings.SettingsActivity
  * - [action]: Acción a ejecutar al hacer clic
  */
 // Clase de datos MenuItem: modelo inmutable con propiedades de dominio
-// Clase de datos MenuItem: modelo inmutable con propiedades de dominio
 data class MenuItem(
-    // Constante id: valor inmutable que no cambia tras su asignación
     // Constante id: valor inmutable que no cambia tras su asignación
     val id: String,
     // Constante icon: valor inmutable que no cambia tras su asignación
-    // Constante icon: valor inmutable que no cambia tras su asignación
     val icon: String,
     // Constante title: valor inmutable que no cambia tras su asignación
-    // Constante title: valor inmutable que no cambia tras su asignación
     val title: String,
-    // Constante action: valor inmutable que no cambia tras su asignación
     // Constante action: valor inmutable que no cambia tras su asignación
     val action: () -> Unit
 )
@@ -1853,20 +1494,15 @@ data class MenuItem(
  * - [Iniciar los servicios necesarios en segundo plano]
  */
 // Activity DashboardActivity: pantalla principal que gestiona el ciclo de vida
-// Activity DashboardActivity: pantalla principal que gestiona el ciclo de vida
 class DashboardActivity : ComponentActivity() {
     // Método del ciclo de vida: inicializa la actividad y configura la UI
-    // Método del ciclo de vida: inicializa la actividad y configura la UI
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Invoca la implementación del método en la clase padre
         // Invoca la implementación del método en la clase padre
         super.onCreate(savedInstanceState)
 
         // ✅ Solicitar permisos para notificaciones en Android 13+
         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (ContextCompat.checkSelfPermission(
                     this,
@@ -1882,17 +1518,13 @@ class DashboardActivity : ComponentActivity() {
         }
 
         // Constante prefs: valor inmutable que no cambia tras su asignación
-        // Constante prefs: valor inmutable que no cambia tras su asignación
         val prefs = getSharedPreferences("watch_prefs", MODE_PRIVATE)
-        // Constante hasMascota: valor inmutable que no cambia tras su asignación
         // Constante hasMascota: valor inmutable que no cambia tras su asignación
         val hasMascota = (prefs.getString("mascota_activa_id", "") ?: "").isNotEmpty()
 
         // ✅ Iniciar PollingService
         // Constante serviceIntent: valor inmutable que no cambia tras su asignación
-        // Constante serviceIntent: valor inmutable que no cambia tras su asignación
         val serviceIntent = Intent(this, PollingService::class.java)
-        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(serviceIntent)
@@ -1901,12 +1533,10 @@ class DashboardActivity : ComponentActivity() {
         }
 
         // Define el árbol de UI con Jetpack Compose como contenido de la Activity
-        // Define el árbol de UI con Jetpack Compose como contenido de la Activity
         setContent {
             DashboardScreen(
                 hasMascota = hasMascota,
                 onNavigateTo = { target ->
-                    // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
                     // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
                     when (target) {
                         "mascotas" -> startActivity(Intent(this, MascotaListActivity::class.java))
@@ -1921,27 +1551,19 @@ class DashboardActivity : ComponentActivity() {
 
 // 🎨 Paleta temática "mascotas perdidas"
 // Constante BgTop: valor inmutable que no cambia tras su asignación
-// Constante BgTop: valor inmutable que no cambia tras su asignación
 private val BgTop = Color(0xFF1B1430)
-// Constante BgBottom: valor inmutable que no cambia tras su asignación
 // Constante BgBottom: valor inmutable que no cambia tras su asignación
 private val BgBottom = Color(0xFF0D0B1A)
 // Constante CardBg1: valor inmutable que no cambia tras su asignación
-// Constante CardBg1: valor inmutable que no cambia tras su asignación
 private val CardBg1 = Color(0xFF2A2350) // Mis Mascotas (azul-violeta)
-// Constante CardBg2: valor inmutable que no cambia tras su asignación
 // Constante CardBg2: valor inmutable que no cambia tras su asignación
 private val CardBg2 = Color(0xFF4A1F2E) // Marcar Perdida (rojo oscuro)
 // Constante CardBg3: valor inmutable que no cambia tras su asignación
-// Constante CardBg3: valor inmutable que no cambia tras su asignación
 private val CardBg3 = Color(0xFF1F3A3A) // Reportar (teal oscuro)
-// Constante CardBg4: valor inmutable que no cambia tras su asignación
 // Constante CardBg4: valor inmutable que no cambia tras su asignación
 private val CardBg4 = Color(0xFF2E2A1F) // Config (ámbar oscuro)
 // Constante AccentGreen: valor inmutable que no cambia tras su asignación
-// Constante AccentGreen: valor inmutable que no cambia tras su asignación
 private val AccentGreen = Color(0xFF4CD97B)
-// Constante AccentOrange: valor inmutable que no cambia tras su asignación
 // Constante AccentOrange: valor inmutable que no cambia tras su asignación
 private val AccentOrange = Color(0xFFFFA94D)
 
@@ -1953,15 +1575,12 @@ private val AccentOrange = Color(0xFFFFA94D)
  * - [onNavigateTo]: Callback para manejar la navegación entre pantallas
  */
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
-// Función DashboardScreen: define la lógica de esta operación
 // Función DashboardScreen: define la lógica de esta operación
 fun DashboardScreen(
     hasMascota: Boolean,
     onNavigateTo: (String) -> Unit
 ) {
-    // Constante menuItems: valor inmutable que no cambia tras su asignación
     // Constante menuItems: valor inmutable que no cambia tras su asignación
     val menuItems = listOf(
         MenuItem("mascotas", "🐾", "Mascotas") { onNavigateTo("mascotas") } to CardBg1,
@@ -2041,9 +1660,7 @@ fun DashboardScreen(
 }
 
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
-// Función GridMenuItem: define la lógica de esta operación
 // Función GridMenuItem: define la lógica de esta operación
 fun GridMenuItem(
     item: MenuItem,
@@ -2098,97 +1715,66 @@ fun GridMenuItem(
 
 ```kotlin
 // Paquete: com.lomito.seguro.wear.ui.home
-// Paquete: com.lomito.seguro.wear.ui.home
 package com.lomito.seguro.wear.ui.home
 
 // Importa la dependencia necesaria: BroadcastReceiver
-// Importa la dependencia necesaria: BroadcastReceiver
 import android.content.BroadcastReceiver
-// Importa el contexto de Android
 // Importa el contexto de Android
 import android.content.Context
 // Importa la clase Intent para navegación entre componentes
-// Importa la clase Intent para navegación entre componentes
 import android.content.Intent
-// Importa la clase Intent para navegación entre componentes
 // Importa la clase Intent para navegación entre componentes
 import android.content.IntentFilter
 // Importa la dependencia necesaria: Build
-// Importa la dependencia necesaria: Build
 import android.os.Build
-// Importa el contenedor de datos Bundle
 // Importa el contenedor de datos Bundle
 import android.os.Bundle
 // Importa la dependencia necesaria: VibrationEffect
-// Importa la dependencia necesaria: VibrationEffect
 import android.os.VibrationEffect
-// Importa la dependencia necesaria: Vibrator
 // Importa la dependencia necesaria: Vibrator
 import android.os.Vibrator
 // Importa la dependencia necesaria: ComponentActivity
-// Importa la dependencia necesaria: ComponentActivity
 import androidx.activity.ComponentActivity
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.activity.compose.setContent
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.background
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.*
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.runtime.*
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.runtime.livedata.observeAsState
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.Alignment
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.Modifier
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.graphics.Color
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.text.font.FontWeight
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.text.style.TextAlign
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.dp
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.sp
-// Importa la clase base ViewModel del ciclo de vida
 // Importa la clase base ViewModel del ciclo de vida
 import androidx.lifecycle.ViewModelProvider
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.wear.compose.material.*
-// Importa la dependencia necesaria: BleState
 // Importa la dependencia necesaria: BleState
 import com.lomito.seguro.wear.data.BleState
 // Importa la dependencia necesaria: PollingService
-// Importa la dependencia necesaria: PollingService
 import com.lomito.seguro.wear.data.PollingService
-// Importa la clase base ViewModel del ciclo de vida
 // Importa la clase base ViewModel del ciclo de vida
 import com.lomito.seguro.wear.data.WatchViewModel
 // Importa la dependencia necesaria: AlertActivity
-// Importa la dependencia necesaria: AlertActivity
 import com.lomito.seguro.wear.ui.alert.AlertActivity
-// Importa la dependencia necesaria: DashboardActivity
 // Importa la dependencia necesaria: DashboardActivity
 import com.lomito.seguro.wear.ui.dashboard.DashboardActivity
 // Importa la dependencia necesaria: ReportActivity
-// Importa la dependencia necesaria: ReportActivity
 import com.lomito.seguro.wear.ui.report.ReportActivity
-// Importa la dependencia necesaria: SelectionActivity
 // Importa la dependencia necesaria: SelectionActivity
 import com.lomito.seguro.wear.ui.selection.SelectionActivity
 
@@ -2200,34 +1786,25 @@ import com.lomito.seguro.wear.ui.selection.SelectionActivity
  * - [Gestionar accesos a las funciones principales como alerta, reporte y cambio de mascota]
  */
 // Activity WearMainActivity: pantalla principal que gestiona el ciclo de vida
-// Activity WearMainActivity: pantalla principal que gestiona el ciclo de vida
 class WearMainActivity : ComponentActivity() {
     private lateinit var viewModel: WatchViewModel
 
     // Constante bleReceiver: valor inmutable que no cambia tras su asignación
-    // Constante bleReceiver: valor inmutable que no cambia tras su asignación
     private val bleReceiver = object : BroadcastReceiver() {
-        // Sobreescribe la función onReceive de la clase padre
         // Sobreescribe la función onReceive de la clase padre
         override fun onReceive(context: Context, intent: Intent) {
             // Bloque try-catch: maneja posibles excepciones en el código crítico
-            // Bloque try-catch: maneja posibles excepciones en el código crítico
             try {
-                // Constante distancia: valor inmutable que no cambia tras su asignación
                 // Constante distancia: valor inmutable que no cambia tras su asignación
                 val distancia = intent.getIntExtra("distancia", 0)
                 // Constante mascotaId: valor inmutable que no cambia tras su asignación
-                // Constante mascotaId: valor inmutable que no cambia tras su asignación
                 val mascotaId = intent.getStringExtra("mascotaId") ?: ""
                 // Constante umbral: valor inmutable que no cambia tras su asignación
-                // Constante umbral: valor inmutable que no cambia tras su asignación
                 val umbral = intent.getIntExtra("umbral", 50)
-                // Constante superaUmbral: valor inmutable que no cambia tras su asignación
                 // Constante superaUmbral: valor inmutable que no cambia tras su asignación
                 val superaUmbral = intent.getBooleanExtra("superaUmbral", false)
                 viewModel.actualizarEstado(distancia, mascotaId, umbral, superaUmbral)
             } catch (e: Exception) {
-                // Registro de evento en el log de Android para depuración
                 // Registro de evento en el log de Android para depuración
                 android.util.Log.e("WEAR_MAIN", "Error en bleReceiver: ${e.message}")
             }
@@ -2235,35 +1812,26 @@ class WearMainActivity : ComponentActivity() {
     }
 
     // Método del ciclo de vida: inicializa la actividad y configura la UI
-    // Método del ciclo de vida: inicializa la actividad y configura la UI
     override fun onCreate(savedInstanceState: Bundle?) {
         // Bloque try-catch: maneja posibles excepciones en el código crítico
-        // Bloque try-catch: maneja posibles excepciones en el código crítico
         try {
-            // Invoca la implementación del método en la clase padre
             // Invoca la implementación del método en la clase padre
             super.onCreate(savedInstanceState)
             viewModel = ViewModelProvider(this)[WatchViewModel::class.java]
 
             // Constante prefs: valor inmutable que no cambia tras su asignación
-            // Constante prefs: valor inmutable que no cambia tras su asignación
             val prefs = getSharedPreferences("watch_prefs", MODE_PRIVATE)
-            // Constante mascotaId: valor inmutable que no cambia tras su asignación
             // Constante mascotaId: valor inmutable que no cambia tras su asignación
             val mascotaId = prefs.getString("mascota_activa_id", "") ?: ""
             // Constante mascotaNombre: valor inmutable que no cambia tras su asignación
-            // Constante mascotaNombre: valor inmutable que no cambia tras su asignación
             val mascotaNombre = prefs.getString("mascota_activa_nombre", "Mascota") ?: "Mascota"
-            // Constante umbral: valor inmutable que no cambia tras su asignación
             // Constante umbral: valor inmutable que no cambia tras su asignación
             val umbral = prefs.getInt("mascota_umbral", 50)
 
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (mascotaId.isEmpty()) {
                 startActivity(Intent(this, SelectionActivity::class.java))
                 finish()
-                // Retorna el valor al llamador de la función
                 // Retorna el valor al llamador de la función
                 return
             }
@@ -2272,9 +1840,7 @@ class WearMainActivity : ComponentActivity() {
 
             // ✅ Iniciar PollingService global
             // Constante serviceIntent: valor inmutable que no cambia tras su asignación
-            // Constante serviceIntent: valor inmutable que no cambia tras su asignación
             val serviceIntent = Intent(this, PollingService::class.java)
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 startForegroundService(serviceIntent)
@@ -2284,9 +1850,7 @@ class WearMainActivity : ComponentActivity() {
 
             // ✅ Receiver para actualizar UI desde el PollingService
             // Constante filter: valor inmutable que no cambia tras su asignación
-            // Constante filter: valor inmutable que no cambia tras su asignación
             val filter = IntentFilter("com.lomito.seguro.wear.BLE_UPDATE")
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 registerReceiver(bleReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
@@ -2295,9 +1859,7 @@ class WearMainActivity : ComponentActivity() {
             }
 
             // Define el árbol de UI con Jetpack Compose como contenido de la Activity
-            // Define el árbol de UI con Jetpack Compose como contenido de la Activity
             setContent {
-                // Constante state: valor inmutable que no cambia tras su asignación
                 // Constante state: valor inmutable que no cambia tras su asignación
                 val state by viewModel.bleState.observeAsState(BleState())
                 WearMainScreen(
@@ -2305,17 +1867,14 @@ class WearMainActivity : ComponentActivity() {
                     mascotaNombre = mascotaNombre,
                     onAlertClick = {
                         // Bloque try-catch: maneja posibles excepciones en el código crítico
-                        // Bloque try-catch: maneja posibles excepciones en el código crítico
                         try {
                             startActivity(Intent(this, AlertActivity::class.java))
                         } catch (e: Exception) {
-                            // Registro de evento en el log de Android para depuración
                             // Registro de evento en el log de Android para depuración
                             android.util.Log.e("WEAR_MAIN", "Error: ${e.message}")
                         }
                     },
                     onReportClick = {
-                        // Bloque try-catch: maneja posibles excepciones en el código crítico
                         // Bloque try-catch: maneja posibles excepciones en el código crítico
                         try {
                             startActivity(Intent(this, ReportActivity::class.java).apply {
@@ -2324,30 +1883,25 @@ class WearMainActivity : ComponentActivity() {
                             })
                         } catch (e: Exception) {
                             // Registro de evento en el log de Android para depuración
-                            // Registro de evento en el log de Android para depuración
                             android.util.Log.e("WEAR_MAIN", "Error: ${e.message}")
                         }
                     },
                     onChangeMascota = {
-                        // Bloque try-catch: maneja posibles excepciones en el código crítico
                         // Bloque try-catch: maneja posibles excepciones en el código crítico
                         try {
                             startActivity(Intent(this, SelectionActivity::class.java))
                             finish()
                         } catch (e: Exception) {
                             // Registro de evento en el log de Android para depuración
-                            // Registro de evento en el log de Android para depuración
                             android.util.Log.e("WEAR_MAIN", "Error: ${e.message}")
                         }
                     },
                     onDashboardClick = {
                         // Bloque try-catch: maneja posibles excepciones en el código crítico
-                        // Bloque try-catch: maneja posibles excepciones en el código crítico
                         try {
                             startActivity(Intent(this, DashboardActivity::class.java))
                             finish()
                         } catch (e: Exception) {
-                            // Registro de evento en el log de Android para depuración
                             // Registro de evento en el log de Android para depuración
                             android.util.Log.e("WEAR_MAIN", "Error: ${e.message}")
                         }
@@ -2357,14 +1911,11 @@ class WearMainActivity : ComponentActivity() {
 
         } catch (e: Exception) {
             // Registro de evento en el log de Android para depuración
-            // Registro de evento en el log de Android para depuración
             android.util.Log.e("WEAR_MAIN", "Error FATAL: ${e.message}", e)
-            // Bloque try-catch: maneja posibles excepciones en el código crítico
             // Bloque try-catch: maneja posibles excepciones en el código crítico
             try {
                 startActivity(Intent(this, SelectionActivity::class.java))
             } catch (e2: Exception) {
-                // Registro de evento en el log de Android para depuración
                 // Registro de evento en el log de Android para depuración
                 android.util.Log.e("WEAR_MAIN", "No se pudo abrir Selection: ${e2.message}")
             }
@@ -2373,12 +1924,9 @@ class WearMainActivity : ComponentActivity() {
     }
 
     // Método del ciclo de vida: se limpia la actividad antes de destruirse
-    // Método del ciclo de vida: se limpia la actividad antes de destruirse
     override fun onDestroy() {
         // Invoca la implementación del método en la clase padre
-        // Invoca la implementación del método en la clase padre
         super.onDestroy()
-        // Bloque try-catch: maneja posibles excepciones en el código crítico
         // Bloque try-catch: maneja posibles excepciones en el código crítico
         try { unregisterReceiver(bleReceiver) } catch (e: Exception) {}
     }
@@ -2396,9 +1944,7 @@ class WearMainActivity : ComponentActivity() {
  * - [onDashboardClick]: Acción para ir al menú principal
  */
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
-// Función WearMainScreen: define la lógica de esta operación
 // Función WearMainScreen: define la lógica de esta operación
 fun WearMainScreen(
     state: BleState,
@@ -2409,12 +1955,10 @@ fun WearMainScreen(
     onDashboardClick: () -> Unit
 ) {
     // Constante pct: valor inmutable que no cambia tras su asignación
-    // Constante pct: valor inmutable que no cambia tras su asignación
     val pct = if (state.umbral > 0)
         (state.distancia.toFloat() / state.umbral.toFloat()).coerceIn(0f, 1f)
     else 0f
 
-    // Constante ringColor: valor inmutable que no cambia tras su asignación
     // Constante ringColor: valor inmutable que no cambia tras su asignación
     val ringColor = when {
         state.distancia > 250 -> Color(0xFF8B0000)
@@ -2427,7 +1971,6 @@ fun WearMainScreen(
     }
 
     // Constante bgColor: valor inmutable que no cambia tras su asignación
-    // Constante bgColor: valor inmutable que no cambia tras su asignación
     val bgColor = when {
         state.distancia > 250 -> Color(0xFF1A0000)
         state.distancia > 150 -> Color(0xFF2A0000)
@@ -2439,7 +1982,6 @@ fun WearMainScreen(
     }
 
     // Constante alertLevel: valor inmutable que no cambia tras su asignación
-    // Constante alertLevel: valor inmutable que no cambia tras su asignación
     val alertLevel = when {
         state.distancia > 250 -> "🚨 ¡PELIGRO EXTREMO!"
         state.distancia > 150 -> "🚨 ¡ALERTA MÁXIMA!"
@@ -2450,7 +1992,6 @@ fun WearMainScreen(
         else                  -> "✅ En rango"
     }
 
-    // Constante alertIcon: valor inmutable que no cambia tras su asignación
     // Constante alertIcon: valor inmutable que no cambia tras su asignación
     val alertIcon = when {
         state.distancia > 100 -> "🚨"
@@ -2552,61 +2093,42 @@ fun WearMainScreen(
 
 ```kotlin
 // Paquete: com.lomito.seguro.wear.ui.mascota
-// Paquete: com.lomito.seguro.wear.ui.mascota
 package com.lomito.seguro.wear.ui.mascota
-// Importa la dependencia necesaria: BuildConfig
 // Importa la dependencia necesaria: BuildConfig
 import com.lomito.seguro.wear.BuildConfig
 
 // Importa el contenedor de datos Bundle
-// Importa el contenedor de datos Bundle
 import android.os.Bundle
-// Importa la dependencia necesaria: ComponentActivity
 // Importa la dependencia necesaria: ComponentActivity
 import androidx.activity.ComponentActivity
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.activity.compose.setContent
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.background
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.*
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.runtime.*
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.Alignment
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.Modifier
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.graphics.Color
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.text.font.FontWeight
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.dp
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.sp
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.wear.compose.material.*
-// Importa soporte para corrutinas de Kotlin
 // Importa soporte para corrutinas de Kotlin
 import kotlinx.coroutines.*
 // Importa el parser JSON
-// Importa el parser JSON
 import org.json.JSONObject
 // Importa la dependencia necesaria: HttpURLConnection
-// Importa la dependencia necesaria: HttpURLConnection
 import java.net.HttpURLConnection
-// Importa la dependencia necesaria: URL
 // Importa la dependencia necesaria: URL
 import java.net.URL
 
@@ -2618,29 +2140,21 @@ import java.net.URL
  * - [Enviar la solicitud al backend para registrar la nueva mascota]
  */
 // Activity AddMascotaActivity: pantalla principal que gestiona el ciclo de vida
-// Activity AddMascotaActivity: pantalla principal que gestiona el ciclo de vida
 class AddMascotaActivity : ComponentActivity() {
-    // Variable isSending: almacena el estado mutable de este componente
     // Variable isSending: almacena el estado mutable de este componente
     private var isSending = false
     // Variable isSuccess: almacena el estado mutable de este componente
-    // Variable isSuccess: almacena el estado mutable de este componente
     private var isSuccess = false
     // Variable errorMessage: almacena el estado mutable de este componente
-    // Variable errorMessage: almacena el estado mutable de este componente
     private var errorMessage = ""
-    // Constante backendUrl: valor inmutable que no cambia tras su asignación
     // Constante backendUrl: valor inmutable que no cambia tras su asignación
     private val backendUrl = BuildConfig.BACKEND_URL
 
     // Método del ciclo de vida: inicializa la actividad y configura la UI
-    // Método del ciclo de vida: inicializa la actividad y configura la UI
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Invoca la implementación del método en la clase padre
         // Invoca la implementación del método en la clase padre
         super.onCreate(savedInstanceState)
 
-        // Define el árbol de UI con Jetpack Compose como contenido de la Activity
         // Define el árbol de UI con Jetpack Compose como contenido de la Activity
         setContent {
             AddMascotaScreen(
@@ -2657,34 +2171,26 @@ class AddMascotaActivity : ComponentActivity() {
 
     private fun crearMascota(nombre: String, especie: String, umbral: Int) {
         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (isSending) return
         isSending = true
 
         // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
-        // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
         CoroutineScope(Dispatchers.IO).launch {
-            // Bloque try-catch: maneja posibles excepciones en el código crítico
             // Bloque try-catch: maneja posibles excepciones en el código crítico
             try {
                 // Constante prefs: valor inmutable que no cambia tras su asignación
-                // Constante prefs: valor inmutable que no cambia tras su asignación
                 val prefs = getSharedPreferences("watch_prefs", MODE_PRIVATE)
-                // Constante userId: valor inmutable que no cambia tras su asignación
                 // Constante userId: valor inmutable que no cambia tras su asignación
                 val userId = prefs.getString("user_id", "2") ?: "2"
 
                 // Constante url: valor inmutable que no cambia tras su asignación
-                // Constante url: valor inmutable que no cambia tras su asignación
                 val url = URL("$backendUrl/api/mascotas")
-                // Constante conn: valor inmutable que no cambia tras su asignación
                 // Constante conn: valor inmutable que no cambia tras su asignación
                 val conn = url.openConnection() as HttpURLConnection
                 conn.requestMethod = "POST"
                 conn.setRequestProperty("Content-Type", "application/json")
                 conn.doOutput = true
 
-                // Constante json: valor inmutable que no cambia tras su asignación
                 // Constante json: valor inmutable que no cambia tras su asignación
                 val json = JSONObject().apply {
                     put("nombre", nombre)
@@ -2695,15 +2201,12 @@ class AddMascotaActivity : ComponentActivity() {
 
                 conn.outputStream.write(json.toString().toByteArray())
                 // Constante responseCode: valor inmutable que no cambia tras su asignación
-                // Constante responseCode: valor inmutable que no cambia tras su asignación
                 val responseCode = conn.responseCode
                 conn.disconnect()
 
                 // Cambia el contexto de ejecución de la corrutina (ej. a IO para operaciones de red)
-                // Cambia el contexto de ejecución de la corrutina (ej. a IO para operaciones de red)
                 withContext(Dispatchers.Main) {
                     isSending = false
-                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     if (responseCode == 200 || responseCode == 201) {
                         isSuccess = true
@@ -2712,7 +2215,6 @@ class AddMascotaActivity : ComponentActivity() {
                     }
                 }
             } catch (e: Exception) {
-                // Cambia el contexto de ejecución de la corrutina (ej. a IO para operaciones de red)
                 // Cambia el contexto de ejecución de la corrutina (ej. a IO para operaciones de red)
                 withContext(Dispatchers.Main) {
                     isSending = false
@@ -2734,9 +2236,7 @@ class AddMascotaActivity : ComponentActivity() {
  * - [onBack]: Acción para volver atrás
  */
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
-// Función AddMascotaScreen: define la lógica de esta operación
 // Función AddMascotaScreen: define la lógica de esta operación
 fun AddMascotaScreen(
     isSending: Boolean,
@@ -2746,12 +2246,9 @@ fun AddMascotaScreen(
     onBack: () -> Unit
 ) {
     // Variable nombre: almacena el estado mutable de este componente
-    // Variable nombre: almacena el estado mutable de este componente
     var nombre by remember { mutableStateOf("") }
     // Variable especie: almacena el estado mutable de este componente
-    // Variable especie: almacena el estado mutable de este componente
     var especie by remember { mutableStateOf("PERRO") }
-    // Variable umbral: almacena el estado mutable de este componente
     // Variable umbral: almacena el estado mutable de este componente
     var umbral by remember { mutableStateOf(50) }
 
@@ -2789,7 +2286,6 @@ fun AddMascotaScreen(
 
             Spacer(modifier = Modifier.height(4.dp))
 
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (isSuccess) {
                 Box(
@@ -2896,7 +2392,6 @@ fun AddMascotaScreen(
                 Spacer(modifier = Modifier.height(6.dp))
 
                 // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                 if (errorMessage.isNotEmpty()) {
                     Text(
                         text = errorMessage,
@@ -2908,7 +2403,6 @@ fun AddMascotaScreen(
                 CompactButton(
                     onClick = {
                         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                         if (nombre.isNotEmpty()) {
                             onSave(nombre, especie, umbral)
                         }
@@ -2919,7 +2413,6 @@ fun AddMascotaScreen(
                     modifier = Modifier.fillMaxWidth(0.8f).height(32.dp)
                 ) {
                     Text(
-                        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                         if (isSending) "Creando..." else "Crear",
                         fontSize = 11.sp,
@@ -2938,79 +2431,54 @@ fun AddMascotaScreen(
 
 ```kotlin
 // Paquete: com.lomito.seguro.wear.ui.mascota
-// Paquete: com.lomito.seguro.wear.ui.mascota
 package com.lomito.seguro.wear.ui.mascota
-// Importa la dependencia necesaria: BuildConfig
 // Importa la dependencia necesaria: BuildConfig
 import com.lomito.seguro.wear.BuildConfig
 
 // Importa el contenedor de datos Bundle
-// Importa el contenedor de datos Bundle
 import android.os.Bundle
-// Importa la dependencia necesaria: ComponentActivity
 // Importa la dependencia necesaria: ComponentActivity
 import androidx.activity.ComponentActivity
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.activity.compose.setContent
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.background
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.*
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.lazy.LazyColumn
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.lazy.items
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.shape.CircleShape
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.shape.RoundedCornerShape
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.runtime.*
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.Alignment
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.Modifier
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.graphics.Brush
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.graphics.Color
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.text.font.FontWeight
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.dp
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.sp
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.wear.compose.material.*
 // Importa soporte para corrutinas de Kotlin
-// Importa soporte para corrutinas de Kotlin
 import kotlinx.coroutines.*
-// Importa el parser JSON
 // Importa el parser JSON
 import org.json.JSONArray
 // Importa el parser JSON
-// Importa el parser JSON
 import org.json.JSONObject
 // Importa la dependencia necesaria: HttpURLConnection
-// Importa la dependencia necesaria: HttpURLConnection
 import java.net.HttpURLConnection
-// Importa la dependencia necesaria: URL
 // Importa la dependencia necesaria: URL
 import java.net.URL
 
@@ -3021,30 +2489,21 @@ import java.net.URL
  * - [Mantener el estado e información básica de la mascota]
  */
 // Clase de datos MascotaParaPerder: modelo inmutable con propiedades de dominio
-// Clase de datos MascotaParaPerder: modelo inmutable con propiedades de dominio
 data class MascotaParaPerder(
-    // Constante id: valor inmutable que no cambia tras su asignación
     // Constante id: valor inmutable que no cambia tras su asignación
     val id: String,
     // Constante nombre: valor inmutable que no cambia tras su asignación
-    // Constante nombre: valor inmutable que no cambia tras su asignación
     val nombre: String,
-    // Constante especie: valor inmutable que no cambia tras su asignación
     // Constante especie: valor inmutable que no cambia tras su asignación
     val especie: String,
     // Constante raza: valor inmutable que no cambia tras su asignación
-    // Constante raza: valor inmutable que no cambia tras su asignación
     val raza: String = "",
-    // Constante color: valor inmutable que no cambia tras su asignación
     // Constante color: valor inmutable que no cambia tras su asignación
     val color: String = "",
     // Constante fotoUrl: valor inmutable que no cambia tras su asignación
-    // Constante fotoUrl: valor inmutable que no cambia tras su asignación
     val fotoUrl: String? = null,
     // Constante distanciaAlerta: valor inmutable que no cambia tras su asignación
-    // Constante distanciaAlerta: valor inmutable que no cambia tras su asignación
     val distanciaAlerta: Int = 50,
-    // Constante estado: valor inmutable que no cambia tras su asignación
     // Constante estado: valor inmutable que no cambia tras su asignación
     val estado: String = "EN_CASA"
 )
@@ -3057,57 +2516,42 @@ data class MascotaParaPerder(
  * - [Permitir al usuario cambiar el estado de una mascota a "PERDIDA"]
  */
 // Activity MarcarPerdidaActivity: pantalla principal que gestiona el ciclo de vida
-// Activity MarcarPerdidaActivity: pantalla principal que gestiona el ciclo de vida
 class MarcarPerdidaActivity : ComponentActivity() {
-    // Constante backendUrl: valor inmutable que no cambia tras su asignación
     // Constante backendUrl: valor inmutable que no cambia tras su asignación
     private val backendUrl = BuildConfig.BACKEND_URL
 
     // Método del ciclo de vida: inicializa la actividad y configura la UI
-    // Método del ciclo de vida: inicializa la actividad y configura la UI
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Invoca la implementación del método en la clase padre
         // Invoca la implementación del método en la clase padre
         super.onCreate(savedInstanceState)
 
         // Constante prefs: valor inmutable que no cambia tras su asignación
-        // Constante prefs: valor inmutable que no cambia tras su asignación
         val prefs = getSharedPreferences("watch_prefs", MODE_PRIVATE)
-        // Variable userId: almacena el estado mutable de este componente
         // Variable userId: almacena el estado mutable de este componente
         var userId = prefs.getString("user_id", "") ?: ""
 
         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (userId.isEmpty() || !userId.matches(Regex("^\\d+$"))) {
             userId = "2"
-            // Inicia el editor para modificar los SharedPreferences
             // Inicia el editor para modificar los SharedPreferences
             prefs.edit().putString("user_id", userId).apply()
         }
 
         // Registro de evento en el log de Android para depuración
-        // Registro de evento en el log de Android para depuración
         android.util.Log.d("MARCAR_PERDIDA", "📱 userId: $userId")
 
         // Define el árbol de UI con Jetpack Compose como contenido de la Activity
-        // Define el árbol de UI con Jetpack Compose como contenido de la Activity
         setContent {
-            // Variable mascotas: almacena el estado mutable de este componente
             // Variable mascotas: almacena el estado mutable de este componente
             var mascotas by remember { mutableStateOf<List<MascotaParaPerder>>(emptyList()) }
             // Variable isLoading: almacena el estado mutable de este componente
-            // Variable isLoading: almacena el estado mutable de este componente
             var isLoading by remember { mutableStateOf(true) }
             // Variable errorMessage: almacena el estado mutable de este componente
-            // Variable errorMessage: almacena el estado mutable de este componente
             var errorMessage by remember { mutableStateOf("") }
-            // Variable successMessage: almacena el estado mutable de este componente
             // Variable successMessage: almacena el estado mutable de este componente
             var successMessage by remember { mutableStateOf("") }
 
             LaunchedEffect(Unit) {
-                // Constante result: valor inmutable que no cambia tras su asignación
                 // Constante result: valor inmutable que no cambia tras su asignación
                 val result = withContext(Dispatchers.IO) {
                     cargarMascotas(userId)
@@ -3124,21 +2568,17 @@ class MarcarPerdidaActivity : ComponentActivity() {
                 successMessage = successMessage,
                 onMarcarPerdida = { mascotaId ->
                     // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
-                    // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
                     CoroutineScope(Dispatchers.Main).launch {
-                        // Constante result: valor inmutable que no cambia tras su asignación
                         // Constante result: valor inmutable que no cambia tras su asignación
                         val result = withContext(Dispatchers.IO) {
                             marcarComoPerdida(mascotaId, userId)
                         }
-                        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                         if (result.success) {
                             successMessage = "✅ Mascota marcada como PERDIDA"
                             errorMessage = ""
                             // Recargar lista
                             isLoading = true
-                            // Constante newResult: valor inmutable que no cambia tras su asignación
                             // Constante newResult: valor inmutable que no cambia tras su asignación
                             val newResult = withContext(Dispatchers.IO) {
                                 cargarMascotas(userId)
@@ -3158,9 +2598,7 @@ class MarcarPerdidaActivity : ComponentActivity() {
                     errorMessage = ""
                     successMessage = ""
                     // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
-                    // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
                     CoroutineScope(Dispatchers.Main).launch {
-                        // Constante result: valor inmutable que no cambia tras su asignación
                         // Constante result: valor inmutable que no cambia tras su asignación
                         val result = withContext(Dispatchers.IO) {
                             cargarMascotas(userId)
@@ -3176,16 +2614,12 @@ class MarcarPerdidaActivity : ComponentActivity() {
 
     private suspend fun cargarMascotas(userId: String): CargaResult {
         // Retorna el valor al llamador de la función
-        // Retorna el valor al llamador de la función
         return try {
-            // Registro de evento en el log de Android para depuración
             // Registro de evento en el log de Android para depuración
             android.util.Log.d("MARCAR_PERDIDA", "📱 Cargando mascotas para usuario: $userId")
 
             // Constante url: valor inmutable que no cambia tras su asignación
-            // Constante url: valor inmutable que no cambia tras su asignación
             val url = URL("$backendUrl/api/mascotas?ownerId=$userId")
-            // Constante conn: valor inmutable que no cambia tras su asignación
             // Constante conn: valor inmutable que no cambia tras su asignación
             val conn = url.openConnection() as HttpURLConnection
             conn.connectTimeout = 5000
@@ -3193,36 +2627,26 @@ class MarcarPerdidaActivity : ComponentActivity() {
             conn.requestMethod = "GET"
 
             // Constante responseCode: valor inmutable que no cambia tras su asignación
-            // Constante responseCode: valor inmutable que no cambia tras su asignación
             val responseCode = conn.responseCode
-            // Registro de evento en el log de Android para depuración
             // Registro de evento en el log de Android para depuración
             android.util.Log.d("MARCAR_PERDIDA", "📡 Response Code: $responseCode")
 
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 // Constante response: valor inmutable que no cambia tras su asignación
-                // Constante response: valor inmutable que no cambia tras su asignación
                 val response = conn.inputStream.bufferedReader().readText()
-                // Registro de evento en el log de Android para depuración
                 // Registro de evento en el log de Android para depuración
                 android.util.Log.d("MARCAR_PERDIDA", "📥 Respuesta: $response")
 
                 // Constante jsonArray: valor inmutable que no cambia tras su asignación
-                // Constante jsonArray: valor inmutable que no cambia tras su asignación
                 val jsonArray = JSONArray(response)
-                // Registro de evento en el log de Android para depuración
                 // Registro de evento en el log de Android para depuración
                 android.util.Log.d("MARCAR_PERDIDA", "📊 JSON Array Length: ${jsonArray.length()}")
 
                 // Constante lista: valor inmutable que no cambia tras su asignación
-                // Constante lista: valor inmutable que no cambia tras su asignación
                 val lista = mutableListOf<MascotaParaPerder>()
                 // Itera sobre la colección para procesar cada elemento
-                // Itera sobre la colección para procesar cada elemento
                 for (i in 0 until jsonArray.length()) {
-                    // Constante obj: valor inmutable que no cambia tras su asignación
                     // Constante obj: valor inmutable que no cambia tras su asignación
                     val obj = jsonArray.getJSONObject(i)
                     lista.add(
@@ -3253,7 +2677,6 @@ class MarcarPerdidaActivity : ComponentActivity() {
             }
         } catch (e: Exception) {
             // Registro de evento en el log de Android para depuración
-            // Registro de evento en el log de Android para depuración
             android.util.Log.e("MARCAR_PERDIDA", "❌ Error: ${e.message}", e)
             CargaResult(
                 mascotas = emptyList(),
@@ -3264,16 +2687,12 @@ class MarcarPerdidaActivity : ComponentActivity() {
 
     private suspend fun marcarComoPerdida(mascotaId: String, userId: String): OperacionResult {
         // Retorna el valor al llamador de la función
-        // Retorna el valor al llamador de la función
         return try {
-            // Registro de evento en el log de Android para depuración
             // Registro de evento en el log de Android para depuración
             android.util.Log.d("MARCAR_PERDIDA", "🔴 Marcando mascota $mascotaId como PERDIDA")
 
             // Constante url: valor inmutable que no cambia tras su asignación
-            // Constante url: valor inmutable que no cambia tras su asignación
             val url = URL("$backendUrl/api/mascotas/$mascotaId")
-            // Constante conn: valor inmutable que no cambia tras su asignación
             // Constante conn: valor inmutable que no cambia tras su asignación
             val conn = url.openConnection() as HttpURLConnection
             conn.requestMethod = "PUT"
@@ -3283,22 +2702,18 @@ class MarcarPerdidaActivity : ComponentActivity() {
             conn.doOutput = true
 
             // Constante json: valor inmutable que no cambia tras su asignación
-            // Constante json: valor inmutable que no cambia tras su asignación
             val json = JSONObject().apply {
                 put("estado", "PERDIDA")
             }
 
             conn.outputStream.write(json.toString().toByteArray())
             // Constante responseCode: valor inmutable que no cambia tras su asignación
-            // Constante responseCode: valor inmutable que no cambia tras su asignación
             val responseCode = conn.responseCode
             conn.disconnect()
 
             // Registro de evento en el log de Android para depuración
-            // Registro de evento en el log de Android para depuración
             android.util.Log.d("MARCAR_PERDIDA", "📡 Response Code: $responseCode")
 
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (responseCode == 200 || responseCode == 201) {
                 OperacionResult(success = true, errorMessage = "")
@@ -3307,30 +2722,23 @@ class MarcarPerdidaActivity : ComponentActivity() {
             }
         } catch (e: Exception) {
             // Registro de evento en el log de Android para depuración
-            // Registro de evento en el log de Android para depuración
             android.util.Log.e("MARCAR_PERDIDA", "❌ Error: ${e.message}", e)
             OperacionResult(success = false, errorMessage = "Error: ${e.message}")
         }
     }
 
     // Clase de datos CargaResult: modelo inmutable con propiedades de dominio
-    // Clase de datos CargaResult: modelo inmutable con propiedades de dominio
     data class CargaResult(
         // Constante mascotas: valor inmutable que no cambia tras su asignación
-        // Constante mascotas: valor inmutable que no cambia tras su asignación
         val mascotas: List<MascotaParaPerder>,
-        // Constante errorMessage: valor inmutable que no cambia tras su asignación
         // Constante errorMessage: valor inmutable que no cambia tras su asignación
         val errorMessage: String
     )
 
     // Clase de datos OperacionResult: modelo inmutable con propiedades de dominio
-    // Clase de datos OperacionResult: modelo inmutable con propiedades de dominio
     data class OperacionResult(
         // Constante success: valor inmutable que no cambia tras su asignación
-        // Constante success: valor inmutable que no cambia tras su asignación
         val success: Boolean,
-        // Constante errorMessage: valor inmutable que no cambia tras su asignación
         // Constante errorMessage: valor inmutable que no cambia tras su asignación
         val errorMessage: String
     )
@@ -3338,24 +2746,17 @@ class MarcarPerdidaActivity : ComponentActivity() {
 
 // 🎨 Paleta temática "mascotas perdidas" (consistente con el resto de la app)
 // Constante BgTop: valor inmutable que no cambia tras su asignación
-// Constante BgTop: valor inmutable que no cambia tras su asignación
 private val BgTop = Color(0xFF1B1430)
-// Constante BgBottom: valor inmutable que no cambia tras su asignación
 // Constante BgBottom: valor inmutable que no cambia tras su asignación
 private val BgBottom = Color(0xFF0D0B1A)
 // Constante CardBg: valor inmutable que no cambia tras su asignación
-// Constante CardBg: valor inmutable que no cambia tras su asignación
 private val CardBg = Color(0xFF252044)
-// Constante AccentRed: valor inmutable que no cambia tras su asignación
 // Constante AccentRed: valor inmutable que no cambia tras su asignación
 private val AccentRed = Color(0xFFE85D5D)
 // Constante AccentGreen: valor inmutable que no cambia tras su asignación
-// Constante AccentGreen: valor inmutable que no cambia tras su asignación
 private val AccentGreen = Color(0xFF4CD97B)
 // Constante AccentOrange: valor inmutable que no cambia tras su asignación
-// Constante AccentOrange: valor inmutable que no cambia tras su asignación
 private val AccentOrange = Color(0xFFFFA94D)
-// Constante AccentBlue: valor inmutable que no cambia tras su asignación
 // Constante AccentBlue: valor inmutable que no cambia tras su asignación
 private val AccentBlue = Color(0xFF4D9FFF)
 
@@ -3372,9 +2773,7 @@ private val AccentBlue = Color(0xFF4D9FFF)
  * - [onRetry]: Acción para reintentar la carga
  */
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
-// Función MarcarPerdidaScreen: define la lógica de esta operación
 // Función MarcarPerdidaScreen: define la lógica de esta operación
 fun MarcarPerdidaScreen(
     mascotas: List<MascotaParaPerder>,
@@ -3393,7 +2792,6 @@ fun MarcarPerdidaScreen(
                 .fillMaxSize()
                 .background(Brush.verticalGradient(listOf(BgTop, BgBottom)))
         ) {
-            // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
             // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
             when {
                 isLoading -> {
@@ -3423,7 +2821,6 @@ fun MarcarPerdidaScreen(
                                 color = Color.White.copy(alpha = 0.6f),
                                 fontSize = 11.sp
                             )
-                            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                             if (errorMessage.isNotEmpty()) {
                                 Text(
@@ -3470,7 +2867,6 @@ fun MarcarPerdidaScreen(
                         }
 
                         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                         if (successMessage.isNotEmpty()) {
                             item {
                                 Text(
@@ -3484,7 +2880,6 @@ fun MarcarPerdidaScreen(
                             }
                         }
 
-                        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                         if (errorMessage.isNotEmpty()) {
                             item {
@@ -3511,7 +2906,6 @@ fun MarcarPerdidaScreen(
                                 mascota = mascota,
                                 onMarcarPerdida = {
                                     // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                     if (mascota.estado != "PERDIDA") {
                                         onMarcarPerdida(mascota.id)
                                     }
@@ -3537,21 +2931,16 @@ fun MarcarPerdidaScreen(
 }
 
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
-// Función MascotaMarcarPerdidaCard: define la lógica de esta operación
 // Función MascotaMarcarPerdidaCard: define la lógica de esta operación
 fun MascotaMarcarPerdidaCard(
     mascota: MascotaParaPerder,
     onMarcarPerdida: () -> Unit
 ) {
     // Constante isPerdida: valor inmutable que no cambia tras su asignación
-    // Constante isPerdida: valor inmutable que no cambia tras su asignación
     val isPerdida = mascota.estado == "PERDIDA"
     // Constante estadoColor: valor inmutable que no cambia tras su asignación
-    // Constante estadoColor: valor inmutable que no cambia tras su asignación
     val estadoColor = if (isPerdida) AccentRed else AccentGreen
-    // Constante estadoTexto: valor inmutable que no cambia tras su asignación
     // Constante estadoTexto: valor inmutable que no cambia tras su asignación
     val estadoTexto = if (isPerdida) "PERDIDA" else "EN CASA"
 
@@ -3618,7 +3007,6 @@ fun MascotaMarcarPerdidaCard(
                     Spacer(Modifier.height(6.dp))
 
                     // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     if (isPerdida) {
                         Text(
                             text = "⚠️ Ya está perdida",
@@ -3648,88 +3036,60 @@ fun MascotaMarcarPerdidaCard(
 
 ```kotlin
 // Paquete: com.lomito.seguro.wear.ui.mascota
-// Paquete: com.lomito.seguro.wear.ui.mascota
 package com.lomito.seguro.wear.ui.mascota
-// Importa la dependencia necesaria: BuildConfig
 // Importa la dependencia necesaria: BuildConfig
 import com.lomito.seguro.wear.BuildConfig
 
 // Importa la clase Intent para navegación entre componentes
-// Importa la clase Intent para navegación entre componentes
 import android.content.Intent
-// Importa el contenedor de datos Bundle
 // Importa el contenedor de datos Bundle
 import android.os.Bundle
 // Importa la dependencia necesaria: ComponentActivity
-// Importa la dependencia necesaria: ComponentActivity
 import androidx.activity.ComponentActivity
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.activity.compose.setContent
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.background
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.*
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.lazy.LazyColumn
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.lazy.items
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.shape.CircleShape
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.shape.RoundedCornerShape
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.runtime.*
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.Alignment
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.Modifier
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.draw.clip
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.graphics.Brush
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.graphics.Color
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.layout.ContentScale
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.text.font.FontWeight
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.dp
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.sp
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.wear.compose.material.*
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import coil.compose.AsyncImage
 // Importa soporte para corrutinas de Kotlin
-// Importa soporte para corrutinas de Kotlin
 import kotlinx.coroutines.*
-// Importa el parser JSON
 // Importa el parser JSON
 import org.json.JSONObject
 // Importa la dependencia necesaria: HttpURLConnection
-// Importa la dependencia necesaria: HttpURLConnection
 import java.net.HttpURLConnection
-// Importa la dependencia necesaria: URL
 // Importa la dependencia necesaria: URL
 import java.net.URL
 
@@ -3741,75 +3101,53 @@ import java.net.URL
  * - [Permitir al usuario alternar el estado de la mascota (PERDIDA / EN CASA)]
  */
 // Activity MascotaDetailActivity: pantalla principal que gestiona el ciclo de vida
-// Activity MascotaDetailActivity: pantalla principal que gestiona el ciclo de vida
 class MascotaDetailActivity : ComponentActivity() {
 
-    // Constante backendUrl: valor inmutable que no cambia tras su asignación
     // Constante backendUrl: valor inmutable que no cambia tras su asignación
     private val backendUrl = BuildConfig.BACKEND_URL
 
     // Método del ciclo de vida: inicializa la actividad y configura la UI
-    // Método del ciclo de vida: inicializa la actividad y configura la UI
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Invoca la implementación del método en la clase padre
         // Invoca la implementación del método en la clase padre
         super.onCreate(savedInstanceState)
 
         // Constante mascotaId: valor inmutable que no cambia tras su asignación
-        // Constante mascotaId: valor inmutable que no cambia tras su asignación
         val mascotaId = intent.getStringExtra("mascota_id") ?: ""
-        // Constante nombre: valor inmutable que no cambia tras su asignación
         // Constante nombre: valor inmutable que no cambia tras su asignación
         val nombre = intent.getStringExtra("mascota_nombre") ?: "Mascota"
         // Constante especie: valor inmutable que no cambia tras su asignación
-        // Constante especie: valor inmutable que no cambia tras su asignación
         val especie = intent.getStringExtra("mascota_especie") ?: ""
-        // Constante raza: valor inmutable que no cambia tras su asignación
         // Constante raza: valor inmutable que no cambia tras su asignación
         val raza = intent.getStringExtra("mascota_raza") ?: ""
         // Constante edad: valor inmutable que no cambia tras su asignación
-        // Constante edad: valor inmutable que no cambia tras su asignación
         val edad = intent.getIntExtra("mascota_edad", 0)
-        // Constante color: valor inmutable que no cambia tras su asignación
         // Constante color: valor inmutable que no cambia tras su asignación
         val color = intent.getStringExtra("mascota_color") ?: ""
         // Constante peso: valor inmutable que no cambia tras su asignación
-        // Constante peso: valor inmutable que no cambia tras su asignación
         val peso = intent.getStringExtra("mascota_peso") ?: ""
-        // Constante fotoUrl: valor inmutable que no cambia tras su asignación
         // Constante fotoUrl: valor inmutable que no cambia tras su asignación
         val fotoUrl = intent.getStringExtra("mascota_foto")
         // Constante distanciaAlerta: valor inmutable que no cambia tras su asignación
-        // Constante distanciaAlerta: valor inmutable que no cambia tras su asignación
         val distanciaAlerta = intent.getIntExtra("mascota_distancia_alerta", 50)
         // Variable estadoInicial: almacena el estado mutable de este componente
-        // Variable estadoInicial: almacena el estado mutable de este componente
         var estadoInicial = intent.getStringExtra("mascota_estado") ?: "EN_CASA"
-        // Constante distanciaSimulada: valor inmutable que no cambia tras su asignación
         // Constante distanciaSimulada: valor inmutable que no cambia tras su asignación
         val distanciaSimulada = intent.getIntExtra("mascota_distancia_simulada", 0)
 
         // Constante fotoUrlAbs: valor inmutable que no cambia tras su asignación
-        // Constante fotoUrlAbs: valor inmutable que no cambia tras su asignación
         val fotoUrlAbs = fotoUrl?.takeIf { it.isNotEmpty() }?.let {
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (it.startsWith("http")) it else "$backendUrl$it"
         }
 
         // Define el árbol de UI con Jetpack Compose como contenido de la Activity
-        // Define el árbol de UI con Jetpack Compose como contenido de la Activity
         setContent {
-            // Variable estado: almacena el estado mutable de este componente
             // Variable estado: almacena el estado mutable de este componente
             var estado by remember { mutableStateOf(estadoInicial) }
             // Variable isUpdating: almacena el estado mutable de este componente
-            // Variable isUpdating: almacena el estado mutable de este componente
             var isUpdating by remember { mutableStateOf(false) }
             // Variable showToast: almacena el estado mutable de este componente
-            // Variable showToast: almacena el estado mutable de este componente
             var showToast by remember { mutableStateOf(false) }
-            // Variable toastMessage: almacena el estado mutable de este componente
             // Variable toastMessage: almacena el estado mutable de este componente
             var toastMessage by remember { mutableStateOf("") }
 
@@ -3829,18 +3167,13 @@ class MascotaDetailActivity : ComponentActivity() {
                 onCambiarEstado = {
                     isUpdating = true
                     // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
-                    // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
                     CoroutineScope(Dispatchers.IO).launch {
-                        // Bloque try-catch: maneja posibles excepciones en el código crítico
                         // Bloque try-catch: maneja posibles excepciones en el código crítico
                         try {
                             // Constante nuevoEstado: valor inmutable que no cambia tras su asignación
-                            // Constante nuevoEstado: valor inmutable que no cambia tras su asignación
                             val nuevoEstado = if (estado == "EN_CASA") "PERDIDA" else "EN_CASA"
                             // Constante url: valor inmutable que no cambia tras su asignación
-                            // Constante url: valor inmutable que no cambia tras su asignación
                             val url = URL("$backendUrl/api/mascotas/$mascotaId/estado")
-                            // Constante conn: valor inmutable que no cambia tras su asignación
                             // Constante conn: valor inmutable que no cambia tras su asignación
                             val conn = url.openConnection() as HttpURLConnection
                             conn.connectTimeout = 5000
@@ -3850,20 +3183,16 @@ class MascotaDetailActivity : ComponentActivity() {
                             conn.doOutput = true
 
                             // Constante json: valor inmutable que no cambia tras su asignación
-                            // Constante json: valor inmutable que no cambia tras su asignación
                             val json = JSONObject().apply {
                                 put("estado", nuevoEstado)
                             }
 
                             conn.outputStream.write(json.toString().toByteArray())
                             // Constante responseCode: valor inmutable que no cambia tras su asignación
-                            // Constante responseCode: valor inmutable que no cambia tras su asignación
                             val responseCode = conn.responseCode
 
                             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                             if (responseCode == HttpURLConnection.HTTP_OK) {
-                                // Cambia el contexto de ejecución de la corrutina (ej. a IO para operaciones de red)
                                 // Cambia el contexto de ejecución de la corrutina (ej. a IO para operaciones de red)
                                 withContext(Dispatchers.Main) {
                                     estado = nuevoEstado
@@ -3879,7 +3208,6 @@ class MascotaDetailActivity : ComponentActivity() {
                                 }
                             } else {
                                 // Cambia el contexto de ejecución de la corrutina (ej. a IO para operaciones de red)
-                                // Cambia el contexto de ejecución de la corrutina (ej. a IO para operaciones de red)
                                 withContext(Dispatchers.Main) {
                                     toastMessage = "❌ Error actualizando estado"
                                     showToast = true
@@ -3888,13 +3216,11 @@ class MascotaDetailActivity : ComponentActivity() {
                             conn.disconnect()
                         } catch (e: Exception) {
                             // Cambia el contexto de ejecución de la corrutina (ej. a IO para operaciones de red)
-                            // Cambia el contexto de ejecución de la corrutina (ej. a IO para operaciones de red)
                             withContext(Dispatchers.Main) {
                                 toastMessage = "❌ Error: ${e.message}"
                                 showToast = true
                             }
                         }
-                        // Cambia el contexto de ejecución de la corrutina (ej. a IO para operaciones de red)
                         // Cambia el contexto de ejecución de la corrutina (ej. a IO para operaciones de red)
                         withContext(Dispatchers.Main) {
                             isUpdating = false
@@ -3905,7 +3231,6 @@ class MascotaDetailActivity : ComponentActivity() {
                 }
             )
 
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (showToast) {
                 Box(
@@ -3945,7 +3270,6 @@ class MascotaDetailActivity : ComponentActivity() {
      */
     private fun enviarBroadcastEstado(mascotaId: String, nuevoEstado: String) {
         // Constante intent: valor inmutable que no cambia tras su asignación
-        // Constante intent: valor inmutable que no cambia tras su asignación
         val intent = Intent("com.lomito.seguro.wear.ESTADO_ACTUALIZADO").apply {
             putExtra("mascota_id", mascotaId)
             putExtra("nuevo_estado", nuevoEstado)
@@ -3953,28 +3277,21 @@ class MascotaDetailActivity : ComponentActivity() {
         }
         sendBroadcast(intent)
         // Registro de evento en el log de Android para depuración
-        // Registro de evento en el log de Android para depuración
         android.util.Log.d("DETAIL", "📢 Broadcast enviado: $mascotaId -> $nuevoEstado")
     }
 }
 
 // 🎨 Paleta temática "mascotas perdidas" (consistente con Dashboard y Lista)
 // Constante BgTop: valor inmutable que no cambia tras su asignación
-// Constante BgTop: valor inmutable que no cambia tras su asignación
 private val BgTop = Color(0xFF1B1430)
-// Constante BgBottom: valor inmutable que no cambia tras su asignación
 // Constante BgBottom: valor inmutable que no cambia tras su asignación
 private val BgBottom = Color(0xFF0D0B1A)
 // Constante CardBg: valor inmutable que no cambia tras su asignación
-// Constante CardBg: valor inmutable que no cambia tras su asignación
 private val CardBg = Color(0xFF252044)
-// Constante AccentRed: valor inmutable que no cambia tras su asignación
 // Constante AccentRed: valor inmutable que no cambia tras su asignación
 private val AccentRed = Color(0xFFE85D5D)
 // Constante AccentGreen: valor inmutable que no cambia tras su asignación
-// Constante AccentGreen: valor inmutable que no cambia tras su asignación
 private val AccentGreen = Color(0xFF4CD97B)
-// Constante AccentOrange: valor inmutable que no cambia tras su asignación
 // Constante AccentOrange: valor inmutable que no cambia tras su asignación
 private val AccentOrange = Color(0xFFFFA94D)
 
@@ -3997,9 +3314,7 @@ private val AccentOrange = Color(0xFFFFA94D)
  * - [onCambiarEstado]: Callback para alternar el estado
  */
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
-// Función MascotaDetailScreen: define la lógica de esta operación
 // Función MascotaDetailScreen: define la lógica de esta operación
 fun MascotaDetailScreen(
     nombre: String,
@@ -4017,14 +3332,12 @@ fun MascotaDetailScreen(
     onCambiarEstado: () -> Unit
 ) {
     // Constante estadoColor: valor inmutable que no cambia tras su asignación
-    // Constante estadoColor: valor inmutable que no cambia tras su asignación
     val estadoColor = when (estado) {
         "PERDIDA" -> AccentRed
         "ENCONTRADA" -> AccentGreen
         else -> AccentOrange
     }
 
-    // Constante estadoTexto: valor inmutable que no cambia tras su asignación
     // Constante estadoTexto: valor inmutable que no cambia tras su asignación
     val estadoTexto = when (estado) {
         "PERDIDA" -> "Perdida"
@@ -4033,7 +3346,6 @@ fun MascotaDetailScreen(
     }
 
     // Constante distanciaColor: valor inmutable que no cambia tras su asignación
-    // Constante distanciaColor: valor inmutable que no cambia tras su asignación
     val distanciaColor = when {
         distanciaSimulada > distanciaAlerta -> AccentRed
         distanciaSimulada > distanciaAlerta * 0.8 -> AccentOrange
@@ -4041,12 +3353,9 @@ fun MascotaDetailScreen(
     }
 
     // Constante btnColor: valor inmutable que no cambia tras su asignación
-    // Constante btnColor: valor inmutable que no cambia tras su asignación
     val btnColor = if (estado == "EN_CASA") AccentRed else AccentGreen
     // Constante btnText: valor inmutable que no cambia tras su asignación
-    // Constante btnText: valor inmutable que no cambia tras su asignación
     val btnText = if (estado == "EN_CASA") "Marcar Perdida" else "Marcar En Casa"
-    // Constante btnIcon: valor inmutable que no cambia tras su asignación
     // Constante btnIcon: valor inmutable que no cambia tras su asignación
     val btnIcon = if (estado == "EN_CASA") "🆘" else "🏠"
 
@@ -4070,7 +3379,6 @@ fun MascotaDetailScreen(
             ) {
                 // Header
                 item {
-                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     if (!fotoUrl.isNullOrEmpty()) {
                         AsyncImage(
@@ -4185,22 +3493,16 @@ fun MascotaDetailScreen(
 
                 // ✅ Tarjeta de datos (raza, edad, color, peso)
                 // Constante datos: valor inmutable que no cambia tras su asignación
-                // Constante datos: valor inmutable que no cambia tras su asignación
                 val datos = buildList {
-                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     if (raza.isNotEmpty()) add("Raza" to raza)
                     // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     if (edad > 0) add("Edad" to "$edad años")
-                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     if (color.isNotEmpty()) add("Color" to color)
                     // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     if (peso.isNotEmpty()) add("Peso" to peso)
                 }
-                // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                 // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                 if (datos.isNotEmpty()) {
                     item {
@@ -4217,7 +3519,6 @@ fun MascotaDetailScreen(
                             ) {
                                 datos.forEachIndexed { index, (label, value) ->
                                     DetailRow(label, value)
-                                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                     // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                     if (index != datos.lastIndex) Spacer(Modifier.height(4.dp))
                                 }
@@ -4237,7 +3538,6 @@ fun MascotaDetailScreen(
                         colors = ButtonDefaults.buttonColors(backgroundColor = btnColor),
                         enabled = !isUpdating
                     ) {
-                        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                         if (isUpdating) {
                             CircularProgressIndicator(
@@ -4273,9 +3573,7 @@ fun MascotaDetailScreen(
 }
 
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
-// Función DetailRow: define la lógica de esta operación
 // Función DetailRow: define la lógica de esta operación
 fun DetailRow(label: String, value: String) {
     Row(
@@ -4303,103 +3601,70 @@ fun DetailRow(label: String, value: String) {
 
 ```kotlin
 // Paquete: com.lomito.seguro.wear.ui.mascota
-// Paquete: com.lomito.seguro.wear.ui.mascota
 package com.lomito.seguro.wear.ui.mascota
-// Importa la dependencia necesaria: BuildConfig
 // Importa la dependencia necesaria: BuildConfig
 import com.lomito.seguro.wear.BuildConfig
 
 // Importa la dependencia necesaria: BroadcastReceiver
-// Importa la dependencia necesaria: BroadcastReceiver
 import android.content.BroadcastReceiver
-// Importa el contexto de Android
 // Importa el contexto de Android
 import android.content.Context
 // Importa la clase Intent para navegación entre componentes
-// Importa la clase Intent para navegación entre componentes
 import android.content.Intent
-// Importa la clase Intent para navegación entre componentes
 // Importa la clase Intent para navegación entre componentes
 import android.content.IntentFilter
 // Importa la dependencia necesaria: Build
-// Importa la dependencia necesaria: Build
 import android.os.Build
-// Importa el contenedor de datos Bundle
 // Importa el contenedor de datos Bundle
 import android.os.Bundle
 // Importa la dependencia necesaria: ComponentActivity
-// Importa la dependencia necesaria: ComponentActivity
 import androidx.activity.ComponentActivity
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.activity.compose.setContent
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.background
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.*
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.lazy.LazyColumn
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.lazy.items
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.shape.CircleShape
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.shape.RoundedCornerShape
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.runtime.*
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.Alignment
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.Modifier
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.draw.clip
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.graphics.Brush
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.graphics.Color
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.layout.ContentScale
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.text.font.FontWeight
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.dp
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.sp
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.wear.compose.material.*
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import coil.compose.AsyncImage
 // Importa soporte para corrutinas de Kotlin
-// Importa soporte para corrutinas de Kotlin
 import kotlinx.coroutines.*
-// Importa el parser JSON
 // Importa el parser JSON
 import org.json.JSONArray
 // Importa el parser JSON
-// Importa el parser JSON
 import org.json.JSONObject
 // Importa la dependencia necesaria: HttpURLConnection
-// Importa la dependencia necesaria: HttpURLConnection
 import java.net.HttpURLConnection
-// Importa la dependencia necesaria: URL
 // Importa la dependencia necesaria: URL
 import java.net.URL
 
@@ -4410,36 +3675,25 @@ import java.net.URL
  * - [Almacenar los datos básicos necesarios para mostrar en un listado]
  */
 // Clase de datos MascotaItem: modelo inmutable con propiedades de dominio
-// Clase de datos MascotaItem: modelo inmutable con propiedades de dominio
 data class MascotaItem(
-    // Constante id: valor inmutable que no cambia tras su asignación
     // Constante id: valor inmutable que no cambia tras su asignación
     val id: String,
     // Constante nombre: valor inmutable que no cambia tras su asignación
-    // Constante nombre: valor inmutable que no cambia tras su asignación
     val nombre: String,
-    // Constante especie: valor inmutable que no cambia tras su asignación
     // Constante especie: valor inmutable que no cambia tras su asignación
     val especie: String,
     // Constante raza: valor inmutable que no cambia tras su asignación
-    // Constante raza: valor inmutable que no cambia tras su asignación
     val raza: String = "",
-    // Constante edad: valor inmutable que no cambia tras su asignación
     // Constante edad: valor inmutable que no cambia tras su asignación
     val edad: Int = 0,
     // Constante color: valor inmutable que no cambia tras su asignación
-    // Constante color: valor inmutable que no cambia tras su asignación
     val color: String = "",
-    // Constante peso: valor inmutable que no cambia tras su asignación
     // Constante peso: valor inmutable que no cambia tras su asignación
     val peso: String = "",
     // Constante fotoUrl: valor inmutable que no cambia tras su asignación
-    // Constante fotoUrl: valor inmutable que no cambia tras su asignación
     val fotoUrl: String? = null,
     // Constante distanciaAlerta: valor inmutable que no cambia tras su asignación
-    // Constante distanciaAlerta: valor inmutable que no cambia tras su asignación
     val distanciaAlerta: Int = 50,
-    // Constante estado: valor inmutable que no cambia tras su asignación
     // Constante estado: valor inmutable que no cambia tras su asignación
     val estado: String = "EN_CASA"
 )
@@ -4452,44 +3706,33 @@ data class MascotaItem(
  * - [Gestionar la actualización en tiempo real de su estado a través de broadcast y polling]
  */
 // Activity MascotaListActivity: pantalla principal que gestiona el ciclo de vida
-// Activity MascotaListActivity: pantalla principal que gestiona el ciclo de vida
 class MascotaListActivity : ComponentActivity() {
-    // Variable pollingJob: almacena el estado mutable de este componente
     // Variable pollingJob: almacena el estado mutable de este componente
     private var pollingJob: Job? = null
     // Constante backendUrl: valor inmutable que no cambia tras su asignación
-    // Constante backendUrl: valor inmutable que no cambia tras su asignación
     private val backendUrl = BuildConfig.BACKEND_URL
-    // Constante distanciasSimuladas: valor inmutable que no cambia tras su asignación
     // Constante distanciasSimuladas: valor inmutable que no cambia tras su asignación
     private val distanciasSimuladas = mutableStateMapOf<String, Int>()
 
     // ✅ State para mascotas con actualización inmediata
     // Variable mascotasState: almacena el estado mutable de este componente
-    // Variable mascotasState: almacena el estado mutable de este componente
     private var mascotasState by mutableStateOf<List<MascotaItem>>(emptyList())
 
     // ✅ BroadcastReceiver para actualizar el estado de una mascota
     // Constante estadoUpdateReceiver: valor inmutable que no cambia tras su asignación
-    // Constante estadoUpdateReceiver: valor inmutable que no cambia tras su asignación
     private val estadoUpdateReceiver = object : BroadcastReceiver() {
-        // Sobreescribe la función onReceive de la clase padre
         // Sobreescribe la función onReceive de la clase padre
         override fun onReceive(context: Context, intent: Intent) {
             // Constante mascotaId: valor inmutable que no cambia tras su asignación
-            // Constante mascotaId: valor inmutable que no cambia tras su asignación
             val mascotaId = intent.getStringExtra("mascota_id") ?: return
-            // Constante nuevoEstado: valor inmutable que no cambia tras su asignación
             // Constante nuevoEstado: valor inmutable que no cambia tras su asignación
             val nuevoEstado = intent.getStringExtra("nuevo_estado") ?: return
 
-            // Registro de evento en el log de Android para depuración
             // Registro de evento en el log de Android para depuración
             android.util.Log.d("MLIST", "📢 Actualizando estado de $mascotaId a $nuevoEstado")
 
             // ✅ Actualizar la lista inmediatamente
             mascotasState = mascotasState.map { item ->
-                // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                 // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                 if (item.id == mascotaId) {
                     item.copy(estado = nuevoEstado)
@@ -4501,18 +3744,13 @@ class MascotaListActivity : ComponentActivity() {
     }
 
     // Constante bleReceiver: valor inmutable que no cambia tras su asignación
-    // Constante bleReceiver: valor inmutable que no cambia tras su asignación
     private val bleReceiver = object : BroadcastReceiver() {
-        // Sobreescribe la función onReceive de la clase padre
         // Sobreescribe la función onReceive de la clase padre
         override fun onReceive(context: Context, intent: Intent) {
             // Constante mascotaId: valor inmutable que no cambia tras su asignación
-            // Constante mascotaId: valor inmutable que no cambia tras su asignación
             val mascotaId = intent.getStringExtra("mascotaId") ?: return
             // Constante distancia: valor inmutable que no cambia tras su asignación
-            // Constante distancia: valor inmutable que no cambia tras su asignación
             val distancia = intent.getIntExtra("distancia", 0)
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (mascotaId.isNotEmpty()) {
                 distanciasSimuladas[mascotaId] = distancia
@@ -4521,17 +3759,13 @@ class MascotaListActivity : ComponentActivity() {
     }
 
     // Método del ciclo de vida: inicializa la actividad y configura la UI
-    // Método del ciclo de vida: inicializa la actividad y configura la UI
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Invoca la implementación del método en la clase padre
         // Invoca la implementación del método en la clase padre
         super.onCreate(savedInstanceState)
 
         // ✅ Registrar receiver para actualizaciones de estado
         // Constante filter: valor inmutable que no cambia tras su asignación
-        // Constante filter: valor inmutable que no cambia tras su asignación
         val filter = IntentFilter("com.lomito.seguro.wear.ESTADO_ACTUALIZADO")
-        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             registerReceiver(estadoUpdateReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
@@ -4540,17 +3774,13 @@ class MascotaListActivity : ComponentActivity() {
         }
 
         // Define el árbol de UI con Jetpack Compose como contenido de la Activity
-        // Define el árbol de UI con Jetpack Compose como contenido de la Activity
         setContent {
             // Variable isLoading: almacena el estado mutable de este componente
-            // Variable isLoading: almacena el estado mutable de este componente
             var isLoading by remember { mutableStateOf(true) }
-            // Variable errorMessage: almacena el estado mutable de este componente
             // Variable errorMessage: almacena el estado mutable de este componente
             var errorMessage by remember { mutableStateOf("") }
 
             LaunchedEffect(Unit) {
-                // Constante result: valor inmutable que no cambia tras su asignación
                 // Constante result: valor inmutable que no cambia tras su asignación
                 val result = withContext(Dispatchers.IO) { cargarMascotas() }
                 mascotasState = result.mascotas
@@ -4564,7 +3794,6 @@ class MascotaListActivity : ComponentActivity() {
                 isLoading = isLoading,
                 errorMessage = errorMessage,
                 onSelect = { mascota ->
-                    // Constante intent: valor inmutable que no cambia tras su asignación
                     // Constante intent: valor inmutable que no cambia tras su asignación
                     val intent = Intent(this@MascotaListActivity, MascotaDetailActivity::class.java).apply {
                         putExtra("mascota_id", mascota.id)
@@ -4586,9 +3815,7 @@ class MascotaListActivity : ComponentActivity() {
                     isLoading = true
                     errorMessage = ""
                     // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
-                    // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
                     CoroutineScope(Dispatchers.Main).launch {
-                        // Constante result: valor inmutable que no cambia tras su asignación
                         // Constante result: valor inmutable que no cambia tras su asignación
                         val result = withContext(Dispatchers.IO) { cargarMascotas() }
                         mascotasState = result.mascotas
@@ -4601,15 +3828,11 @@ class MascotaListActivity : ComponentActivity() {
     }
 
     // Método del ciclo de vida: la actividad se vuelve visible
-    // Método del ciclo de vida: la actividad se vuelve visible
     override fun onStart() {
-        // Invoca la implementación del método en la clase padre
         // Invoca la implementación del método en la clase padre
         super.onStart()
         // Constante filter: valor inmutable que no cambia tras su asignación
-        // Constante filter: valor inmutable que no cambia tras su asignación
         val filter = IntentFilter("com.lomito.seguro.wear.BLE_UPDATE")
-        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             registerReceiver(bleReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
@@ -4618,40 +3841,29 @@ class MascotaListActivity : ComponentActivity() {
         }
 
         // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
-        // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
         pollingJob = CoroutineScope(Dispatchers.IO + SupervisorJob()).launch {
             while (isActive) {
                 // Bloque try-catch: maneja posibles excepciones en el código crítico
-                // Bloque try-catch: maneja posibles excepciones en el código crítico
                 try {
                     // Constante url: valor inmutable que no cambia tras su asignación
-                    // Constante url: valor inmutable que no cambia tras su asignación
                     val url = URL("$backendUrl/api/simulador/estado")
-                    // Constante conn: valor inmutable que no cambia tras su asignación
                     // Constante conn: valor inmutable que no cambia tras su asignación
                     val conn = url.openConnection() as HttpURLConnection
                     conn.connectTimeout = 2000
                     conn.readTimeout = 2000
                     conn.requestMethod = "GET"
                     // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     if (conn.responseCode == HttpURLConnection.HTTP_OK) {
-                        // Constante response: valor inmutable que no cambia tras su asignación
                         // Constante response: valor inmutable que no cambia tras su asignación
                         val response = conn.inputStream.bufferedReader().readText()
                         // Constante json: valor inmutable que no cambia tras su asignación
-                        // Constante json: valor inmutable que no cambia tras su asignación
                         val json = JSONObject(response)
-                        // Constante distancia: valor inmutable que no cambia tras su asignación
                         // Constante distancia: valor inmutable que no cambia tras su asignación
                         val distancia = json.optInt("distancia", 0)
                         // Constante mascotaId: valor inmutable que no cambia tras su asignación
-                        // Constante mascotaId: valor inmutable que no cambia tras su asignación
                         val mascotaId = json.optString("mascotaId", "")
                         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                         if (mascotaId.isNotEmpty()) {
-                            // Cambia el contexto de ejecución de la corrutina (ej. a IO para operaciones de red)
                             // Cambia el contexto de ejecución de la corrutina (ej. a IO para operaciones de red)
                             withContext(Dispatchers.Main) {
                                 distanciasSimuladas[mascotaId] = distancia
@@ -4661,7 +3873,6 @@ class MascotaListActivity : ComponentActivity() {
                     conn.disconnect()
                 } catch (e: Exception) {
                     // Registro de evento en el log de Android para depuración
-                    // Registro de evento en el log de Android para depuración
                     android.util.Log.e("MLIST_POLL", "Error: ${e.message}")
                 }
                 delay(2000)
@@ -4670,9 +3881,7 @@ class MascotaListActivity : ComponentActivity() {
     }
 
     // Método del ciclo de vida: la actividad ya no es visible
-    // Método del ciclo de vida: la actividad ya no es visible
     override fun onStop() {
-        // Invoca la implementación del método en la clase padre
         // Invoca la implementación del método en la clase padre
         super.onStop()
         unregisterReceiver(bleReceiver)
@@ -4680,12 +3889,9 @@ class MascotaListActivity : ComponentActivity() {
     }
 
     // Método del ciclo de vida: se limpia la actividad antes de destruirse
-    // Método del ciclo de vida: se limpia la actividad antes de destruirse
     override fun onDestroy() {
         // Invoca la implementación del método en la clase padre
-        // Invoca la implementación del método en la clase padre
         super.onDestroy()
-        // Bloque try-catch: maneja posibles excepciones en el código crítico
         // Bloque try-catch: maneja posibles excepciones en el código crítico
         try {
             unregisterReceiver(estadoUpdateReceiver)
@@ -4696,51 +3902,36 @@ class MascotaListActivity : ComponentActivity() {
 
     private suspend fun cargarMascotas(): CargaResult {
         // Retorna el valor al llamador de la función
-        // Retorna el valor al llamador de la función
         return try {
-            // Constante prefs: valor inmutable que no cambia tras su asignación
             // Constante prefs: valor inmutable que no cambia tras su asignación
             val prefs = getSharedPreferences("watch_prefs", MODE_PRIVATE)
             // Constante userId: valor inmutable que no cambia tras su asignación
-            // Constante userId: valor inmutable que no cambia tras su asignación
             val userId = prefs.getString("user_id", "2") ?: "2"
             // Constante url: valor inmutable que no cambia tras su asignación
-            // Constante url: valor inmutable que no cambia tras su asignación
             val url = URL("$backendUrl/api/mascotas?ownerId=$userId")
-            // Constante conn: valor inmutable que no cambia tras su asignación
             // Constante conn: valor inmutable que no cambia tras su asignación
             val conn = url.openConnection() as HttpURLConnection
             conn.connectTimeout = 5000
             conn.readTimeout = 5000
             conn.requestMethod = "GET"
             // Constante responseCode: valor inmutable que no cambia tras su asignación
-            // Constante responseCode: valor inmutable que no cambia tras su asignación
             val responseCode = conn.responseCode
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 // Constante response: valor inmutable que no cambia tras su asignación
-                // Constante response: valor inmutable que no cambia tras su asignación
                 val response = conn.inputStream.bufferedReader().readText()
-                // Constante jsonArray: valor inmutable que no cambia tras su asignación
                 // Constante jsonArray: valor inmutable que no cambia tras su asignación
                 val jsonArray = JSONArray(response)
                 // Constante lista: valor inmutable que no cambia tras su asignación
-                // Constante lista: valor inmutable que no cambia tras su asignación
                 val lista = mutableListOf<MascotaItem>()
-                // Itera sobre la colección para procesar cada elemento
                 // Itera sobre la colección para procesar cada elemento
                 for (i in 0 until jsonArray.length()) {
                     // Constante obj: valor inmutable que no cambia tras su asignación
-                    // Constante obj: valor inmutable que no cambia tras su asignación
                     val obj = jsonArray.getJSONObject(i)
-                    // Constante fotoRelativa: valor inmutable que no cambia tras su asignación
                     // Constante fotoRelativa: valor inmutable que no cambia tras su asignación
                     val fotoRelativa = obj.optString("foto_url", null)
                     // Constante fotoAbsoluta: valor inmutable que no cambia tras su asignación
-                    // Constante fotoAbsoluta: valor inmutable que no cambia tras su asignación
                     val fotoAbsoluta = fotoRelativa?.takeIf { it.isNotEmpty() }?.let {
-                        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                         if (it.startsWith("http")) it else "$backendUrl$it"
                     }
@@ -4771,30 +3962,22 @@ class MascotaListActivity : ComponentActivity() {
     }
 
     // Clase de datos CargaResult: modelo inmutable con propiedades de dominio
-    // Clase de datos CargaResult: modelo inmutable con propiedades de dominio
     data class CargaResult(val mascotas: List<MascotaItem>, val errorMessage: String)
 }
 
 // 🎨 Paleta temática "mascotas perdidas" (misma del Dashboard)
 // Constante BgTop: valor inmutable que no cambia tras su asignación
-// Constante BgTop: valor inmutable que no cambia tras su asignación
 private val BgTop = Color(0xFF1B1430)
-// Constante BgBottom: valor inmutable que no cambia tras su asignación
 // Constante BgBottom: valor inmutable que no cambia tras su asignación
 private val BgBottom = Color(0xFF0D0B1A)
 // Constante CardBg: valor inmutable que no cambia tras su asignación
-// Constante CardBg: valor inmutable que no cambia tras su asignación
 private val CardBg = Color(0xFF252044)
-// Constante AccentRed: valor inmutable que no cambia tras su asignación
 // Constante AccentRed: valor inmutable que no cambia tras su asignación
 private val AccentRed = Color(0xFFE85D5D)
 // Constante AccentGreen: valor inmutable que no cambia tras su asignación
-// Constante AccentGreen: valor inmutable que no cambia tras su asignación
 private val AccentGreen = Color(0xFF4CD97B)
 // Constante AccentOrange: valor inmutable que no cambia tras su asignación
-// Constante AccentOrange: valor inmutable que no cambia tras su asignación
 private val AccentOrange = Color(0xFFFFA94D)
-// Constante AccentBlue: valor inmutable que no cambia tras su asignación
 // Constante AccentBlue: valor inmutable que no cambia tras su asignación
 private val AccentBlue = Color(0xFF4D9FFF)
 
@@ -4811,9 +3994,7 @@ private val AccentBlue = Color(0xFF4D9FFF)
  * - [onRetry]: Callback para reintentar la conexión
  */
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
-// Función MascotaListScreen: define la lógica de esta operación
 // Función MascotaListScreen: define la lógica de esta operación
 fun MascotaListScreen(
     mascotas: List<MascotaItem>,
@@ -4859,7 +4040,6 @@ fun MascotaListScreen(
                 }
 
                 // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
-                // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
                 when {
                     isLoading -> {
                         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -4880,7 +4060,6 @@ fun MascotaListScreen(
                                 Text("🐾", fontSize = 22.sp)
                                 Spacer(Modifier.height(4.dp))
                                 Text("No hay mascotas", color = Color.White.copy(alpha = 0.6f), fontSize = 11.sp)
-                                // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                 // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                 if (errorMessage.isNotEmpty()) {
                                     Text(
@@ -4931,16 +4110,13 @@ fun MascotaListScreen(
 }
 
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
-// Función MascotaItemCard: define la lógica de esta operación
 // Función MascotaItemCard: define la lógica de esta operación
 fun MascotaItemCard(
     mascota: MascotaItem,
     distanciaSimulada: Int?,
     onClick: () -> Unit
 ) {
-    // Constante estadoColor: valor inmutable que no cambia tras su asignación
     // Constante estadoColor: valor inmutable que no cambia tras su asignación
     val estadoColor = when (mascota.estado) {
         "PERDIDA" -> AccentRed
@@ -4949,14 +4125,12 @@ fun MascotaItemCard(
     }
 
     // Constante estadoTexto: valor inmutable que no cambia tras su asignación
-    // Constante estadoTexto: valor inmutable que no cambia tras su asignación
     val estadoTexto = when (mascota.estado) {
         "PERDIDA" -> "Perdida"
         "ENCONTRADA" -> "Encontrada"
         else -> "En Casa"
     }
 
-    // Constante distanciaColor: valor inmutable que no cambia tras su asignación
     // Constante distanciaColor: valor inmutable que no cambia tras su asignación
     val distanciaColor = when {
         distanciaSimulada == null -> Color.White.copy(alpha = 0.4f)
@@ -4998,7 +4172,6 @@ fun MascotaItemCard(
                         horizontalArrangement = Arrangement.spacedBy(6.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                         if (!mascota.fotoUrl.isNullOrEmpty()) {
                             AsyncImage(
@@ -5064,93 +4237,64 @@ fun MascotaItemCard(
 
 ```kotlin
 // Paquete: com.lomito.seguro.wear.ui.report
-// Paquete: com.lomito.seguro.wear.ui.report
 package com.lomito.seguro.wear.ui.report
-// Importa la dependencia necesaria: BuildConfig
 // Importa la dependencia necesaria: BuildConfig
 import com.lomito.seguro.wear.BuildConfig
 
 // Importa la dependencia necesaria: RemoteInput
-// Importa la dependencia necesaria: RemoteInput
 import android.app.RemoteInput
-// Importa el contenedor de datos Bundle
 // Importa el contenedor de datos Bundle
 import android.os.Bundle
 // Importa la dependencia necesaria: ComponentActivity
-// Importa la dependencia necesaria: ComponentActivity
 import androidx.activity.ComponentActivity
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.activity.compose.setContent
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.activity.compose.rememberLauncherForActivityResult
-// Importa la dependencia necesaria: ActivityResultContracts
 // Importa la dependencia necesaria: ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.background
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.*
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.shape.CircleShape
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.shape.RoundedCornerShape
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.runtime.*
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.Alignment
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.Modifier
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.draw.clip
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.graphics.Color
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.text.font.FontWeight
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.text.style.TextAlign
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.dp
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.sp
-// Importa la clase Intent para navegación entre componentes
 // Importa la clase Intent para navegación entre componentes
 import androidx.wear.input.RemoteInputIntentHelper
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.wear.compose.material.*
-// Importa soporte para corrutinas de Kotlin
 // Importa soporte para corrutinas de Kotlin
 import kotlinx.coroutines.*
 // Importa el parser JSON
-// Importa el parser JSON
 import org.json.JSONObject
 // Importa la dependencia necesaria: HttpURLConnection
-// Importa la dependencia necesaria: HttpURLConnection
 import java.net.HttpURLConnection
-// Importa la dependencia necesaria: URL
 // Importa la dependencia necesaria: URL
 import java.net.URL
 
 // Constante KEY_TEXTO: valor fijo definido en tiempo de compilación
-// Constante KEY_TEXTO: valor fijo definido en tiempo de compilación
 private const val KEY_TEXTO = "key_texto_input"
 
-// Declaración de la clase Paso
 // Declaración de la clase Paso
 enum class Paso { NOMBRE, ESPECIE, RAZA, COLOR, TELEFONO, CONFIRMAR }
 
@@ -5162,68 +4306,49 @@ enum class Paso { NOMBRE, ESPECIE, RAZA, COLOR, TELEFONO, CONFIRMAR }
  * - [Publicar el registro de la mascota como perdida en el backend]
  */
 // Activity AgregarMascotaPerdidaActivity: pantalla principal que gestiona el ciclo de vida
-// Activity AgregarMascotaPerdidaActivity: pantalla principal que gestiona el ciclo de vida
 class AgregarMascotaPerdidaActivity : ComponentActivity() {
-    // Constante backendUrl: valor inmutable que no cambia tras su asignación
     // Constante backendUrl: valor inmutable que no cambia tras su asignación
     private val backendUrl = BuildConfig.BACKEND_URL
 
     // Método del ciclo de vida: inicializa la actividad y configura la UI
-    // Método del ciclo de vida: inicializa la actividad y configura la UI
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Invoca la implementación del método en la clase padre
         // Invoca la implementación del método en la clase padre
         super.onCreate(savedInstanceState)
 
         // Define el árbol de UI con Jetpack Compose como contenido de la Activity
-        // Define el árbol de UI con Jetpack Compose como contenido de la Activity
         setContent {
-            // Variable paso: almacena el estado mutable de este componente
             // Variable paso: almacena el estado mutable de este componente
             var paso by remember { mutableStateOf(Paso.NOMBRE) }
             // Variable nombre: almacena el estado mutable de este componente
-            // Variable nombre: almacena el estado mutable de este componente
             var nombre by remember { mutableStateOf("") }
-            // Variable especie: almacena el estado mutable de este componente
             // Variable especie: almacena el estado mutable de este componente
             var especie by remember { mutableStateOf("PERRO") }
             // Variable raza: almacena el estado mutable de este componente
-            // Variable raza: almacena el estado mutable de este componente
             var raza by remember { mutableStateOf("") }
-            // Variable color: almacena el estado mutable de este componente
             // Variable color: almacena el estado mutable de este componente
             var color by remember { mutableStateOf("") }
             // Variable telefono: almacena el estado mutable de este componente
-            // Variable telefono: almacena el estado mutable de este componente
             var telefono by remember { mutableStateOf("") }
-            // Variable isSending: almacena el estado mutable de este componente
             // Variable isSending: almacena el estado mutable de este componente
             var isSending by remember { mutableStateOf(false) }
             // Variable isSuccess: almacena el estado mutable de este componente
-            // Variable isSuccess: almacena el estado mutable de este componente
             var isSuccess by remember { mutableStateOf(false) }
             // Variable errorMessage: almacena el estado mutable de este componente
-            // Variable errorMessage: almacena el estado mutable de este componente
             var errorMessage by remember { mutableStateOf("") }
-            // Variable campoActivo: almacena el estado mutable de este componente
             // Variable campoActivo: almacena el estado mutable de este componente
             var campoActivo by remember { mutableStateOf("") }
 
             // Constante inputLauncher: valor inmutable que no cambia tras su asignación
-            // Constante inputLauncher: valor inmutable que no cambia tras su asignación
             val inputLauncher = rememberLauncherForActivityResult(
                 ActivityResultContracts.StartActivityForResult()
             ) { result ->
-                // Constante texto: valor inmutable que no cambia tras su asignación
                 // Constante texto: valor inmutable que no cambia tras su asignación
                 val texto = RemoteInput.getResultsFromIntent(result.data)
                     ?.getCharSequence(KEY_TEXTO)
                     ?.toString()
                     ?.trim()
                 // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                 if (!texto.isNullOrEmpty()) {
-                    // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
                     // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
                     when (campoActivo) {
                         "nombre" -> { nombre = texto; paso = Paso.ESPECIE }
@@ -5235,13 +4360,10 @@ class AgregarMascotaPerdidaActivity : ComponentActivity() {
             }
 
             // Función pedirInput: define la lógica de esta operación
-            // Función pedirInput: define la lógica de esta operación
             fun pedirInput(campo: String, label: String) {
                 campoActivo = campo
                 // Constante intent: valor inmutable que no cambia tras su asignación
-                // Constante intent: valor inmutable que no cambia tras su asignación
                 val intent = RemoteInputIntentHelper.createActionRemoteInputIntent()
-                // Constante remoteInputs: valor inmutable que no cambia tras su asignación
                 // Constante remoteInputs: valor inmutable que no cambia tras su asignación
                 val remoteInputs = listOf(RemoteInput.Builder(KEY_TEXTO).setLabel(label).build())
                 RemoteInputIntentHelper.putRemoteInputsExtra(intent, remoteInputs)
@@ -5255,7 +4377,6 @@ class AgregarMascotaPerdidaActivity : ComponentActivity() {
                     .background(Color(0xFF0D0B1A)),
                 contentAlignment = Alignment.Center
             ) {
-                // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
                 // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
                 when {
                     isSuccess -> PantallaExito { finish() }
@@ -5272,14 +4393,12 @@ class AgregarMascotaPerdidaActivity : ComponentActivity() {
                             modifier = Modifier.padding(bottom = 12.dp)
                         ) {
                             // Itera sobre cada elemento de la colección y ejecuta el bloque
-                            // Itera sobre cada elemento de la colección y ejecuta el bloque
                             Paso.entries.forEach { p ->
                                 Box(
                                     modifier = Modifier
                                         .size(if (p == paso) 8.dp else 5.dp)
                                         .clip(CircleShape)
                                         .background(
-                                            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                             if (p.ordinal <= paso.ordinal)
                                                 Color(0xFFE85D5D)
@@ -5291,7 +4410,6 @@ class AgregarMascotaPerdidaActivity : ComponentActivity() {
                         }
 
                         // ✅ Contenido del paso
-                        // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
                         // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
                         when (paso) {
                             Paso.NOMBRE -> PasoNombre(
@@ -5340,7 +4458,6 @@ class AgregarMascotaPerdidaActivity : ComponentActivity() {
                                 errorMessage = errorMessage,
                                 onGuardar = {
                                     // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                     if (!isSending) {
                                         isSending = true
                                         errorMessage = ""
@@ -5382,22 +4499,16 @@ class AgregarMascotaPerdidaActivity : ComponentActivity() {
         onError: (String) -> Unit
     ) {
         // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
-        // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
         CoroutineScope(Dispatchers.IO).launch {
-            // Bloque try-catch: maneja posibles excepciones en el código crítico
             // Bloque try-catch: maneja posibles excepciones en el código crítico
             try {
                 // Constante prefs: valor inmutable que no cambia tras su asignación
-                // Constante prefs: valor inmutable que no cambia tras su asignación
                 val prefs = getSharedPreferences("watch_prefs", MODE_PRIVATE)
-                // Constante userId: valor inmutable que no cambia tras su asignación
                 // Constante userId: valor inmutable que no cambia tras su asignación
                 val userId = prefs.getString("user_id", "2") ?: "2"
 
                 // Constante url: valor inmutable que no cambia tras su asignación
-                // Constante url: valor inmutable que no cambia tras su asignación
                 val url = URL("$backendUrl/api/mascotas")
-                // Constante conn: valor inmutable que no cambia tras su asignación
                 // Constante conn: valor inmutable que no cambia tras su asignación
                 val conn = url.openConnection() as HttpURLConnection
                 conn.requestMethod = "POST"
@@ -5406,7 +4517,6 @@ class AgregarMascotaPerdidaActivity : ComponentActivity() {
                 conn.setRequestProperty("Content-Type", "application/json")
                 conn.doOutput = true
 
-                // Constante json: valor inmutable que no cambia tras su asignación
                 // Constante json: valor inmutable que no cambia tras su asignación
                 val json = JSONObject().apply {
                     put("nombre", nombre)
@@ -5420,14 +4530,11 @@ class AgregarMascotaPerdidaActivity : ComponentActivity() {
 
                 conn.outputStream.write(json.toString().toByteArray())
                 // Constante responseCode: valor inmutable que no cambia tras su asignación
-                // Constante responseCode: valor inmutable que no cambia tras su asignación
                 val responseCode = conn.responseCode
                 conn.disconnect()
 
                 // Cambia el contexto de ejecución de la corrutina (ej. a IO para operaciones de red)
-                // Cambia el contexto de ejecución de la corrutina (ej. a IO para operaciones de red)
                 withContext(Dispatchers.Main) {
-                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     if (responseCode == 200 || responseCode == 201) {
                         onSuccess()
@@ -5436,7 +4543,6 @@ class AgregarMascotaPerdidaActivity : ComponentActivity() {
                     }
                 }
             } catch (e: Exception) {
-                // Cambia el contexto de ejecución de la corrutina (ej. a IO para operaciones de red)
                 // Cambia el contexto de ejecución de la corrutina (ej. a IO para operaciones de red)
                 withContext(Dispatchers.Main) {
                     onError(e.message ?: "Error desconocido")
@@ -5448,9 +4554,7 @@ class AgregarMascotaPerdidaActivity : ComponentActivity() {
     // ✅ Función para notificar al móvil
     private fun notificarNuevaMascotaPerdida(nombre: String) {
         // Constante context: valor inmutable que no cambia tras su asignación
-        // Constante context: valor inmutable que no cambia tras su asignación
         val context = applicationContext
-        // Constante payload: valor inmutable que no cambia tras su asignación
         // Constante payload: valor inmutable que no cambia tras su asignación
         val payload = JSONObject().apply {
             put("tipo", "NUEVA_MASCOTA_PERDIDA")
@@ -5458,32 +4562,25 @@ class AgregarMascotaPerdidaActivity : ComponentActivity() {
         }.toString().toByteArray()
 
         // Usa la API de Wearable para comunicación con dispositivos Wear OS
-        // Usa la API de Wearable para comunicación con dispositivos Wear OS
         com.google.android.gms.wearable.Wearable.getNodeClient(context).connectedNodes
             .addOnSuccessListener { nodes ->
                 // Itera sobre cada elemento de la colección y ejecuta el bloque
-                // Itera sobre cada elemento de la colección y ejecuta el bloque
                 nodes.forEach { node ->
                     // Usa la API de Wearable para comunicación con dispositivos Wear OS
-                    // Usa la API de Wearable para comunicación con dispositivos Wear OS
                     com.google.android.gms.wearable.Wearable.getMessageClient(context)
-                        // Envía un mensaje al dispositivo Wear OS conectado
                         // Envía un mensaje al dispositivo Wear OS conectado
                         .sendMessage(node.id, "/mascota/perdida/nueva", payload)
                         .addOnSuccessListener {
                             // Registro de evento en el log de Android para depuración
-                            // Registro de evento en el log de Android para depuración
                             android.util.Log.d("MASCOTA_PERDIDA", "✅ Notificación enviada al móvil")
                         }
                         .addOnFailureListener { e ->
-                            // Registro de evento en el log de Android para depuración
                             // Registro de evento en el log de Android para depuración
                             android.util.Log.e("MASCOTA_PERDIDA", "❌ Error enviando: ${e.message}")
                         }
                 }
             }
             .addOnFailureListener { e ->
-                // Registro de evento en el log de Android para depuración
                 // Registro de evento en el log de Android para depuración
                 android.util.Log.e("MASCOTA_PERDIDA", "❌ Error obteniendo nodos: ${e.message}")
             }
@@ -5493,7 +4590,6 @@ class AgregarMascotaPerdidaActivity : ComponentActivity() {
 // ==================== COMPONENTES UI ====================
 
 // ✅ Paso 1: Nombre
-// Anotación que marca esta función como una función de composición de UI
 // Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun PasoNombre(
@@ -5550,7 +4646,6 @@ private fun PasoNombre(
 
 // ✅ Paso 2: Especie
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun PasoEspecie(
     especie: String,
@@ -5600,7 +4695,6 @@ private fun PasoEspecie(
 }
 
 // ✅ Paso 3/4: Input opcional
-// Anotación que marca esta función como una función de composición de UI
 // Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun PasoInput(
@@ -5665,7 +4759,6 @@ private fun PasoInput(
                 label = {
                     Text(
                         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                         if (valor.isEmpty()) "Omitir" else "Siguiente",
                         fontSize = 9.sp,
                         color = Color.White
@@ -5679,7 +4772,6 @@ private fun PasoInput(
 }
 
 // ✅ Paso 5: Teléfono
-// Anotación que marca esta función como una función de composición de UI
 // Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun PasoTelefono(
@@ -5736,7 +4828,6 @@ private fun PasoTelefono(
 
 // ✅ Paso final: Confirmar
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun PasoConfirmar(
     nombre: String,
@@ -5766,13 +4857,11 @@ private fun PasoConfirmar(
         Spacer(Modifier.height(4.dp))
 
         // Constante detalles: valor inmutable que no cambia tras su asignación
-        // Constante detalles: valor inmutable que no cambia tras su asignación
         val detalles = listOfNotNull(
             raza.ifEmpty { null },
             color.ifEmpty { null },
             telefono.ifEmpty { null }
         )
-        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (detalles.isNotEmpty()) {
             Text(
@@ -5786,7 +4875,6 @@ private fun PasoConfirmar(
         Spacer(Modifier.height(10.dp))
 
         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (errorMessage.isNotEmpty()) {
             Text(
                 text = "⚠️ $errorMessage",
@@ -5796,7 +4884,6 @@ private fun PasoConfirmar(
             )
         }
 
-        // Constante puedeGuardar: valor inmutable que no cambia tras su asignación
         // Constante puedeGuardar: valor inmutable que no cambia tras su asignación
         val puedeGuardar = nombre.isNotBlank() && telefono.isNotBlank() && !isSending
 
@@ -5810,7 +4897,6 @@ private fun PasoConfirmar(
             ),
             enabled = puedeGuardar
         ) {
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (isSending) {
                 CircularProgressIndicator(
@@ -5836,7 +4922,6 @@ private fun PasoConfirmar(
 
 // ✅ Botón de especie
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun BotonEspecie(
     emoji: String,
@@ -5855,7 +4940,6 @@ private fun BotonEspecie(
             modifier = Modifier
                 .fillMaxSize()
                 .background(
-                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     if (selected) Color(0xFFE85D5D).copy(alpha = 0.3f)
                     else Color(0xFF2C2657)
@@ -5879,7 +4963,6 @@ private fun BotonEspecie(
 }
 
 // ✅ Pantalla de éxito
-// Anotación que marca esta función como una función de composición de UI
 // Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun PantallaExito(onBack: () -> Unit) {
@@ -5921,114 +5004,78 @@ private fun PantallaExito(onBack: () -> Unit) {
 ```kotlin
 // wear/ui/report/ReportActivity.kt
 // Paquete: com.lomito.seguro.wear.ui.report
-// Paquete: com.lomito.seguro.wear.ui.report
 package com.lomito.seguro.wear.ui.report
 
 // Importa la dependencia necesaria: BuildConfig
-// Importa la dependencia necesaria: BuildConfig
 import com.lomito.seguro.wear.BuildConfig
-// Importa la dependencia necesaria: Manifest
 // Importa la dependencia necesaria: Manifest
 import android.Manifest
 // Importa la dependencia necesaria: PackageManager
-// Importa la dependencia necesaria: PackageManager
 import android.content.pm.PackageManager
-// Importa la dependencia necesaria: Location
 // Importa la dependencia necesaria: Location
 import android.location.Location
 // Importa el contenedor de datos Bundle
-// Importa el contenedor de datos Bundle
 import android.os.Bundle
-// Importa la dependencia necesaria: ComponentActivity
 // Importa la dependencia necesaria: ComponentActivity
 import androidx.activity.ComponentActivity
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.activity.compose.setContent
-// Importa la dependencia necesaria: viewModels
 // Importa la dependencia necesaria: viewModels
 import androidx.activity.viewModels
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.background
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.*
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.runtime.*
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.runtime.livedata.observeAsState
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.Alignment
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.Modifier
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.graphics.Color
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.text.font.FontWeight
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.text.style.TextAlign
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.dp
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.sp
-// Importa la dependencia necesaria: ActivityCompat
 // Importa la dependencia necesaria: ActivityCompat
 import androidx.core.app.ActivityCompat
 // Importa la clase base ViewModel del ciclo de vida
-// Importa la clase base ViewModel del ciclo de vida
 import androidx.lifecycle.AndroidViewModel
-// Importa el observable de datos reactivos
 // Importa el observable de datos reactivos
 import androidx.lifecycle.LiveData
 // Importa el observable de datos reactivos
-// Importa el observable de datos reactivos
 import androidx.lifecycle.MutableLiveData
-// Importa la dependencia necesaria: viewModelScope
 // Importa la dependencia necesaria: viewModelScope
 import androidx.lifecycle.viewModelScope
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.wear.compose.material.*
-// Importa la dependencia necesaria: LocationServices
 // Importa la dependencia necesaria: LocationServices
 import com.google.android.gms.location.LocationServices
 // Importa la API de comunicación con Wear OS
-// Importa la API de comunicación con Wear OS
 import com.google.android.gms.wearable.Wearable
-// Importa soporte para corrutinas de Kotlin
 // Importa soporte para corrutinas de Kotlin
 import kotlinx.coroutines.launch
 // Importa soporte para corrutinas de Kotlin
-// Importa soporte para corrutinas de Kotlin
 import kotlinx.coroutines.tasks.await
 // Importa el parser JSON
-// Importa el parser JSON
 import org.json.JSONObject
-// Importa la dependencia necesaria: URL
 // Importa la dependencia necesaria: URL
 import java.net.URL
 
 // --- COLORES COHERENTES CON EL MURAL ---
 // Constante ThemeBg: valor inmutable que no cambia tras su asignación
-// Constante ThemeBg: valor inmutable que no cambia tras su asignación
 private val ThemeBg = Color(0xFF1A1A2E)
-// Constante CardBg: valor inmutable que no cambia tras su asignación
 // Constante CardBg: valor inmutable que no cambia tras su asignación
 private val CardBg = Color(0xFF2C2C3E)
 // Constante AccentGreen: valor inmutable que no cambia tras su asignación
-// Constante AccentGreen: valor inmutable que no cambia tras su asignación
 private val AccentGreen = Color(0xFF4CAF50)
-// Constante AccentBlue: valor inmutable que no cambia tras su asignación
 // Constante AccentBlue: valor inmutable que no cambia tras su asignación
 private val AccentBlue = Color(0xFF2196F3)
 
@@ -6040,35 +5087,25 @@ private val AccentBlue = Color(0xFF2196F3)
  * - [Enviar el reporte de avistamiento al backend y al móvil conectado]
  */
 // ViewModel ReportViewModel: gestiona el estado y la lógica de negocio de la pantalla
-// ViewModel ReportViewModel: gestiona el estado y la lógica de negocio de la pantalla
 class ReportViewModel(app: android.app.Application) : AndroidViewModel(app) {
-    // Constante _estado: valor inmutable que no cambia tras su asignación
     // Constante _estado: valor inmutable que no cambia tras su asignación
     private val _estado = MutableLiveData<String>("¿Viste a esta mascota?")
     // Constante estado: valor inmutable que no cambia tras su asignación
-    // Constante estado: valor inmutable que no cambia tras su asignación
     val estado: LiveData<String> = _estado
     // Constante _enviado: valor inmutable que no cambia tras su asignación
-    // Constante _enviado: valor inmutable que no cambia tras su asignación
     private val _enviado = MutableLiveData(false)
-    // Constante enviado: valor inmutable que no cambia tras su asignación
     // Constante enviado: valor inmutable que no cambia tras su asignación
     val enviado: LiveData<Boolean> = _enviado
 
     // Función reportarVista: define la lógica de esta operación
-    // Función reportarVista: define la lógica de esta operación
     fun reportarVista(mascotaId: String, mascotaNombre: String) {
         _estado.value = "Obteniendo ubicación..."
         // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
-        // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
         viewModelScope.launch {
-            // Bloque try-catch: maneja posibles excepciones en el código crítico
             // Bloque try-catch: maneja posibles excepciones en el código crítico
             try {
                 // Constante fusedClient: valor inmutable que no cambia tras su asignación
-                // Constante fusedClient: valor inmutable que no cambia tras su asignación
                 val fusedClient = LocationServices.getFusedLocationProviderClient(getApplication())
-                // Constante location: valor inmutable que no cambia tras su asignación
                 // Constante location: valor inmutable que no cambia tras su asignación
                 val location: Location? = if (
                     ActivityCompat.checkSelfPermission(
@@ -6079,15 +5116,12 @@ class ReportViewModel(app: android.app.Application) : AndroidViewModel(app) {
                 } else null
 
                 // Constante lat: valor inmutable que no cambia tras su asignación
-                // Constante lat: valor inmutable que no cambia tras su asignación
                 val lat = location?.latitude ?: 0.0
-                // Constante lng: valor inmutable que no cambia tras su asignación
                 // Constante lng: valor inmutable que no cambia tras su asignación
                 val lng = location?.longitude ?: 0.0
 
                 _estado.value = "Enviando reporte..."
 
-                // Constante payload: valor inmutable que no cambia tras su asignación
                 // Constante payload: valor inmutable que no cambia tras su asignación
                 val payload = JSONObject().apply {
                     put("mascotaId", mascotaId)
@@ -6098,30 +5132,23 @@ class ReportViewModel(app: android.app.Application) : AndroidViewModel(app) {
                 }.toString().toByteArray()
 
                 // Constante nodes: valor inmutable que no cambia tras su asignación
-                // Constante nodes: valor inmutable que no cambia tras su asignación
                 val nodes = Wearable.getNodeClient(getApplication()).connectedNodes.await()
-                // Itera sobre cada elemento de la colección y ejecuta el bloque
                 // Itera sobre cada elemento de la colección y ejecuta el bloque
                 nodes.forEach { node ->
                     // Usa la API de Wearable para comunicación con dispositivos Wear OS
-                    // Usa la API de Wearable para comunicación con dispositivos Wear OS
                     Wearable.getMessageClient(getApplication())
-                        // Envía un mensaje al dispositivo Wear OS conectado
                         // Envía un mensaje al dispositivo Wear OS conectado
                         .sendMessage(node.id, "/watch/reporte", payload).await()
                 }
 
                 // Constante url: valor inmutable que no cambia tras su asignación
-                // Constante url: valor inmutable que no cambia tras su asignación
                 val url = URL("${BuildConfig.BACKEND_URL}/api/reportes")
-                // Constante conn: valor inmutable que no cambia tras su asignación
                 // Constante conn: valor inmutable que no cambia tras su asignación
                 val conn = url.openConnection() as java.net.HttpURLConnection
                 conn.requestMethod = "POST"
                 conn.setRequestProperty("Content-Type", "application/json")
                 conn.doOutput = true
 
-                // Constante json: valor inmutable que no cambia tras su asignación
                 // Constante json: valor inmutable que no cambia tras su asignación
                 val json = JSONObject().apply {
                     put("mascotaId", mascotaId)
@@ -6132,11 +5159,9 @@ class ReportViewModel(app: android.app.Application) : AndroidViewModel(app) {
 
                 conn.outputStream.write(json.toString().toByteArray())
                 // Constante responseCode: valor inmutable que no cambia tras su asignación
-                // Constante responseCode: valor inmutable que no cambia tras su asignación
                 val responseCode = conn.responseCode
                 conn.disconnect()
 
-                // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                 // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                 if (responseCode == 200 || responseCode == 201) {
                     _estado.value = "✅ ¡Enviado!"
@@ -6158,32 +5183,23 @@ class ReportViewModel(app: android.app.Application) : AndroidViewModel(app) {
  * - [Iniciar la pantalla de reporte con el ID y nombre de la mascota]
  */
 // Activity ReportActivity: pantalla principal que gestiona el ciclo de vida
-// Activity ReportActivity: pantalla principal que gestiona el ciclo de vida
 class ReportActivity : ComponentActivity() {
-    // Constante reportVM: valor inmutable que no cambia tras su asignación
     // Constante reportVM: valor inmutable que no cambia tras su asignación
     private val reportVM: ReportViewModel by viewModels()
 
     // Método del ciclo de vida: inicializa la actividad y configura la UI
-    // Método del ciclo de vida: inicializa la actividad y configura la UI
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Invoca la implementación del método en la clase padre
         // Invoca la implementación del método en la clase padre
         super.onCreate(savedInstanceState)
         // Constante mascotaId: valor inmutable que no cambia tras su asignación
-        // Constante mascotaId: valor inmutable que no cambia tras su asignación
         val mascotaId = intent.getStringExtra("mascotaId") ?: ""
-        // Constante mascotaNombre: valor inmutable que no cambia tras su asignación
         // Constante mascotaNombre: valor inmutable que no cambia tras su asignación
         val mascotaNombre = intent.getStringExtra("mascotaNombre") ?: "Mascota"
 
         // Define el árbol de UI con Jetpack Compose como contenido de la Activity
-        // Define el árbol de UI con Jetpack Compose como contenido de la Activity
         setContent {
             // Constante estado: valor inmutable que no cambia tras su asignación
-            // Constante estado: valor inmutable que no cambia tras su asignación
             val estado by reportVM.estado.observeAsState("Cargando...")
-            // Constante enviado: valor inmutable que no cambia tras su asignación
             // Constante enviado: valor inmutable que no cambia tras su asignación
             val enviado by reportVM.enviado.observeAsState(false)
 
@@ -6209,9 +5225,7 @@ class ReportActivity : ComponentActivity() {
  * - [onDismiss]: Acción para cerrar o cancelar
  */
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
-// Función ReportScreen: define la lógica de esta operación
 // Función ReportScreen: define la lógica de esta operación
 fun ReportScreen(
     mascotaNombre: String,
@@ -6220,7 +5234,6 @@ fun ReportScreen(
     onReportar: () -> Unit,
     onDismiss: () -> Unit
 ) {
-    // Constante listState: valor inmutable que no cambia tras su asignación
     // Constante listState: valor inmutable que no cambia tras su asignación
     val listState = rememberScalingLazyListState()
 
@@ -6282,9 +5295,7 @@ fun ReportScreen(
             // Acciones o Progreso
             item {
                 // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                 if (!enviado) {
-                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     if (estado.contains("Enviando") || estado.contains("Obteniendo")) {
                         CircularProgressIndicator(
@@ -6332,100 +5343,68 @@ fun ReportScreen(
 
 ```kotlin
 // Paquete: com.lomito.seguro.wear.ui.report
-// Paquete: com.lomito.seguro.wear.ui.report
 package com.lomito.seguro.wear.ui.report
-// Importa la dependencia necesaria: BuildConfig
 // Importa la dependencia necesaria: BuildConfig
 import com.lomito.seguro.wear.BuildConfig
 
 // Importa la dependencia necesaria: Manifest
-// Importa la dependencia necesaria: Manifest
 import android.Manifest
-// Importa la dependencia necesaria: PackageManager
 // Importa la dependencia necesaria: PackageManager
 import android.content.pm.PackageManager
 // Importa el contenedor de datos Bundle
-// Importa el contenedor de datos Bundle
 import android.os.Bundle
-// Importa la dependencia necesaria: ComponentActivity
 // Importa la dependencia necesaria: ComponentActivity
 import androidx.activity.ComponentActivity
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.activity.compose.setContent
-// Importa la dependencia necesaria: ActivityResultContracts
 // Importa la dependencia necesaria: ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.background
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.clickable
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.*
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.shape.CircleShape
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.shape.RoundedCornerShape
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.runtime.*
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.Alignment
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.Modifier
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.draw.clip
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.graphics.Brush
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.graphics.Color
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.text.font.FontWeight
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.text.style.TextAlign
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.dp
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.sp
-// Importa el contexto de Android
 // Importa el contexto de Android
 import androidx.core.content.ContextCompat
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.wear.compose.material.*
-// Importa la dependencia necesaria: LocationServices
 // Importa la dependencia necesaria: LocationServices
 import com.google.android.gms.location.LocationServices
 // Importa la API de comunicación con Wear OS
-// Importa la API de comunicación con Wear OS
 import com.google.android.gms.wearable.Wearable
-// Importa soporte para corrutinas de Kotlin
 // Importa soporte para corrutinas de Kotlin
 import kotlinx.coroutines.*
 // Importa el parser JSON
-// Importa el parser JSON
 import org.json.JSONArray
-// Importa el parser JSON
 // Importa el parser JSON
 import org.json.JSONObject
 // Importa la dependencia necesaria: HttpURLConnection
-// Importa la dependencia necesaria: HttpURLConnection
 import java.net.HttpURLConnection
-// Importa la dependencia necesaria: URL
 // Importa la dependencia necesaria: URL
 import java.net.URL
 
@@ -6436,45 +5415,31 @@ import java.net.URL
  * - [Almacenar los datos de la mascota a buscar, incluyendo dueño e ubicación]
  */
 // Clase de datos MascotaPerdida: modelo inmutable con propiedades de dominio
-// Clase de datos MascotaPerdida: modelo inmutable con propiedades de dominio
 data class MascotaPerdida(
-    // Constante id: valor inmutable que no cambia tras su asignación
     // Constante id: valor inmutable que no cambia tras su asignación
     val id: String,
     // Constante nombre: valor inmutable que no cambia tras su asignación
-    // Constante nombre: valor inmutable que no cambia tras su asignación
     val nombre: String,
-    // Constante especie: valor inmutable que no cambia tras su asignación
     // Constante especie: valor inmutable que no cambia tras su asignación
     val especie: String,
     // Constante raza: valor inmutable que no cambia tras su asignación
-    // Constante raza: valor inmutable que no cambia tras su asignación
     val raza: String = "",
-    // Constante color: valor inmutable que no cambia tras su asignación
     // Constante color: valor inmutable que no cambia tras su asignación
     val color: String = "",
     // Constante fotoUrl: valor inmutable que no cambia tras su asignación
-    // Constante fotoUrl: valor inmutable que no cambia tras su asignación
     val fotoUrl: String? = null,
-    // Constante distanciaAlerta: valor inmutable que no cambia tras su asignación
     // Constante distanciaAlerta: valor inmutable que no cambia tras su asignación
     val distanciaAlerta: Int = 50,
     // Constante estado: valor inmutable que no cambia tras su asignación
-    // Constante estado: valor inmutable que no cambia tras su asignación
     val estado: String = "PERDIDA",
-    // Constante ownerId: valor inmutable que no cambia tras su asignación
     // Constante ownerId: valor inmutable que no cambia tras su asignación
     val ownerId: String = "",
     // Constante duenoNombre: valor inmutable que no cambia tras su asignación
-    // Constante duenoNombre: valor inmutable que no cambia tras su asignación
     val duenoNombre: String = "",
-    // Constante duenoTelefono: valor inmutable que no cambia tras su asignación
     // Constante duenoTelefono: valor inmutable que no cambia tras su asignación
     val duenoTelefono: String = "",
     // Constante ultimaUbicacionLat: valor inmutable que no cambia tras su asignación
-    // Constante ultimaUbicacionLat: valor inmutable que no cambia tras su asignación
     val ultimaUbicacionLat: Double? = null,
-    // Constante ultimaUbicacionLng: valor inmutable que no cambia tras su asignación
     // Constante ultimaUbicacionLng: valor inmutable que no cambia tras su asignación
     val ultimaUbicacionLng: Double? = null
 )
@@ -6488,38 +5453,28 @@ data class MascotaPerdida(
  * - [Permitir reportar el avistamiento de una mascota con la ubicación GPS]
  */
 // Activity ReportarAvistamientoActivity: pantalla principal que gestiona el ciclo de vida
-// Activity ReportarAvistamientoActivity: pantalla principal que gestiona el ciclo de vida
 class ReportarAvistamientoActivity : ComponentActivity() {
-    // Constante backendUrl: valor inmutable que no cambia tras su asignación
     // Constante backendUrl: valor inmutable que no cambia tras su asignación
     private val backendUrl = BuildConfig.BACKEND_URL
     // Variable ubicacionLat: almacena el estado mutable de este componente
-    // Variable ubicacionLat: almacena el estado mutable de este componente
     private var ubicacionLat = 0.0
-    // Variable ubicacionLng: almacena el estado mutable de este componente
     // Variable ubicacionLng: almacena el estado mutable de este componente
     private var ubicacionLng = 0.0
     // Variable ubicacionTexto: almacena el estado mutable de este componente
-    // Variable ubicacionTexto: almacena el estado mutable de este componente
     private var ubicacionTexto = "Obteniendo ubicacion..."
-    // Variable ubicacionValida: almacena el estado mutable de este componente
     // Variable ubicacionValida: almacena el estado mutable de este componente
     private var ubicacionValida = false
 
-    // Constante locationPermissionRequest: valor inmutable que no cambia tras su asignación
     // Constante locationPermissionRequest: valor inmutable que no cambia tras su asignación
     private val locationPermissionRequest = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (isGranted) {
-            // Registro de evento en el log de Android para depuración
             // Registro de evento en el log de Android para depuración
             android.util.Log.d("AVISTAMIENTO", "Permiso de ubicacion concedido")
             obtenerUbicacion()
         } else {
-            // Registro de evento en el log de Android para depuración
             // Registro de evento en el log de Android para depuración
             android.util.Log.d("AVISTAMIENTO", "Permiso de ubicacion denegado")
             ubicacionValida = false
@@ -6528,31 +5483,23 @@ class ReportarAvistamientoActivity : ComponentActivity() {
     }
 
     // Método del ciclo de vida: inicializa la actividad y configura la UI
-    // Método del ciclo de vida: inicializa la actividad y configura la UI
     override fun onCreate(savedInstanceState: Bundle?) {
         // Invoca la implementación del método en la clase padre
-        // Invoca la implementación del método en la clase padre
         super.onCreate(savedInstanceState)
-        // Registro de evento en el log de Android para depuración
         // Registro de evento en el log de Android para depuración
         android.util.Log.d("AVISTAMIENTO", "INICIANDO")
 
         // Constante prefs: valor inmutable que no cambia tras su asignación
-        // Constante prefs: valor inmutable que no cambia tras su asignación
         val prefs = getSharedPreferences("watch_prefs", MODE_PRIVATE)
         // Variable userId: almacena el estado mutable de este componente
-        // Variable userId: almacena el estado mutable de este componente
         var userId = prefs.getString("user_id", "") ?: ""
-        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (userId.isEmpty() || !userId.matches(Regex("^\\d+$"))) {
             userId = "2"
             // Inicia el editor para modificar los SharedPreferences
-            // Inicia el editor para modificar los SharedPreferences
             prefs.edit().putString("user_id", userId).apply()
         }
 
-        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -6565,57 +5512,40 @@ class ReportarAvistamientoActivity : ComponentActivity() {
         }
 
         // Define el árbol de UI con Jetpack Compose como contenido de la Activity
-        // Define el árbol de UI con Jetpack Compose como contenido de la Activity
         setContent {
-            // Variable mascotasPerdidas: almacena el estado mutable de este componente
             // Variable mascotasPerdidas: almacena el estado mutable de este componente
             var mascotasPerdidas by remember { mutableStateOf<List<MascotaPerdida>>(emptyList()) }
             // Variable isLoading: almacena el estado mutable de este componente
-            // Variable isLoading: almacena el estado mutable de este componente
             var isLoading by remember { mutableStateOf(true) }
-            // Variable errorMessage: almacena el estado mutable de este componente
             // Variable errorMessage: almacena el estado mutable de este componente
             var errorMessage by remember { mutableStateOf("") }
             // Variable successMessage: almacena el estado mutable de este componente
-            // Variable successMessage: almacena el estado mutable de este componente
             var successMessage by remember { mutableStateOf("") }
-            // Variable mostrarFormulario: almacena el estado mutable de este componente
             // Variable mostrarFormulario: almacena el estado mutable de este componente
             var mostrarFormulario by remember { mutableStateOf(false) }
             // Variable mostrarDetalles: almacena el estado mutable de este componente
-            // Variable mostrarDetalles: almacena el estado mutable de este componente
             var mostrarDetalles by remember { mutableStateOf(false) }
-            // Variable mascotaSeleccionada: almacena el estado mutable de este componente
             // Variable mascotaSeleccionada: almacena el estado mutable de este componente
             var mascotaSeleccionada by remember { mutableStateOf<MascotaPerdida?>(null) }
             // Variable isSendingReport: almacena el estado mutable de este componente
-            // Variable isSendingReport: almacena el estado mutable de este componente
             var isSendingReport by remember { mutableStateOf(false) }
-            // Variable isCreating: almacena el estado mutable de este componente
             // Variable isCreating: almacena el estado mutable de este componente
             var isCreating by remember { mutableStateOf(false) }
 
             // Variable paso: almacena el estado mutable de este componente
-            // Variable paso: almacena el estado mutable de este componente
             var paso by remember { mutableStateOf(0) }
-            // Variable nombre: almacena el estado mutable de este componente
             // Variable nombre: almacena el estado mutable de este componente
             var nombre by remember { mutableStateOf("") }
             // Variable especie: almacena el estado mutable de este componente
-            // Variable especie: almacena el estado mutable de este componente
             var especie by remember { mutableStateOf("PERRO") }
-            // Variable raza: almacena el estado mutable de este componente
             // Variable raza: almacena el estado mutable de este componente
             var raza by remember { mutableStateOf("") }
             // Variable color: almacena el estado mutable de este componente
-            // Variable color: almacena el estado mutable de este componente
             var color by remember { mutableStateOf("") }
-            // Variable telefono: almacena el estado mutable de este componente
             // Variable telefono: almacena el estado mutable de este componente
             var telefono by remember { mutableStateOf("") }
 
             LaunchedEffect(Unit) {
-                // Constante result: valor inmutable que no cambia tras su asignación
                 // Constante result: valor inmutable que no cambia tras su asignación
                 val result = withContext(Dispatchers.IO) {
                     cargarMascotasPerdidas()
@@ -6624,11 +5554,9 @@ class ReportarAvistamientoActivity : ComponentActivity() {
                 isLoading = false
                 errorMessage = result.errorMessage
                 // Registro de evento en el log de Android para depuración
-                // Registro de evento en el log de Android para depuración
                 android.util.Log.d("AVISTAMIENTO", "Mascotas cargadas: ${result.mascotas.size}")
             }
 
-            // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
             // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
             when {
                 mostrarDetalles && mascotaSeleccionada != null -> {
@@ -6640,13 +5568,10 @@ class ReportarAvistamientoActivity : ComponentActivity() {
                         },
                         onReportar = {
                             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                             if (ubicacionValida) {
                                 isSendingReport = true
                                 // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
-                                // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
                                 CoroutineScope(Dispatchers.Main).launch {
-                                    // Constante result: valor inmutable que no cambia tras su asignación
                                     // Constante result: valor inmutable que no cambia tras su asignación
                                     val result = withContext(Dispatchers.IO) {
                                         reportarAvistamiento(
@@ -6658,14 +5583,12 @@ class ReportarAvistamientoActivity : ComponentActivity() {
                                     }
                                     isSendingReport = false
                                     // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                     if (result.success) {
                                         successMessage = "Reporte enviado"
                                         errorMessage = ""
                                         mostrarDetalles = false
                                         mascotaSeleccionada = null
                                         isLoading = true
-                                        // Constante newResult: valor inmutable que no cambia tras su asignación
                                         // Constante newResult: valor inmutable que no cambia tras su asignación
                                         val newResult = withContext(Dispatchers.IO) {
                                             cargarMascotasPerdidas()
@@ -6701,19 +5624,15 @@ class ReportarAvistamientoActivity : ComponentActivity() {
                             onPasoChange = { paso = it },
                             onSave = {
                                 // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                                // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                 if (nombre.isNotEmpty() && telefono.isNotEmpty()) {
                                     isCreating = true
                                     // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
-                                    // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
                                     CoroutineScope(Dispatchers.Main).launch {
-                                        // Constante result: valor inmutable que no cambia tras su asignación
                                         // Constante result: valor inmutable que no cambia tras su asignación
                                         val result = withContext(Dispatchers.IO) {
                                             crearMascotaPerdida(nombre, especie, raza, color, telefono)
                                         }
                                         isCreating = false
-                                        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                         if (result.success) {
                                             successMessage = "Mascota publicada en el mural"
@@ -6725,7 +5644,6 @@ class ReportarAvistamientoActivity : ComponentActivity() {
                                             color = ""
                                             telefono = ""
                                             isLoading = true
-                                            // Constante newResult: valor inmutable que no cambia tras su asignación
                                             // Constante newResult: valor inmutable que no cambia tras su asignación
                                             val newResult = withContext(Dispatchers.IO) {
                                                 cargarMascotasPerdidas()
@@ -6765,7 +5683,6 @@ class ReportarAvistamientoActivity : ComponentActivity() {
                         },
                         onAgregarClick = {
                             // Registro de evento en el log de Android para depuración
-                            // Registro de evento en el log de Android para depuración
                             android.util.Log.d("AVISTAMIENTO", "Boton + presionado")
                             mostrarFormulario = true
                             paso = 0
@@ -6780,9 +5697,7 @@ class ReportarAvistamientoActivity : ComponentActivity() {
                             errorMessage = ""
                             successMessage = ""
                             // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
-                            // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
                             CoroutineScope(Dispatchers.Main).launch {
-                                // Constante result: valor inmutable que no cambia tras su asignación
                                 // Constante result: valor inmutable que no cambia tras su asignación
                                 val result = withContext(Dispatchers.IO) {
                                     cargarMascotasPerdidas()
@@ -6800,7 +5715,6 @@ class ReportarAvistamientoActivity : ComponentActivity() {
 
     private fun obtenerUbicacion() {
         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -6809,22 +5723,18 @@ class ReportarAvistamientoActivity : ComponentActivity() {
             ubicacionValida = false
             ubicacionTexto = "Sin permiso de ubicacion"
             // Retorna el valor al llamador de la función
-            // Retorna el valor al llamador de la función
             return
         }
 
         // Constante fusedClient: valor inmutable que no cambia tras su asignación
-        // Constante fusedClient: valor inmutable que no cambia tras su asignación
         val fusedClient = LocationServices.getFusedLocationProviderClient(this)
         fusedClient.lastLocation.addOnSuccessListener { location ->
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (location != null) {
                 ubicacionLat = location.latitude
                 ubicacionLng = location.longitude
                 ubicacionTexto = "Lat: ${String.format("%.4f", location.latitude)}, Lng: ${String.format("%.4f", location.longitude)}"
                 ubicacionValida = true
-                // Registro de evento en el log de Android para depuración
                 // Registro de evento en el log de Android para depuración
                 android.util.Log.d("AVISTAMIENTO", "Ubicacion obtenida: $ubicacionTexto")
             } else {
@@ -6839,53 +5749,39 @@ class ReportarAvistamientoActivity : ComponentActivity() {
 
     private suspend fun cargarMascotasPerdidas(): CargaResult {
         // Retorna el valor al llamador de la función
-        // Retorna el valor al llamador de la función
         return try {
-            // Registro de evento en el log de Android para depuración
             // Registro de evento en el log de Android para depuración
             android.util.Log.d("AVISTAMIENTO", "Cargando mascotas del mural...")
 
             // Constante url: valor inmutable que no cambia tras su asignación
-            // Constante url: valor inmutable que no cambia tras su asignación
             val url = URL("$backendUrl/api/mascotas/mural")
-            // Constante conn: valor inmutable que no cambia tras su asignación
             // Constante conn: valor inmutable que no cambia tras su asignación
             val conn = url.openConnection() as HttpURLConnection
             conn.connectTimeout = 5000
             conn.readTimeout = 5000
             conn.requestMethod = "GET"
             // Constante responseCode: valor inmutable que no cambia tras su asignación
-            // Constante responseCode: valor inmutable que no cambia tras su asignación
             val responseCode = conn.responseCode
 
-            // Registro de evento en el log de Android para depuración
             // Registro de evento en el log de Android para depuración
             android.util.Log.d("AVISTAMIENTO", "Response Code: $responseCode")
 
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 // Constante response: valor inmutable que no cambia tras su asignación
-                // Constante response: valor inmutable que no cambia tras su asignación
                 val response = conn.inputStream.bufferedReader().readText()
-                // Registro de evento en el log de Android para depuración
                 // Registro de evento en el log de Android para depuración
                 android.util.Log.d("AVISTAMIENTO", "Respuesta: $response")
 
                 // Constante jsonArray: valor inmutable que no cambia tras su asignación
-                // Constante jsonArray: valor inmutable que no cambia tras su asignación
                 val jsonArray = JSONArray(response)
-                // Constante lista: valor inmutable que no cambia tras su asignación
                 // Constante lista: valor inmutable que no cambia tras su asignación
                 val lista = mutableListOf<MascotaPerdida>()
 
                 // Itera sobre la colección para procesar cada elemento
-                // Itera sobre la colección para procesar cada elemento
                 for (i in 0 until jsonArray.length()) {
                     // Constante obj: valor inmutable que no cambia tras su asignación
-                    // Constante obj: valor inmutable que no cambia tras su asignación
                     val obj = jsonArray.getJSONObject(i)
-                    // Constante ownerId: valor inmutable que no cambia tras su asignación
                     // Constante ownerId: valor inmutable que no cambia tras su asignación
                     val ownerId = obj.optString("owner_id", "")
                     lista.add(
@@ -6906,21 +5802,17 @@ class ReportarAvistamientoActivity : ComponentActivity() {
                 }
                 conn.disconnect()
                 // Registro de evento en el log de Android para depuración
-                // Registro de evento en el log de Android para depuración
                 android.util.Log.d("AVISTAMIENTO", "${lista.size} mascotas cargadas")
                 CargaResult(lista, if (lista.isEmpty()) "No hay mascotas perdidas en el mural" else "")
             } else {
                 // Constante errorBody: valor inmutable que no cambia tras su asignación
-                // Constante errorBody: valor inmutable que no cambia tras su asignación
                 val errorBody = conn.errorStream?.bufferedReader()?.readText()
                 conn.disconnect()
-                // Registro de evento en el log de Android para depuración
                 // Registro de evento en el log de Android para depuración
                 android.util.Log.e("AVISTAMIENTO", "Error HTTP $responseCode: $errorBody")
                 CargaResult(emptyList(), "Error al cargar (HTTP $responseCode)")
             }
         } catch (e: Exception) {
-            // Registro de evento en el log de Android para depuración
             // Registro de evento en el log de Android para depuración
             android.util.Log.e("AVISTAMIENTO", "Error: ${e.message}", e)
             CargaResult(emptyList(), "Error: ${e.message}")
@@ -6934,26 +5826,19 @@ class ReportarAvistamientoActivity : ComponentActivity() {
         direccion: String
     ): OperacionResult {
         // Retorna el valor al llamador de la función
-        // Retorna el valor al llamador de la función
         return try {
-            // Constante prefs: valor inmutable que no cambia tras su asignación
             // Constante prefs: valor inmutable que no cambia tras su asignación
             val prefs = getSharedPreferences("watch_prefs", MODE_PRIVATE)
             // Constante userIdStr: valor inmutable que no cambia tras su asignación
-            // Constante userIdStr: valor inmutable que no cambia tras su asignación
             val userIdStr = prefs.getString("user_id", "2") ?: "2"
-            // Constante reportadoPorId: valor inmutable que no cambia tras su asignación
             // Constante reportadoPorId: valor inmutable que no cambia tras su asignación
             val reportadoPorId = userIdStr.toIntOrNull() ?: 2
 
             // Registro de evento en el log de Android para depuración
-            // Registro de evento en el log de Android para depuración
             android.util.Log.d("AVISTAMIENTO", "Reportando: $mascotaId en $lat, $lng")
 
             // Constante url: valor inmutable que no cambia tras su asignación
-            // Constante url: valor inmutable que no cambia tras su asignación
             val url = URL("$backendUrl/api/reportes")
-            // Constante conn: valor inmutable que no cambia tras su asignación
             // Constante conn: valor inmutable que no cambia tras su asignación
             val conn = url.openConnection() as HttpURLConnection
             conn.requestMethod = "POST"
@@ -6962,7 +5847,6 @@ class ReportarAvistamientoActivity : ComponentActivity() {
             conn.setRequestProperty("Content-Type", "application/json")
             conn.doOutput = true
 
-            // Constante json: valor inmutable que no cambia tras su asignación
             // Constante json: valor inmutable que no cambia tras su asignación
             val json = JSONObject().apply {
                 put("mascota_id", mascotaId)
@@ -6974,11 +5858,9 @@ class ReportarAvistamientoActivity : ComponentActivity() {
 
             conn.outputStream.write(json.toString().toByteArray())
             // Constante responseCode: valor inmutable que no cambia tras su asignación
-            // Constante responseCode: valor inmutable que no cambia tras su asignación
             val responseCode = conn.responseCode
             conn.disconnect()
 
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (responseCode == 200 || responseCode == 201) {
                 enviarNotificacionAlMovil(mascotaId, lat, lng, direccion)
@@ -6999,16 +5881,12 @@ class ReportarAvistamientoActivity : ComponentActivity() {
         telefono: String
     ): OperacionResult {
         // Retorna el valor al llamador de la función
-        // Retorna el valor al llamador de la función
         return try {
-            // Registro de evento en el log de Android para depuración
             // Registro de evento en el log de Android para depuración
             android.util.Log.d("AVISTAMIENTO", "Creando mascota perdida para el mural: $nombre")
 
             // Constante url: valor inmutable que no cambia tras su asignación
-            // Constante url: valor inmutable que no cambia tras su asignación
             val url = URL("$backendUrl/api/mascotas/mural")
-            // Constante conn: valor inmutable que no cambia tras su asignación
             // Constante conn: valor inmutable que no cambia tras su asignación
             val conn = url.openConnection() as HttpURLConnection
             conn.requestMethod = "POST"
@@ -7017,7 +5895,6 @@ class ReportarAvistamientoActivity : ComponentActivity() {
             conn.setRequestProperty("Content-Type", "application/json")
             conn.doOutput = true
 
-            // Constante json: valor inmutable que no cambia tras su asignación
             // Constante json: valor inmutable que no cambia tras su asignación
             val json = JSONObject().apply {
                 put("nombre", nombre)
@@ -7028,14 +5905,11 @@ class ReportarAvistamientoActivity : ComponentActivity() {
             }
 
             // Registro de evento en el log de Android para depuración
-            // Registro de evento en el log de Android para depuración
             android.util.Log.d("AVISTAMIENTO", "JSON enviado: $json")
 
             conn.outputStream.write(json.toString().toByteArray())
             // Constante responseCode: valor inmutable que no cambia tras su asignación
-            // Constante responseCode: valor inmutable que no cambia tras su asignación
             val responseCode = conn.responseCode
-            // Constante responseBody: valor inmutable que no cambia tras su asignación
             // Constante responseBody: valor inmutable que no cambia tras su asignación
             val responseBody = if (responseCode == 200 || responseCode == 201) {
                 conn.inputStream.bufferedReader().readText()
@@ -7045,13 +5919,10 @@ class ReportarAvistamientoActivity : ComponentActivity() {
             conn.disconnect()
 
             // Registro de evento en el log de Android para depuración
-            // Registro de evento en el log de Android para depuración
             android.util.Log.d("AVISTAMIENTO", "Response Code: $responseCode")
-            // Registro de evento en el log de Android para depuración
             // Registro de evento en el log de Android para depuración
             android.util.Log.d("AVISTAMIENTO", "Response: $responseBody")
 
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (responseCode == 200 || responseCode == 201) {
                 OperacionResult(true, "")
@@ -7060,7 +5931,6 @@ class ReportarAvistamientoActivity : ComponentActivity() {
             }
         } catch (e: Exception) {
             // Registro de evento en el log de Android para depuración
-            // Registro de evento en el log de Android para depuración
             android.util.Log.e("AVISTAMIENTO", "Error: ${e.message}", e)
             OperacionResult(false, "Error: ${e.message}")
         }
@@ -7068,9 +5938,7 @@ class ReportarAvistamientoActivity : ComponentActivity() {
 
     private fun enviarNotificacionAlMovil(mascotaId: String, lat: Double, lng: Double, direccion: String) {
         // Constante context: valor inmutable que no cambia tras su asignación
-        // Constante context: valor inmutable que no cambia tras su asignación
         val context = applicationContext
-        // Constante payload: valor inmutable que no cambia tras su asignación
         // Constante payload: valor inmutable que no cambia tras su asignación
         val payload = JSONObject().apply {
             put("tipo", "AVISTAMIENTO_REPORTADO")
@@ -7081,20 +5949,15 @@ class ReportarAvistamientoActivity : ComponentActivity() {
         }.toString().toByteArray()
 
         // Usa la API de Wearable para comunicación con dispositivos Wear OS
-        // Usa la API de Wearable para comunicación con dispositivos Wear OS
         Wearable.getNodeClient(context).connectedNodes
             .addOnSuccessListener { nodes ->
                 // Itera sobre cada elemento de la colección y ejecuta el bloque
-                // Itera sobre cada elemento de la colección y ejecuta el bloque
                 nodes.forEach { node ->
-                    // Usa la API de Wearable para comunicación con dispositivos Wear OS
                     // Usa la API de Wearable para comunicación con dispositivos Wear OS
                     Wearable.getMessageClient(context)
                         // Envía un mensaje al dispositivo Wear OS conectado
-                        // Envía un mensaje al dispositivo Wear OS conectado
                         .sendMessage(node.id, "/watch/avistamiento", payload)
                         .addOnSuccessListener {
-                            // Registro de evento en el log de Android para depuración
                             // Registro de evento en el log de Android para depuración
                             android.util.Log.d("AVISTAMIENTO", "Notificacion enviada al movil")
                         }
@@ -7104,9 +5967,7 @@ class ReportarAvistamientoActivity : ComponentActivity() {
 
     private fun notificarNuevaMascotaPerdida(nombre: String) {
         // Constante context: valor inmutable que no cambia tras su asignación
-        // Constante context: valor inmutable que no cambia tras su asignación
         val context = applicationContext
-        // Constante payload: valor inmutable que no cambia tras su asignación
         // Constante payload: valor inmutable que no cambia tras su asignación
         val payload = JSONObject().apply {
             put("tipo", "NUEVA_MASCOTA_PERDIDA")
@@ -7114,20 +5975,15 @@ class ReportarAvistamientoActivity : ComponentActivity() {
         }.toString().toByteArray()
 
         // Usa la API de Wearable para comunicación con dispositivos Wear OS
-        // Usa la API de Wearable para comunicación con dispositivos Wear OS
         Wearable.getNodeClient(context).connectedNodes
             .addOnSuccessListener { nodes ->
                 // Itera sobre cada elemento de la colección y ejecuta el bloque
-                // Itera sobre cada elemento de la colección y ejecuta el bloque
                 nodes.forEach { node ->
-                    // Usa la API de Wearable para comunicación con dispositivos Wear OS
                     // Usa la API de Wearable para comunicación con dispositivos Wear OS
                     Wearable.getMessageClient(context)
                         // Envía un mensaje al dispositivo Wear OS conectado
-                        // Envía un mensaje al dispositivo Wear OS conectado
                         .sendMessage(node.id, "/mascota/perdida/nueva", payload)
                         .addOnSuccessListener {
-                            // Registro de evento en el log de Android para depuración
                             // Registro de evento en el log de Android para depuración
                             android.util.Log.d("AVISTAMIENTO", "Notificacion de nueva mascota enviada")
                         }
@@ -7136,23 +5992,17 @@ class ReportarAvistamientoActivity : ComponentActivity() {
     }
 
     // Clase de datos CargaResult: modelo inmutable con propiedades de dominio
-    // Clase de datos CargaResult: modelo inmutable con propiedades de dominio
     data class CargaResult(
         // Constante mascotas: valor inmutable que no cambia tras su asignación
-        // Constante mascotas: valor inmutable que no cambia tras su asignación
         val mascotas: List<MascotaPerdida>,
-        // Constante errorMessage: valor inmutable que no cambia tras su asignación
         // Constante errorMessage: valor inmutable que no cambia tras su asignación
         val errorMessage: String
     )
 
     // Clase de datos OperacionResult: modelo inmutable con propiedades de dominio
-    // Clase de datos OperacionResult: modelo inmutable con propiedades de dominio
     data class OperacionResult(
         // Constante success: valor inmutable que no cambia tras su asignación
-        // Constante success: valor inmutable que no cambia tras su asignación
         val success: Boolean,
-        // Constante errorMessage: valor inmutable que no cambia tras su asignación
         // Constante errorMessage: valor inmutable que no cambia tras su asignación
         val errorMessage: String
     )
@@ -7160,24 +6010,17 @@ class ReportarAvistamientoActivity : ComponentActivity() {
 
 // 🎨 Paleta temática "mascotas perdidas"
 // Constante BgTop: valor inmutable que no cambia tras su asignación
-// Constante BgTop: valor inmutable que no cambia tras su asignación
 private val BgTop = Color(0xFF1B1430)
-// Constante BgBottom: valor inmutable que no cambia tras su asignación
 // Constante BgBottom: valor inmutable que no cambia tras su asignación
 private val BgBottom = Color(0xFF0D0B1A)
 // Constante CardBg: valor inmutable que no cambia tras su asignación
-// Constante CardBg: valor inmutable que no cambia tras su asignación
 private val CardBg = Color(0xFF2C2C3E)
-// Constante FieldBg: valor inmutable que no cambia tras su asignación
 // Constante FieldBg: valor inmutable que no cambia tras su asignación
 private val FieldBg = Color(0xFF2C2657)
 // Constante AccentRed: valor inmutable que no cambia tras su asignación
-// Constante AccentRed: valor inmutable que no cambia tras su asignación
 private val AccentRed = Color(0xFFE85D5D)
 // Constante AccentGreen: valor inmutable que no cambia tras su asignación
-// Constante AccentGreen: valor inmutable que no cambia tras su asignación
 private val AccentGreen = Color(0xFF4CD97B)
-// Constante AccentBlue: valor inmutable que no cambia tras su asignación
 // Constante AccentBlue: valor inmutable que no cambia tras su asignación
 private val AccentBlue = Color(0xFF4D9FFF)
 
@@ -7201,9 +6044,7 @@ private val AccentBlue = Color(0xFF4D9FFF)
  * - [onRetry]: Acción para recargar el mural
  */
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
-// Función MainScreenGrid: define la lógica de esta operación
 // Función MainScreenGrid: define la lógica de esta operación
 fun MainScreenGrid(
     mascotas: List<MascotaPerdida>,
@@ -7217,7 +6058,6 @@ fun MainScreenGrid(
     onAgregarClick: () -> Unit,
     onRetry: () -> Unit
 ) {
-    // Constante listState: valor inmutable que no cambia tras su asignación
     // Constante listState: valor inmutable que no cambia tras su asignación
     val listState = rememberScalingLazyListState()
 
@@ -7266,7 +6106,6 @@ fun MainScreenGrid(
 
             // ✅ Mensaje de éxito
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (successMessage.isNotEmpty()) {
                 item {
                     Box(
@@ -7290,7 +6129,6 @@ fun MainScreenGrid(
 
             // ✅ Mensaje de error
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (errorMessage.isNotEmpty() && !isLoading) {
                 item {
                     Box(
@@ -7312,7 +6150,6 @@ fun MainScreenGrid(
             }
 
             // ✅ Estado de envío
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (isSendingReport) {
                 item {
@@ -7336,7 +6173,6 @@ fun MainScreenGrid(
             }
 
             // ✅ CONTENIDO PRINCIPAL
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (isLoading) {
                 item {
@@ -7390,7 +6226,6 @@ fun MainScreenGrid(
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
                         // Itera sobre cada elemento de la colección y ejecuta el bloque
-                        // Itera sobre cada elemento de la colección y ejecuta el bloque
                         pair.forEach { mascota ->
                             MascotaGridItemCompacto(
                                 mascota = mascota,
@@ -7399,7 +6234,6 @@ fun MainScreenGrid(
                             )
                         }
                         // Si es impar, agregar un espacio vacío
-                        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                         if (pair.size == 1) {
                             Spacer(modifier = Modifier.weight(1f))
@@ -7418,9 +6252,7 @@ fun MainScreenGrid(
 
 // ✅ ITEM DE MASCOTA MÁS COMPACTO
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
-// Función MascotaGridItemCompacto: define la lógica de esta operación
 // Función MascotaGridItemCompacto: define la lógica de esta operación
 fun MascotaGridItemCompacto(
     mascota: MascotaPerdida,
@@ -7477,16 +6309,13 @@ fun MascotaGridItemCompacto(
 // ============================================================
 
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
-// Función MascotaPerdidaDetailScreen: define la lógica de esta operación
 // Función MascotaPerdidaDetailScreen: define la lógica de esta operación
 fun MascotaPerdidaDetailScreen(
     mascota: MascotaPerdida,
     onBack: () -> Unit,
     onReportar: () -> Unit
 ) {
-    // Constante listState: valor inmutable que no cambia tras su asignación
     // Constante listState: valor inmutable que no cambia tras su asignación
     val listState = rememberScalingLazyListState()
 
@@ -7588,7 +6417,6 @@ fun MascotaPerdidaDetailScreen(
                             InfoRowCompacta("Dueño", mascota.duenoNombre.take(8))
                         }
                         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                         if (mascota.duenoTelefono.isNotEmpty()) {
                             Spacer(modifier = Modifier.height(2.dp))
                             Row(
@@ -7641,9 +6469,7 @@ fun MascotaPerdidaDetailScreen(
 
 // ✅ InfoRow más compacta
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
-// Función InfoRowCompacta: define la lógica de esta operación
 // Función InfoRowCompacta: define la lógica de esta operación
 fun InfoRowCompacta(label: String, value: String, color: Color = Color.White) {
     Row(
@@ -7670,9 +6496,7 @@ fun InfoRowCompacta(label: String, value: String, color: Color = Color.White) {
 // ============================================================
 
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
-// Función FormularioScreenSimplificado: define la lógica de esta operación
 // Función FormularioScreenSimplificado: define la lógica de esta operación
 fun FormularioScreenSimplificado(
     paso: Int,
@@ -7691,7 +6515,6 @@ fun FormularioScreenSimplificado(
     onSave: () -> Unit,
     onBack: () -> Unit
 ) {
-    // Variable mostrarTeclado: almacena el estado mutable de este componente
     // Variable mostrarTeclado: almacena el estado mutable de este componente
     var mostrarTeclado by remember { mutableStateOf(false) }
 
@@ -7712,14 +6535,12 @@ fun FormularioScreenSimplificado(
                 modifier = Modifier.padding(bottom = 4.dp)
             ) {
                 // Itera sobre cada elemento de la colección y ejecuta el bloque
-                // Itera sobre cada elemento de la colección y ejecuta el bloque
                 (0..5).forEach { i ->
                     Box(
                         modifier = Modifier
                             .size(if (i == paso) 6.dp else 4.dp)
                             .clip(CircleShape)
                             .background(
-                                // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                 // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                 if (i <= paso) AccentRed
                                 else Color.White.copy(alpha = 0.15f)
@@ -7728,7 +6549,6 @@ fun FormularioScreenSimplificado(
                 }
             }
 
-            // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
             // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
             when (paso) {
                 0 -> PasoNombreForm(
@@ -7786,9 +6606,7 @@ fun FormularioScreenSimplificado(
     }
 
     // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
     if (mostrarTeclado) {
-        // Constante valorActual: valor inmutable que no cambia tras su asignación
         // Constante valorActual: valor inmutable que no cambia tras su asignación
         val valorActual = when (paso) {
             0 -> nombre
@@ -7799,13 +6617,10 @@ fun FormularioScreenSimplificado(
         }
 
         // Constante esNumerico: valor inmutable que no cambia tras su asignación
-        // Constante esNumerico: valor inmutable que no cambia tras su asignación
         val esNumerico = paso == 4
 
         // Constante onLetraClick: valor inmutable que no cambia tras su asignación
-        // Constante onLetraClick: valor inmutable que no cambia tras su asignación
         val onLetraClick: (String) -> Unit = { letra ->
-            // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
             // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
             when (paso) {
                 0 -> onNombreChange(nombre + letra)
@@ -7816,9 +6631,7 @@ fun FormularioScreenSimplificado(
         }
 
         // Constante onBorrarClick: valor inmutable que no cambia tras su asignación
-        // Constante onBorrarClick: valor inmutable que no cambia tras su asignación
         val onBorrarClick: () -> Unit = {
-            // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
             // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
             when (paso) {
                 0 -> { if (nombre.isNotEmpty()) onNombreChange(nombre.dropLast(1)) }
@@ -7852,9 +6665,7 @@ fun FormularioScreenSimplificado(
 }
 
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
-// Función PasoNombreForm: define la lógica de esta operación
 // Función PasoNombreForm: define la lógica de esta operación
 fun PasoNombreForm(
     nombre: String,
@@ -7926,9 +6737,7 @@ fun PasoNombreForm(
 }
 
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
-// Función PasoOpcionalForm: define la lógica de esta operación
 // Función PasoOpcionalForm: define la lógica de esta operación
 fun PasoOpcionalForm(
     titulo: String,
@@ -7999,9 +6808,7 @@ fun PasoOpcionalForm(
 }
 
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
-// Función PasoTelefonoForm: define la lógica de esta operación
 // Función PasoTelefonoForm: define la lógica de esta operación
 fun PasoTelefonoForm(
     telefono: String,
@@ -8073,9 +6880,7 @@ fun PasoTelefonoForm(
 }
 
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
-// Función PasoEspecieForm: define la lógica de esta operación
 // Función PasoEspecieForm: define la lógica de esta operación
 fun PasoEspecieForm(
     especie: String,
@@ -8110,7 +6915,6 @@ fun PasoEspecieForm(
                         .fillMaxSize()
                         .background(
                             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                             if (especie == "PERRO") AccentRed.copy(alpha = 0.3f)
                             else FieldBg
                         ),
@@ -8138,7 +6942,6 @@ fun PasoEspecieForm(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(
-                            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                             if (especie == "GATO") AccentRed.copy(alpha = 0.3f)
                             else FieldBg
@@ -8170,9 +6973,7 @@ fun PasoEspecieForm(
 }
 
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
-// Función PasoConfirmarForm: define la lógica de esta operación
 // Función PasoConfirmarForm: define la lógica de esta operación
 fun PasoConfirmarForm(
     nombre: String,
@@ -8202,13 +7003,11 @@ fun PasoConfirmarForm(
         Spacer(Modifier.height(2.dp))
 
         // Constante detalles: valor inmutable que no cambia tras su asignación
-        // Constante detalles: valor inmutable que no cambia tras su asignación
         val detalles = listOfNotNull(
             raza.ifEmpty { null },
             color.ifEmpty { null },
             telefono.ifEmpty { null }
         )
-        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (detalles.isNotEmpty()) {
             Text(
@@ -8222,7 +7021,6 @@ fun PasoConfirmarForm(
         Spacer(Modifier.height(10.dp))
 
         // Constante puedeGuardar: valor inmutable que no cambia tras su asignación
-        // Constante puedeGuardar: valor inmutable que no cambia tras su asignación
         val puedeGuardar = nombre.isNotBlank() && telefono.isNotBlank() && !isCreating
 
         Button(
@@ -8235,7 +7033,6 @@ fun PasoConfirmarForm(
             ),
             enabled = puedeGuardar
         ) {
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (isCreating) {
                 CircularProgressIndicator(
@@ -8269,9 +7066,7 @@ fun PasoConfirmarForm(
 // ============================================================
 
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
-// Función TecladoSimple: define la lógica de esta operación
 // Función TecladoSimple: define la lógica de esta operación
 fun TecladoSimple(
     valor: String,
@@ -8281,18 +7076,13 @@ fun TecladoSimple(
     onCerrar: () -> Unit
 ) {
     // Constante keyBg: valor inmutable que no cambia tras su asignación
-    // Constante keyBg: valor inmutable que no cambia tras su asignación
     val keyBg = Color(0xFF3A3360)
-    // Constante displayBg: valor inmutable que no cambia tras su asignación
     // Constante displayBg: valor inmutable que no cambia tras su asignación
     val displayBg = Color(0xFF252044)
     // Constante accentRed: valor inmutable que no cambia tras su asignación
-    // Constante accentRed: valor inmutable que no cambia tras su asignación
     val accentRed = Color(0xFFE85D5D)
     // Constante accentGreen: valor inmutable que no cambia tras su asignación
-    // Constante accentGreen: valor inmutable que no cambia tras su asignación
     val accentGreen = Color(0xFF4CD97B)
-    // Constante accentBlue: valor inmutable que no cambia tras su asignación
     // Constante accentBlue: valor inmutable que no cambia tras su asignación
     val accentBlue = Color(0xFF4D9FFF)
 
@@ -8350,9 +7140,7 @@ fun TecladoSimple(
             Spacer(Modifier.height(3.dp))
 
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (esNumerico) {
-                // Constante filas: valor inmutable que no cambia tras su asignación
                 // Constante filas: valor inmutable que no cambia tras su asignación
                 val filas = listOf(
                     listOf("1", "2", "3"),
@@ -8360,13 +7148,11 @@ fun TecladoSimple(
                     listOf("7", "8", "9")
                 )
                 // Itera sobre cada elemento de la colección y ejecuta el bloque
-                // Itera sobre cada elemento de la colección y ejecuta el bloque
                 filas.forEach { fila ->
                     Row(
                         modifier = Modifier.fillMaxWidth(0.8f),
                         horizontalArrangement = Arrangement.spacedBy(3.dp)
                     ) {
-                        // Itera sobre cada elemento de la colección y ejecuta el bloque
                         // Itera sobre cada elemento de la colección y ejecuta el bloque
                         fila.forEach { num ->
                             TeclaRedondaCompacta(num, keyBg, modifier = Modifier.weight(1f)) { onLetraClick(num) }
@@ -8384,12 +7170,9 @@ fun TecladoSimple(
                 }
             } else {
                 // Constante filaQ: valor inmutable que no cambia tras su asignación
-                // Constante filaQ: valor inmutable que no cambia tras su asignación
                 val filaQ = listOf("Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P")
                 // Constante filaA: valor inmutable que no cambia tras su asignación
-                // Constante filaA: valor inmutable que no cambia tras su asignación
                 val filaA = listOf("A", "S", "D", "F", "G", "H", "J", "K", "L")
-                // Constante filaZ: valor inmutable que no cambia tras su asignación
                 // Constante filaZ: valor inmutable que no cambia tras su asignación
                 val filaZ = listOf("Z", "X", "C", "V", "B", "N", "M")
 
@@ -8402,7 +7185,6 @@ fun TecladoSimple(
                     horizontalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
                     Box(modifier = Modifier.weight(1f))
-                    // Itera sobre cada elemento de la colección y ejecuta el bloque
                     // Itera sobre cada elemento de la colección y ejecuta el bloque
                     filaZ.forEach { letra ->
                         TeclaPequeñaCompacta(letra, keyBg, modifier = Modifier.weight(1f)) { onLetraClick(letra) }
@@ -8426,7 +7208,6 @@ fun TecladoSimple(
 }
 
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun TecladoFilaCompacta(
     letras: List<String>,
@@ -8439,20 +7220,16 @@ private fun TecladoFilaCompacta(
         horizontalArrangement = Arrangement.spacedBy(2.dp)
     ) {
         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (indentFraction > 0f) Box(modifier = Modifier.weight(indentFraction))
-        // Itera sobre cada elemento de la colección y ejecuta el bloque
         // Itera sobre cada elemento de la colección y ejecuta el bloque
         letras.forEach { letra ->
             TeclaPequeñaCompacta(letra, keyBg, modifier = Modifier.weight(1f)) { onLetraClick(letra) }
         }
         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (indentFraction > 0f) Box(modifier = Modifier.weight(indentFraction))
     }
 }
 
-// Anotación que marca esta función como una función de composición de UI
 // Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun TeclaPequeñaCompacta(
@@ -8474,7 +7251,6 @@ private fun TeclaPequeñaCompacta(
 }
 
 // Anotación que marca esta función como una función de composición de UI
-// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun TeclaRedondaCompacta(
     numero: String,
@@ -8494,7 +7270,6 @@ private fun TeclaRedondaCompacta(
     }
 }
 
-// Anotación que marca esta función como una función de composición de UI
 // Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun TeclaAccionCompacta(
@@ -8524,73 +7299,50 @@ private fun TeclaAccionCompacta(
 
 ```kotlin
 // Paquete: com.lomito.seguro.wear.ui.selection
-// Paquete: com.lomito.seguro.wear.ui.selection
 package com.lomito.seguro.wear.ui.selection
 
 // Importa la dependencia necesaria: BuildConfig
-// Importa la dependencia necesaria: BuildConfig
 import com.lomito.seguro.wear.BuildConfig
-// Importa el contenedor de datos Bundle
 // Importa el contenedor de datos Bundle
 import android.os.Bundle
 // Importa la dependencia necesaria: ComponentActivity
-// Importa la dependencia necesaria: ComponentActivity
 import androidx.activity.ComponentActivity
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.activity.compose.setContent
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.background
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.*
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.lazy.LazyColumn
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.lazy.items
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.runtime.*
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.Alignment
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.Modifier
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.graphics.Color
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.text.font.FontWeight
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.dp
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.sp
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.wear.compose.material.*
 // Importa soporte para corrutinas de Kotlin
-// Importa soporte para corrutinas de Kotlin
 import kotlinx.coroutines.*
-// Importa el parser JSON
 // Importa el parser JSON
 import org.json.JSONArray
 // Importa la dependencia necesaria: BufferedReader
-// Importa la dependencia necesaria: BufferedReader
 import java.io.BufferedReader
-// Importa la dependencia necesaria: InputStreamReader
 // Importa la dependencia necesaria: InputStreamReader
 import java.io.InputStreamReader
 // Importa la dependencia necesaria: HttpURLConnection
-// Importa la dependencia necesaria: HttpURLConnection
 import java.net.HttpURLConnection
-// Importa la dependencia necesaria: URL
 // Importa la dependencia necesaria: URL
 import java.net.URL
 
@@ -8601,21 +7353,15 @@ import java.net.URL
  * - [Proveer la información necesaria para mostrar la lista inicial de selección]
  */
 // Clase de datos MascotaSeleccion: modelo inmutable con propiedades de dominio
-// Clase de datos MascotaSeleccion: modelo inmutable con propiedades de dominio
 data class MascotaSeleccion(
-    // Constante id: valor inmutable que no cambia tras su asignación
     // Constante id: valor inmutable que no cambia tras su asignación
     val id: String,
     // Constante nombre: valor inmutable que no cambia tras su asignación
-    // Constante nombre: valor inmutable que no cambia tras su asignación
     val nombre: String,
-    // Constante especie: valor inmutable que no cambia tras su asignación
     // Constante especie: valor inmutable que no cambia tras su asignación
     val especie: String,
     // Constante fotoUrl: valor inmutable que no cambia tras su asignación
-    // Constante fotoUrl: valor inmutable que no cambia tras su asignación
     val fotoUrl: String = "",
-    // Constante distanciaAlerta: valor inmutable que no cambia tras su asignación
     // Constante distanciaAlerta: valor inmutable que no cambia tras su asignación
     val distanciaAlerta: Int = 50
 )
@@ -8628,38 +7374,29 @@ data class MascotaSeleccion(
  * - [Guardar en SharedPreferences la mascota elegida y navegar a la pantalla principal]
  */
 // Activity SelectionActivity: pantalla principal que gestiona el ciclo de vida
-// Activity SelectionActivity: pantalla principal que gestiona el ciclo de vida
 class SelectionActivity : ComponentActivity() {
     // Estado de la UI
     // Variable mascotasList: almacena el estado mutable de este componente
-    // Variable mascotasList: almacena el estado mutable de este componente
     private var mascotasList = mutableStateListOf<MascotaSeleccion>()
-    // Variable isLoading: almacena el estado mutable de este componente
     // Variable isLoading: almacena el estado mutable de este componente
     private var isLoading = mutableStateOf(true)
     // Variable errorMsg: almacena el estado mutable de este componente
-    // Variable errorMsg: almacena el estado mutable de este componente
     private var errorMsg = mutableStateOf("")
-    // Variable debugMsg: almacena el estado mutable de este componente
     // Variable debugMsg: almacena el estado mutable de este componente
     private var debugMsg = mutableStateOf("")
 
     // Método del ciclo de vida: inicializa la actividad y configura la UI
-    // Método del ciclo de vida: inicializa la actividad y configura la UI
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Invoca la implementación del método en la clase padre
         // Invoca la implementación del método en la clase padre
         super.onCreate(savedInstanceState)
 
         // Limpiar preferencias para prueba
-        // Accede al almacenamiento clave-valor persistente de la aplicación
         // Accede al almacenamiento clave-valor persistente de la aplicación
         getSharedPreferences("watch_prefs", MODE_PRIVATE).edit().clear().apply()
 
         // Cargar datos
         cargarMascotas()
 
-        // Define el árbol de UI con Jetpack Compose como contenido de la Activity
         // Define el árbol de UI con Jetpack Compose como contenido de la Activity
         setContent {
             Scaffold(
@@ -8683,7 +7420,6 @@ class SelectionActivity : ComponentActivity() {
 
                     // Debug info
                     // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     if (debugMsg.value.isNotEmpty()) {
                         Text(
                             text = debugMsg.value,
@@ -8695,7 +7431,6 @@ class SelectionActivity : ComponentActivity() {
 
                     // Error
                     // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     if (errorMsg.value.isNotEmpty() && !isLoading.value) {
                         Text(
                             text = errorMsg.value,
@@ -8706,7 +7441,6 @@ class SelectionActivity : ComponentActivity() {
                     }
 
                     // Contenido
-                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     if (isLoading.value) {
                         Box(
@@ -8760,17 +7494,14 @@ class SelectionActivity : ComponentActivity() {
                                     onClick = {
                                         // Guardar selección
                                         // Accede al almacenamiento clave-valor persistente de la aplicación
-                                        // Accede al almacenamiento clave-valor persistente de la aplicación
                                         getSharedPreferences("watch_prefs", MODE_PRIVATE)
                                             .edit()
                                             .putString("mascota_activa_id", mascota.id)
                                             .putString("mascota_activa_nombre", mascota.nombre)
                                             .putInt("mascota_umbral", mascota.distanciaAlerta)
                                             // Aplica los cambios de forma asíncrona en el hilo principal
-                                            // Aplica los cambios de forma asíncrona en el hilo principal
                                             .apply()
 
-                                        // Constante intent: valor inmutable que no cambia tras su asignación
                                         // Constante intent: valor inmutable que no cambia tras su asignación
                                         val intent = android.content.Intent(
                                             this@SelectionActivity,
@@ -8821,7 +7552,6 @@ class SelectionActivity : ComponentActivity() {
         // Ejecutar en un hilo separado
         Thread {
             // Bloque try-catch: maneja posibles excepciones en el código crítico
-            // Bloque try-catch: maneja posibles excepciones en el código crítico
             try {
                 runOnUiThread {
                     isLoading.value = true
@@ -8829,15 +7559,12 @@ class SelectionActivity : ComponentActivity() {
                 }
 
                 // Constante userId: valor inmutable que no cambia tras su asignación
-                // Constante userId: valor inmutable que no cambia tras su asignación
                 val userId = "2"  // ✅ Usuario con mascotas
-                // Constante url: valor inmutable que no cambia tras su asignación
                 // Constante url: valor inmutable que no cambia tras su asignación
                 val url = URL("$backendUrl/api/mascotas?ownerId=$userId")
 
                 runOnUiThread { debugMsg.value = "Conectando a $url..." }
 
-                // Constante conn: valor inmutable que no cambia tras su asignación
                 // Constante conn: valor inmutable que no cambia tras su asignación
                 val conn = url.openConnection() as HttpURLConnection
                 conn.connectTimeout = 10000
@@ -8846,21 +7573,16 @@ class SelectionActivity : ComponentActivity() {
                 conn.setRequestProperty("Accept", "application/json")
 
                 // Constante responseCode: valor inmutable que no cambia tras su asignación
-                // Constante responseCode: valor inmutable que no cambia tras su asignación
                 val responseCode = conn.responseCode
 
                 runOnUiThread { debugMsg.value = "Response Code: $responseCode" }
 
                 // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                 if (responseCode == HttpURLConnection.HTTP_OK) {
-                    // Constante reader: valor inmutable que no cambia tras su asignación
                     // Constante reader: valor inmutable que no cambia tras su asignación
                     val reader = BufferedReader(InputStreamReader(conn.inputStream))
                     // Constante response: valor inmutable que no cambia tras su asignación
-                    // Constante response: valor inmutable que no cambia tras su asignación
                     val response = StringBuilder()
-                    // Variable line: almacena el estado mutable de este componente
                     // Variable line: almacena el estado mutable de este componente
                     var line: String?
                     while (reader.readLine().also { line = it } != null) {
@@ -8869,22 +7591,17 @@ class SelectionActivity : ComponentActivity() {
                     reader.close()
 
                     // Constante responseText: valor inmutable que no cambia tras su asignación
-                    // Constante responseText: valor inmutable que no cambia tras su asignación
                     val responseText = response.toString()
                     runOnUiThread { debugMsg.value = "Respuesta: ${responseText.take(100)}..." }
 
                     // Parsear JSON
                     // Constante jsonArray: valor inmutable que no cambia tras su asignación
-                    // Constante jsonArray: valor inmutable que no cambia tras su asignación
                     val jsonArray = JSONArray(responseText)
-                    // Constante lista: valor inmutable que no cambia tras su asignación
                     // Constante lista: valor inmutable que no cambia tras su asignación
                     val lista = mutableListOf<MascotaSeleccion>()
 
                     // Itera sobre la colección para procesar cada elemento
-                    // Itera sobre la colección para procesar cada elemento
                     for (i in 0 until jsonArray.length()) {
-                        // Constante obj: valor inmutable que no cambia tras su asignación
                         // Constante obj: valor inmutable que no cambia tras su asignación
                         val obj = jsonArray.getJSONObject(i)
                         lista.add(
@@ -8905,7 +7622,6 @@ class SelectionActivity : ComponentActivity() {
                         isLoading.value = false
                         debugMsg.value = "✅ ${lista.size} mascotas cargadas"
                         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                         if (lista.isEmpty()) {
                             errorMsg.value = "No hay mascotas para este usuario"
                         } else {
@@ -8914,12 +7630,9 @@ class SelectionActivity : ComponentActivity() {
                     }
                 } else {
                     // Constante errorReader: valor inmutable que no cambia tras su asignación
-                    // Constante errorReader: valor inmutable que no cambia tras su asignación
                     val errorReader = BufferedReader(InputStreamReader(conn.errorStream))
                     // Constante errorResponse: valor inmutable que no cambia tras su asignación
-                    // Constante errorResponse: valor inmutable que no cambia tras su asignación
                     val errorResponse = StringBuilder()
-                    // Variable line: almacena el estado mutable de este componente
                     // Variable line: almacena el estado mutable de este componente
                     var line: String?
                     while (errorReader.readLine().also { line = it } != null) {
@@ -8947,7 +7660,6 @@ class SelectionActivity : ComponentActivity() {
 
     companion object {
         // Constante backendUrl: valor inmutable que no cambia tras su asignación
-        // Constante backendUrl: valor inmutable que no cambia tras su asignación
         private val backendUrl = BuildConfig.BACKEND_URL
     }
 }
@@ -8961,79 +7673,54 @@ class SelectionActivity : ComponentActivity() {
 
 ```kotlin
 // Paquete: com.lomito.seguro.wear.ui.settings
-// Paquete: com.lomito.seguro.wear.ui.settings
 package com.lomito.seguro.wear.ui.settings
-// Importa la dependencia necesaria: BuildConfig
 // Importa la dependencia necesaria: BuildConfig
 import com.lomito.seguro.wear.BuildConfig
 
 // Importa el contenedor de datos Bundle
-// Importa el contenedor de datos Bundle
 import android.os.Bundle
-// Importa la dependencia necesaria: ComponentActivity
 // Importa la dependencia necesaria: ComponentActivity
 import androidx.activity.ComponentActivity
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.activity.compose.setContent
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.background
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.clickable
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.*
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.foundation.shape.CircleShape
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.foundation.shape.RoundedCornerShape
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.runtime.*
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.Alignment
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.Modifier
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.draw.clip
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.graphics.Color
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.text.font.FontWeight
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.text.style.TextAlign
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.dp
 // Importa componente de Jetpack Compose
-// Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.sp
-// Importa componente de Jetpack Compose
 // Importa componente de Jetpack Compose
 import androidx.wear.compose.material.*
 // Importa soporte para corrutinas de Kotlin
-// Importa soporte para corrutinas de Kotlin
 import kotlinx.coroutines.*
-// Importa el parser JSON
 // Importa el parser JSON
 import org.json.JSONArray
 // Importa el parser JSON
-// Importa el parser JSON
 import org.json.JSONObject
 // Importa la dependencia necesaria: HttpURLConnection
-// Importa la dependencia necesaria: HttpURLConnection
 import java.net.HttpURLConnection
-// Importa la dependencia necesaria: URL
 // Importa la dependencia necesaria: URL
 import java.net.URL
 
@@ -9044,21 +7731,15 @@ import java.net.URL
  * - [Mantener el estado de la configuración (ej. distancia de alerta)]
  */
 // Clase de datos MascotaSetting: modelo inmutable con propiedades de dominio
-// Clase de datos MascotaSetting: modelo inmutable con propiedades de dominio
 data class MascotaSetting(
-    // Constante id: valor inmutable que no cambia tras su asignación
     // Constante id: valor inmutable que no cambia tras su asignación
     val id: String,
     // Constante nombre: valor inmutable que no cambia tras su asignación
-    // Constante nombre: valor inmutable que no cambia tras su asignación
     val nombre: String,
-    // Constante especie: valor inmutable que no cambia tras su asignación
     // Constante especie: valor inmutable que no cambia tras su asignación
     val especie: String,
     // Variable distanciaAlerta: almacena el estado mutable de este componente
-    // Variable distanciaAlerta: almacena el estado mutable de este componente
     var distanciaAlerta: Int = 50,
-    // Constante ownerId: valor inmutable que no cambia tras su asignación
     // Constante ownerId: valor inmutable que no cambia tras su asignación
     val ownerId: Int = 0
 )
@@ -9071,22 +7752,16 @@ data class MascotaSetting(
  * - [Actualizar el umbral de distancia y la preferencia de vibración]
  */
 // Activity SettingsActivity: pantalla principal que gestiona el ciclo de vida
-// Activity SettingsActivity: pantalla principal que gestiona el ciclo de vida
 class SettingsActivity : ComponentActivity() {
     // Constante backendUrl: valor inmutable que no cambia tras su asignación
-    // Constante backendUrl: valor inmutable que no cambia tras su asignación
     private val backendUrl = BuildConfig.BACKEND_URL
-    // Constante userId: valor inmutable que no cambia tras su asignación
     // Constante userId: valor inmutable que no cambia tras su asignación
     private val userId = 2 // Usuario fijo por ahora
 
     // Método del ciclo de vida: inicializa la actividad y configura la UI
-    // Método del ciclo de vida: inicializa la actividad y configura la UI
     override fun onCreate(savedInstanceState: Bundle?) {
         // Invoca la implementación del método en la clase padre
-        // Invoca la implementación del método en la clase padre
         super.onCreate(savedInstanceState)
-        // Define el árbol de UI con Jetpack Compose como contenido de la Activity
         // Define el árbol de UI con Jetpack Compose como contenido de la Activity
         setContent {
             SettingsScreen()
@@ -9094,50 +7769,37 @@ class SettingsActivity : ComponentActivity() {
     }
 
     // Anotación que marca esta función como una función de composición de UI
-    // Anotación que marca esta función como una función de composición de UI
     @Composable
-    // Función SettingsScreen: define la lógica de esta operación
     // Función SettingsScreen: define la lógica de esta operación
     fun SettingsScreen() {
         // Constante prefs: valor inmutable que no cambia tras su asignación
-        // Constante prefs: valor inmutable que no cambia tras su asignación
         val prefs = getSharedPreferences("watch_prefs", MODE_PRIVATE)
-        // Constante listState: valor inmutable que no cambia tras su asignación
         // Constante listState: valor inmutable que no cambia tras su asignación
         val listState = rememberScalingLazyListState()
 
         // Estados
         // Variable mascotas: almacena el estado mutable de este componente
-        // Variable mascotas: almacena el estado mutable de este componente
         var mascotas by remember { mutableStateOf<List<MascotaSetting>>(emptyList()) }
-        // Variable isLoading: almacena el estado mutable de este componente
         // Variable isLoading: almacena el estado mutable de este componente
         var isLoading by remember { mutableStateOf(true) }
         // Variable isSaving: almacena el estado mutable de este componente
-        // Variable isSaving: almacena el estado mutable de este componente
         var isSaving by remember { mutableStateOf(false) }
-        // Variable errorMessage: almacena el estado mutable de este componente
         // Variable errorMessage: almacena el estado mutable de este componente
         var errorMessage by remember { mutableStateOf("") }
         // Variable successMessage: almacena el estado mutable de este componente
-        // Variable successMessage: almacena el estado mutable de este componente
         var successMessage by remember { mutableStateOf("") }
-        // Variable mascotaSeleccionada: almacena el estado mutable de este componente
         // Variable mascotaSeleccionada: almacena el estado mutable de este componente
         var mascotaSeleccionada by remember {
             mutableStateOf<MascotaSetting?>(null)
         }
         // Variable umbralActual: almacena el estado mutable de este componente
-        // Variable umbralActual: almacena el estado mutable de este componente
         var umbralActual by remember { mutableStateOf(50) }
-        // Variable vibracionActual: almacena el estado mutable de este componente
         // Variable vibracionActual: almacena el estado mutable de este componente
         var vibracionActual by remember { mutableStateOf(prefs.getBoolean("vibracion", true)) }
 
         // Cargar mascotas del usuario al inicio
         LaunchedEffect(Unit) {
             isLoading = true
-            // Constante result: valor inmutable que no cambia tras su asignación
             // Constante result: valor inmutable que no cambia tras su asignación
             val result = withContext(Dispatchers.IO) {
                 cargarMascotasDelUsuario(userId)
@@ -9148,9 +7810,7 @@ class SettingsActivity : ComponentActivity() {
 
             // Si hay mascotas, seleccionar la primera o la guardada
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (mascotas.isNotEmpty()) {
-                // Constante savedId: valor inmutable que no cambia tras su asignación
                 // Constante savedId: valor inmutable que no cambia tras su asignación
                 val savedId = prefs.getString("mascota_seleccionada_id", "") ?: ""
                 mascotaSeleccionada = if (savedId.isNotEmpty()) {
@@ -9165,7 +7825,6 @@ class SettingsActivity : ComponentActivity() {
 
         // Actualizar umbral cuando cambia la mascota seleccionada
         LaunchedEffect(mascotaSeleccionada) {
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (mascotaSeleccionada != null) {
                 umbralActual = mascotaSeleccionada!!.distanciaAlerta
@@ -9203,11 +7862,9 @@ class SettingsActivity : ComponentActivity() {
                         ) {
                             // ✅ Botón Guardar
                             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                             if (!isLoading && mascotas.isNotEmpty()) {
                                 CompactButton(
                                     onClick = {
-                                        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                         if (mascotaSeleccionada != null) {
                                             guardarCambios(
@@ -9219,7 +7876,6 @@ class SettingsActivity : ComponentActivity() {
                                                     errorMessage = ""
                                                     // Actualizar la distancia en la lista local
                                                     mascotas = mascotas.map {
-                                                        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                                         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                                         if (it.id == mascotaSeleccionada!!.id) {
                                                             it.copy(distanciaAlerta = umbralActual)
@@ -9244,7 +7900,6 @@ class SettingsActivity : ComponentActivity() {
                                         .clip(CircleShape),
                                     enabled = !isSaving
                                 ) {
-                                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                     // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                     if (isSaving) {
                                         CircularProgressIndicator(
@@ -9271,7 +7926,6 @@ class SettingsActivity : ComponentActivity() {
 
                 // ✅ Mensajes de estado
                 // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                 if (successMessage.isNotEmpty()) {
                     item {
                         Box(
@@ -9294,7 +7948,6 @@ class SettingsActivity : ComponentActivity() {
                 }
 
                 // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                 if (errorMessage.isNotEmpty()) {
                     item {
                         Box(
@@ -9316,7 +7969,6 @@ class SettingsActivity : ComponentActivity() {
                 }
 
                 // ✅ Estado de carga
-                // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                 // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                 if (isLoading) {
                     item {
@@ -9399,16 +8051,13 @@ class SettingsActivity : ComponentActivity() {
 
                             // Grid de mascotas en 2 columnas
                             // Itera sobre cada elemento de la colección y ejecuta el bloque
-                            // Itera sobre cada elemento de la colección y ejecuta el bloque
                             mascotas.chunked(2).forEach { pair ->
                                 Row(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                                 ) {
                                     // Itera sobre cada elemento de la colección y ejecuta el bloque
-                                    // Itera sobre cada elemento de la colección y ejecuta el bloque
                                     pair.forEach { mascota ->
-                                        // Constante isSelected: valor inmutable que no cambia tras su asignación
                                         // Constante isSelected: valor inmutable que no cambia tras su asignación
                                         val isSelected = mascotaSeleccionada?.id == mascota.id
                                         Card(
@@ -9417,7 +8066,6 @@ class SettingsActivity : ComponentActivity() {
                                                 .height(48.dp),
                                             onClick = {
                                                 mascotaSeleccionada = mascota
-                                                // Inicia el editor para modificar los SharedPreferences
                                                 // Inicia el editor para modificar los SharedPreferences
                                                 prefs.edit().putString("mascota_seleccionada_id", mascota.id).apply()
                                                 // Limpiar mensajes al cambiar de mascota
@@ -9430,7 +8078,6 @@ class SettingsActivity : ComponentActivity() {
                                                 modifier = Modifier
                                                     .fillMaxSize()
                                                     .background(
-                                                        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                                         // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                                         if (isSelected) Color(0xFF4CAF50).copy(alpha = 0.3f)
                                                         else Color(0xFF3D3D5C)
@@ -9451,7 +8098,6 @@ class SettingsActivity : ComponentActivity() {
                                                     maxLines = 1
                                                 )
                                                 // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                                                // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                                 if (isSelected) {
                                                     Text(
                                                         text = "✓",
@@ -9463,7 +8109,6 @@ class SettingsActivity : ComponentActivity() {
                                         }
                                     }
                                     // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                     if (pair.size == 1) {
                                         Spacer(modifier = Modifier.weight(1f))
                                     }
@@ -9474,7 +8119,6 @@ class SettingsActivity : ComponentActivity() {
                     }
 
                     // ✅ Umbral de alerta
-                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     if (mascotaSeleccionada != null) {
                         item {
@@ -9515,7 +8159,6 @@ class SettingsActivity : ComponentActivity() {
                                     CompactButton(
                                         onClick = {
                                             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                                            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                             if (umbralActual > 10) {
                                                 umbralActual -= 10
                                                 successMessage = ""
@@ -9531,7 +8174,6 @@ class SettingsActivity : ComponentActivity() {
                                     }
                                     CompactButton(
                                         onClick = {
-                                            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                             if (umbralActual < 100) {
                                                 umbralActual += 10
@@ -9590,7 +8232,6 @@ class SettingsActivity : ComponentActivity() {
                             ) {
                                 Text(
                                     // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-                                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                     if (vibracionActual) "ON" else "OFF",
                                     fontSize = 9.sp,
                                     color = Color.White,
@@ -9617,30 +8258,23 @@ class SettingsActivity : ComponentActivity() {
         onError: (String) -> Unit
     ) {
         // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
-        // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
         CoroutineScope(Dispatchers.Main).launch {
-            // Bloque try-catch: maneja posibles excepciones en el código crítico
             // Bloque try-catch: maneja posibles excepciones en el código crítico
             try {
                 // 1. Guardar vibración en SharedPreferences
                 // Constante prefs: valor inmutable que no cambia tras su asignación
-                // Constante prefs: valor inmutable que no cambia tras su asignación
                 val prefs = getSharedPreferences("watch_prefs", MODE_PRIVATE)
                 // Inicia el editor para modificar los SharedPreferences
-                // Inicia el editor para modificar los SharedPreferences
                 prefs.edit().putBoolean("vibracion", vibracion).apply()
-                // Inicia el editor para modificar los SharedPreferences
                 // Inicia el editor para modificar los SharedPreferences
                 prefs.edit().putInt("umbral_$mascotaId", nuevaDistancia).apply()
 
                 // 2. Actualizar la distancia en el backend
                 // Constante result: valor inmutable que no cambia tras su asignación
-                // Constante result: valor inmutable que no cambia tras su asignación
                 val result = withContext(Dispatchers.IO) {
                     actualizarDistanciaMascota(mascotaId, nuevaDistancia)
                 }
 
-                // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                 // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                 if (result.success) {
                     onSuccess()
@@ -9658,16 +8292,12 @@ class SettingsActivity : ComponentActivity() {
         nuevaDistancia: Int
     ): OperacionResult {
         // Retorna el valor al llamador de la función
-        // Retorna el valor al llamador de la función
         return try {
-            // Registro de evento en el log de Android para depuración
             // Registro de evento en el log de Android para depuración
             android.util.Log.d("SETTINGS", "Actualizando distancia de mascota $mascotaId a $nuevaDistancia")
 
             // Constante url: valor inmutable que no cambia tras su asignación
-            // Constante url: valor inmutable que no cambia tras su asignación
             val url = URL("$backendUrl/api/mascotas/$mascotaId")
-            // Constante conn: valor inmutable que no cambia tras su asignación
             // Constante conn: valor inmutable que no cambia tras su asignación
             val conn = url.openConnection() as HttpURLConnection
             conn.requestMethod = "PUT"
@@ -9677,16 +8307,13 @@ class SettingsActivity : ComponentActivity() {
             conn.doOutput = true
 
             // Constante json: valor inmutable que no cambia tras su asignación
-            // Constante json: valor inmutable que no cambia tras su asignación
             val json = JSONObject().apply {
                 put("distancia_alerta", nuevaDistancia)
             }
 
             conn.outputStream.write(json.toString().toByteArray())
             // Constante responseCode: valor inmutable que no cambia tras su asignación
-            // Constante responseCode: valor inmutable que no cambia tras su asignación
             val responseCode = conn.responseCode
-            // Constante responseBody: valor inmutable que no cambia tras su asignación
             // Constante responseBody: valor inmutable que no cambia tras su asignación
             val responseBody = if (responseCode == 200 || responseCode == 201) {
                 conn.inputStream.bufferedReader().readText()
@@ -9696,13 +8323,10 @@ class SettingsActivity : ComponentActivity() {
             conn.disconnect()
 
             // Registro de evento en el log de Android para depuración
-            // Registro de evento en el log de Android para depuración
             android.util.Log.d("SETTINGS", "Response Code: $responseCode")
-            // Registro de evento en el log de Android para depuración
             // Registro de evento en el log de Android para depuración
             android.util.Log.d("SETTINGS", "Response: $responseBody")
 
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (responseCode == 200 || responseCode == 201) {
                 OperacionResult(true, "")
@@ -9711,7 +8335,6 @@ class SettingsActivity : ComponentActivity() {
             }
         } catch (e: Exception) {
             // Registro de evento en el log de Android para depuración
-            // Registro de evento en el log de Android para depuración
             android.util.Log.e("SETTINGS", "Error: ${e.message}", e)
             OperacionResult(false, "Error: ${e.message}")
         }
@@ -9719,50 +8342,37 @@ class SettingsActivity : ComponentActivity() {
 
     private suspend fun cargarMascotasDelUsuario(ownerId: Int): CargaMascotasResult {
         // Retorna el valor al llamador de la función
-        // Retorna el valor al llamador de la función
         return try {
-            // Registro de evento en el log de Android para depuración
             // Registro de evento en el log de Android para depuración
             android.util.Log.d("SETTINGS", "Cargando mascotas del usuario $ownerId")
 
             // Constante url: valor inmutable que no cambia tras su asignación
-            // Constante url: valor inmutable que no cambia tras su asignación
             val url = URL("$backendUrl/api/mascotas?ownerId=$ownerId")
-            // Constante conn: valor inmutable que no cambia tras su asignación
             // Constante conn: valor inmutable que no cambia tras su asignación
             val conn = url.openConnection() as HttpURLConnection
             conn.connectTimeout = 5000
             conn.readTimeout = 5000
             conn.requestMethod = "GET"
             // Constante responseCode: valor inmutable que no cambia tras su asignación
-            // Constante responseCode: valor inmutable que no cambia tras su asignación
             val responseCode = conn.responseCode
 
-            // Registro de evento en el log de Android para depuración
             // Registro de evento en el log de Android para depuración
             android.util.Log.d("SETTINGS", "Response Code: $responseCode")
 
             // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
-            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 // Constante response: valor inmutable que no cambia tras su asignación
-                // Constante response: valor inmutable que no cambia tras su asignación
                 val response = conn.inputStream.bufferedReader().readText()
-                // Registro de evento en el log de Android para depuración
                 // Registro de evento en el log de Android para depuración
                 android.util.Log.d("SETTINGS", "Respuesta: $response")
 
                 // Constante jsonArray: valor inmutable que no cambia tras su asignación
-                // Constante jsonArray: valor inmutable que no cambia tras su asignación
                 val jsonArray = JSONArray(response)
-                // Constante lista: valor inmutable que no cambia tras su asignación
                 // Constante lista: valor inmutable que no cambia tras su asignación
                 val lista = mutableListOf<MascotaSetting>()
 
                 // Itera sobre la colección para procesar cada elemento
-                // Itera sobre la colección para procesar cada elemento
                 for (i in 0 until jsonArray.length()) {
-                    // Constante obj: valor inmutable que no cambia tras su asignación
                     // Constante obj: valor inmutable que no cambia tras su asignación
                     val obj = jsonArray.getJSONObject(i)
                     lista.add(
@@ -9777,21 +8387,17 @@ class SettingsActivity : ComponentActivity() {
                 }
                 conn.disconnect()
                 // Registro de evento en el log de Android para depuración
-                // Registro de evento en el log de Android para depuración
                 android.util.Log.d("SETTINGS", "${lista.size} mascotas cargadas")
                 CargaMascotasResult(lista, "")
             } else {
                 // Constante errorBody: valor inmutable que no cambia tras su asignación
-                // Constante errorBody: valor inmutable que no cambia tras su asignación
                 val errorBody = conn.errorStream?.bufferedReader()?.readText()
                 conn.disconnect()
-                // Registro de evento en el log de Android para depuración
                 // Registro de evento en el log de Android para depuración
                 android.util.Log.e("SETTINGS", "Error HTTP $responseCode: $errorBody")
                 CargaMascotasResult(emptyList(), "Error al cargar (HTTP $responseCode)")
             }
         } catch (e: Exception) {
-            // Registro de evento en el log de Android para depuración
             // Registro de evento en el log de Android para depuración
             android.util.Log.e("SETTINGS", "Error: ${e.message}", e)
             CargaMascotasResult(emptyList(), "Error: ${e.message}")
@@ -9799,23 +8405,17 @@ class SettingsActivity : ComponentActivity() {
     }
 
     // Clase de datos CargaMascotasResult: modelo inmutable con propiedades de dominio
-    // Clase de datos CargaMascotasResult: modelo inmutable con propiedades de dominio
     data class CargaMascotasResult(
         // Constante mascotas: valor inmutable que no cambia tras su asignación
-        // Constante mascotas: valor inmutable que no cambia tras su asignación
         val mascotas: List<MascotaSetting>,
-        // Constante errorMessage: valor inmutable que no cambia tras su asignación
         // Constante errorMessage: valor inmutable que no cambia tras su asignación
         val errorMessage: String
     )
 
     // Clase de datos OperacionResult: modelo inmutable con propiedades de dominio
-    // Clase de datos OperacionResult: modelo inmutable con propiedades de dominio
     data class OperacionResult(
         // Constante success: valor inmutable que no cambia tras su asignación
-        // Constante success: valor inmutable que no cambia tras su asignación
         val success: Boolean,
-        // Constante errorMessage: valor inmutable que no cambia tras su asignación
         // Constante errorMessage: valor inmutable que no cambia tras su asignación
         val errorMessage: String?
     )

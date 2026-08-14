@@ -261,11 +261,18 @@ def generate_comment(line, filename):
 
 
 def read_file_utf8(filepath):
-    """Lee un archivo con múltiples encodings posibles."""
-    for encoding in ['utf-8', 'utf-8-sig', 'latin-1', 'cp1252']:
+    """Lee un archivo con múltiples encodings posibles, limpiando BOM."""
+    # Intentar leer el archivo con varios encodings comunes
+    for encoding in ['utf-8-sig', 'utf-8', 'utf-16', 'utf-16-le', 'utf-16-be', 'latin-1', 'cp1252']:
         try:
             with open(filepath, 'r', encoding=encoding) as f:
-                return f.read()
+                content = f.read()
+            # Limpiar el BOM de UTF-16 si quedara al principio
+            content = content.lstrip('\ufeff')
+            # Si el contenido contiene caracteres raros de BOM (como ÿþ), descartar y probar siguiente
+            if '\x00' in content[:50]:  # UTF-16 sin manejar correctamente da nulos
+                continue
+            return content
         except (UnicodeDecodeError, Exception):
             continue
     return ""
@@ -325,12 +332,12 @@ def generate_readme(module_name, module_title, module_description, output_path):
             desc = get_file_description(file_name, group_name)
             lines.append(f"\n{desc}\n")
             
-            # Leer el código del archivo (ya comentado)
+            # Leer el código del archivo (ya fue comentado en el PASO 1)
             code = read_file_utf8(kt_file)
-            if code:
-                # Añadir comentarios adicionales en líneas sin comentario
-                code_with_comments = comment_kotlin_code(file_name, code)
-                lines.append(f"\n```kotlin\n{code_with_comments}\n```\n")
+            if code and code.strip():
+                # Usar el código tal cual (ya tiene comentarios del PASO 1)
+                # NO llamar comment_kotlin_code de nuevo para evitar duplicados
+                lines.append(f"\n```kotlin\n{code.rstrip()}\n```\n")
             else:
                 lines.append("\n> ⚠️ No se pudo leer el archivo.\n")
             
@@ -436,18 +443,24 @@ def process_and_comment_file(kt_file):
 
 
 def main():
-    print("🚀 Iniciando proceso de documentación exhaustiva de Lomito Seguro...")
+    import sys
+    readme_only = '--readme-only' in sys.argv
+    
+    print("Iniciando proceso de documentacion de Lomito Seguro...")
     print("=" * 70)
     
-    # === PASO 1: COMENTAR TODOS LOS ARCHIVOS ===
-    print("\n📝 PASO 1: Añadiendo comentarios a todos los archivos .kt...\n")
-    
     modules = ['mobile', 'tv', 'wear']
-    for module in modules:
-        print(f"\n  📱 Módulo: {module}")
-        files = get_module_files(module)
-        for kt_file in files:
-            process_and_comment_file(kt_file)
+    
+    # === PASO 1: COMENTAR TODOS LOS ARCHIVOS (saltear si --readme-only) ===
+    if not readme_only:
+        print("\nPASO 1: Anadiendo comentarios a todos los archivos .kt...\n")
+        for module in modules:
+            print(f"\n  Modulo: {module}")
+            files = get_module_files(module)
+            for kt_file in files:
+                process_and_comment_file(kt_file)
+    else:
+        print("\nModo README-ONLY: saltando comentado de archivos .kt\n")
     
     # === PASO 2: GENERAR LOS README ===
     print("\n📚 PASO 2: Generando los README de documentación...\n")
