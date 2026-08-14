@@ -44,6 +44,7 @@ import com.lomito.seguro.tv.ui.theme.LomitoAlertRed
 import com.lomito.seguro.tv.ui.theme.LomitoOrange
 import com.lomito.seguro.tv.ui.theme.LomitoSurfaceAlt
 import com.lomito.seguro.tv.ui.theme.LomitoTvTheme
+import com.lomito.seguro.tv.util.toAbsoluteUrl
 
 /**
  * Pantalla principal del módulo Smart TV. Pensada para un TV en la sala de un
@@ -192,7 +193,7 @@ private fun MascotaMuralCard(mascota: Mascota, onClick: () -> Unit) {
         Column {
             Box(modifier = Modifier.fillMaxWidth().aspectRatio(1.3f)) {
                 AsyncImage(
-                    model = mascota.fotoUrl,
+                    model = mascota.fotoUrl.toAbsoluteUrl(),
                     contentDescription = mascota.nombre,
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop

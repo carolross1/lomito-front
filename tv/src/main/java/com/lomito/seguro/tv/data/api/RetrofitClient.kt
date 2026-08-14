@@ -9,7 +9,8 @@ import java.util.concurrent.TimeUnit
 object RetrofitClient {
     // Misma API que el módulo mobile. Para el emulador de Android Studio se usa 10.0.2.2 
     // en lugar de localhost. Si pruebas en TV física, pon la IP local de tu PC (ej. 192.168.x.x)
-    private const val BASE_URL = "http://10.0.2.2:3000/api/"
+    const val SERVER_URL = "http://10.0.2.2:3000"
+    private const val BASE_URL = "$SERVER_URL/api/"
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
