@@ -1,65 +1,115 @@
+// Paquete: com.lomito.seguro.tv.ui.dashboard
 package com.lomito.seguro.tv.ui.dashboard
 
+// Importa la clase Intent para navegación entre componentes
 import android.content.Intent
+// Importa el contenedor de datos Bundle
 import android.os.Bundle
+// Importa la dependencia necesaria: ComponentActivity
 import androidx.activity.ComponentActivity
+// Importa componente de Jetpack Compose
 import androidx.activity.compose.setContent
+// Importa la dependencia necesaria: viewModels
 import androidx.activity.viewModels
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.background
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.Arrangement
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.Box
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.Column
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.aspectRatio
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.fillMaxSize
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.fillMaxWidth
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.height
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.padding
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.width
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.shape.RoundedCornerShape
+// Importa componente de Jetpack Compose
 import androidx.compose.runtime.Composable
+// Importa componente de Jetpack Compose
 import androidx.compose.runtime.collectAsState
+// Importa componente de Jetpack Compose
 import androidx.compose.runtime.getValue
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.Alignment
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.Modifier
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.graphics.Color
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.layout.ContentScale
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.text.font.FontWeight
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.text.style.TextOverflow
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.dp
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.sp
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.lazy.LazyRow
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.lazy.items
+// Importa la dependencia necesaria: Card
 import androidx.tv.material3.Card
+// Importa la dependencia necesaria: CardDefaults
 import androidx.tv.material3.CardDefaults
+// Importa la dependencia necesaria: MaterialTheme
 import androidx.tv.material3.MaterialTheme
+// Importa la dependencia necesaria: Surface
 import androidx.tv.material3.Surface
+// Importa la dependencia necesaria: Text
 import androidx.tv.material3.Text
+// Importa componente de Jetpack Compose
 import coil.compose.AsyncImage
+// Importa la dependencia necesaria: Mascota
 import com.lomito.seguro.tv.data.model.Mascota
+// Importa la dependencia necesaria: Refugio
 import com.lomito.seguro.tv.data.model.Refugio
+// Importa la dependencia necesaria: MascotaDetalleActivity
 import com.lomito.seguro.tv.ui.detalle.MascotaDetalleActivity
+// Importa la dependencia necesaria: RefugioDifusionActivity
 import com.lomito.seguro.tv.ui.refugio.RefugioDifusionActivity
+// Importa la dependencia necesaria: LomitoFoundGreen
 import com.lomito.seguro.tv.ui.theme.LomitoFoundGreen
+// Importa la dependencia necesaria: LomitoAlertRed
 import com.lomito.seguro.tv.ui.theme.LomitoAlertRed
+// Importa la dependencia necesaria: LomitoOrange
 import com.lomito.seguro.tv.ui.theme.LomitoOrange
+// Importa la dependencia necesaria: LomitoSurfaceAlt
 import com.lomito.seguro.tv.ui.theme.LomitoSurfaceAlt
+// Importa la dependencia necesaria: LomitoTvTheme
 import com.lomito.seguro.tv.ui.theme.LomitoTvTheme
+// Importa la dependencia necesaria: toAbsoluteUrl
 import com.lomito.seguro.tv.util.toAbsoluteUrl
 
 /**
- * Pantalla principal del módulo Smart TV. Pensada para un TV en la sala de un
- * refugio o espacio comunitario: no requiere login, se controla con el
- * control remoto (D-pad) y se auto-refresca sola.
+ * [Actividad principal del Dashboard para Android TV]
  *
- * Corresponde a la pantalla "Dashboard" del diagrama de flujo (mural
- * comunitario de mascotas perdidas/encontradas + refugios locales).
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Mostrar el mural comunitario de mascotas perdidas y encontradas]
+ * - [Mostrar el directorio de refugios locales]
  */
+// Activity DashboardActivity: pantalla principal que gestiona el ciclo de vida
 class DashboardActivity : ComponentActivity() {
 
+    // Constante viewModel: valor inmutable que no cambia tras su asignación
     private val viewModel: DashboardViewModel by viewModels()
 
+    // Método del ciclo de vida: inicializa la actividad y configura la UI
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Invoca la implementación del método en la clase padre
         super.onCreate(savedInstanceState)
+        // Define el árbol de UI con Jetpack Compose como contenido de la Activity
         setContent {
             LomitoTvTheme {
                 DashboardScreen(
@@ -82,12 +132,23 @@ class DashboardActivity : ComponentActivity() {
     }
 }
 
+/**
+ * [Pantalla componible del Dashboard]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - viewModel: [ViewModel que provee el estado de la pantalla]
+ * - onMascotaClick: [Callback al seleccionar una mascota]
+ * - onRefugioClick: [Callback al seleccionar un refugio]
+ */
+// Anotación que marca esta función como una función de composición de UI
 @Composable
+// Función DashboardScreen: define la lógica de esta operación
 fun DashboardScreen(
     viewModel: DashboardViewModel,
     onMascotaClick: (Mascota) -> Unit,
     onRefugioClick: (Refugio) -> Unit
 ) {
+    // Constante state: valor inmutable que no cambia tras su asignación
     val state by viewModel.uiState.collectAsState()
 
     Box(
@@ -110,6 +171,7 @@ fun DashboardScreen(
                     fontSize = 18.sp
                 )
                 Box(modifier = Modifier.padding(top = 16.dp)) {
+                    // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
                     when {
                         state.cargando -> Text(
                             text = "Cargando mural comunitario…",
@@ -136,6 +198,7 @@ fun DashboardScreen(
                     fontSize = 18.sp
                 )
                 Box(modifier = Modifier.padding(top = 16.dp)) {
+                    // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
                     when {
                         state.cargando -> Text(
                             text = "Cargando refugios…",
@@ -157,6 +220,7 @@ fun DashboardScreen(
     }
 }
 
+// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun DashboardHeader() {
     Column {
@@ -174,8 +238,10 @@ private fun DashboardHeader() {
     }
 }
 
+// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun MascotaMuralCard(mascota: Mascota, onClick: () -> Unit) {
+    // Constante perdida: valor inmutable que no cambia tras su asignación
     val perdida = mascota.estado.equals("PERDIDA", ignoreCase = true)
 
     Card(
@@ -225,6 +291,7 @@ private fun MascotaMuralCard(mascota: Mascota, onClick: () -> Unit) {
     }
 }
 
+// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun RefugioCard(refugio: Refugio, onClick: () -> Unit) {
     Card(
@@ -256,6 +323,7 @@ private fun RefugioCard(refugio: Refugio, onClick: () -> Unit) {
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.padding(top = 6.dp)
             )
+            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (!refugio.videoUrl.isNullOrBlank()) {
                 Text(
                     text = "● EN VIVO",
@@ -269,6 +337,7 @@ private fun RefugioCard(refugio: Refugio, onClick: () -> Unit) {
     }
 }
 
+// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun EstadoBadge(texto: String, color: Color, modifier: Modifier = Modifier) {
     Surface(

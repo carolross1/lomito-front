@@ -1,52 +1,103 @@
+// Paquete: com.lomito.seguro.wear.ui.selection
 package com.lomito.seguro.wear.ui.selection
 
+// Importa la dependencia necesaria: BuildConfig
 import com.lomito.seguro.wear.BuildConfig
+// Importa el contenedor de datos Bundle
 import android.os.Bundle
+// Importa la dependencia necesaria: ComponentActivity
 import androidx.activity.ComponentActivity
+// Importa componente de Jetpack Compose
 import androidx.activity.compose.setContent
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.background
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.*
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.lazy.LazyColumn
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.lazy.items
+// Importa componente de Jetpack Compose
 import androidx.compose.runtime.*
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.Alignment
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.Modifier
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.graphics.Color
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.text.font.FontWeight
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.dp
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.sp
+// Importa componente de Jetpack Compose
 import androidx.wear.compose.material.*
+// Importa soporte para corrutinas de Kotlin
 import kotlinx.coroutines.*
+// Importa el parser JSON
 import org.json.JSONArray
+// Importa la dependencia necesaria: BufferedReader
 import java.io.BufferedReader
+// Importa la dependencia necesaria: InputStreamReader
 import java.io.InputStreamReader
+// Importa la dependencia necesaria: HttpURLConnection
 import java.net.HttpURLConnection
+// Importa la dependencia necesaria: URL
 import java.net.URL
 
+/**
+ * [Modelo de datos mínimo para la pantalla de selección]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Proveer la información necesaria para mostrar la lista inicial de selección]
+ */
+// Clase de datos MascotaSeleccion: modelo inmutable con propiedades de dominio
 data class MascotaSeleccion(
+    // Constante id: valor inmutable que no cambia tras su asignación
     val id: String,
+    // Constante nombre: valor inmutable que no cambia tras su asignación
     val nombre: String,
+    // Constante especie: valor inmutable que no cambia tras su asignación
     val especie: String,
+    // Constante fotoUrl: valor inmutable que no cambia tras su asignación
     val fotoUrl: String = "",
+    // Constante distanciaAlerta: valor inmutable que no cambia tras su asignación
     val distanciaAlerta: Int = 50
 )
 
+/**
+ * [Actividad inicial para seleccionar la mascota a monitorear]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Cargar la lista de mascotas desde el backend]
+ * - [Guardar en SharedPreferences la mascota elegida y navegar a la pantalla principal]
+ */
+// Activity SelectionActivity: pantalla principal que gestiona el ciclo de vida
 class SelectionActivity : ComponentActivity() {
     // Estado de la UI
+    // Variable mascotasList: almacena el estado mutable de este componente
     private var mascotasList = mutableStateListOf<MascotaSeleccion>()
+    // Variable isLoading: almacena el estado mutable de este componente
     private var isLoading = mutableStateOf(true)
+    // Variable errorMsg: almacena el estado mutable de este componente
     private var errorMsg = mutableStateOf("")
+    // Variable debugMsg: almacena el estado mutable de este componente
     private var debugMsg = mutableStateOf("")
 
+    // Método del ciclo de vida: inicializa la actividad y configura la UI
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Invoca la implementación del método en la clase padre
         super.onCreate(savedInstanceState)
 
         // Limpiar preferencias para prueba
+        // Accede al almacenamiento clave-valor persistente de la aplicación
         getSharedPreferences("watch_prefs", MODE_PRIVATE).edit().clear().apply()
 
         // Cargar datos
         cargarMascotas()
 
+        // Define el árbol de UI con Jetpack Compose como contenido de la Activity
         setContent {
             Scaffold(
                 timeText = { TimeText() },
@@ -68,6 +119,7 @@ class SelectionActivity : ComponentActivity() {
                     )
 
                     // Debug info
+                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     if (debugMsg.value.isNotEmpty()) {
                         Text(
                             text = debugMsg.value,
@@ -78,6 +130,7 @@ class SelectionActivity : ComponentActivity() {
                     }
 
                     // Error
+                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     if (errorMsg.value.isNotEmpty() && !isLoading.value) {
                         Text(
                             text = errorMsg.value,
@@ -88,6 +141,7 @@ class SelectionActivity : ComponentActivity() {
                     }
 
                     // Contenido
+                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     if (isLoading.value) {
                         Box(
                             modifier = Modifier.fillMaxSize(),
@@ -139,13 +193,16 @@ class SelectionActivity : ComponentActivity() {
                                     modifier = Modifier.fillMaxWidth(),
                                     onClick = {
                                         // Guardar selección
+                                        // Accede al almacenamiento clave-valor persistente de la aplicación
                                         getSharedPreferences("watch_prefs", MODE_PRIVATE)
                                             .edit()
                                             .putString("mascota_activa_id", mascota.id)
                                             .putString("mascota_activa_nombre", mascota.nombre)
                                             .putInt("mascota_umbral", mascota.distanciaAlerta)
+                                            // Aplica los cambios de forma asíncrona en el hilo principal
                                             .apply()
 
+                                        // Constante intent: valor inmutable que no cambia tras su asignación
                                         val intent = android.content.Intent(
                                             this@SelectionActivity,
                                             com.lomito.seguro.wear.ui.home.WearMainActivity::class.java
@@ -194,44 +251,58 @@ class SelectionActivity : ComponentActivity() {
     private fun cargarMascotas() {
         // Ejecutar en un hilo separado
         Thread {
+            // Bloque try-catch: maneja posibles excepciones en el código crítico
             try {
                 runOnUiThread {
                     isLoading.value = true
                     debugMsg.value = "Conectando a $backendUrl..."
                 }
 
+                // Constante userId: valor inmutable que no cambia tras su asignación
                 val userId = "2"  // ✅ Usuario con mascotas
+                // Constante url: valor inmutable que no cambia tras su asignación
                 val url = URL("$backendUrl/api/mascotas?ownerId=$userId")
 
                 runOnUiThread { debugMsg.value = "Conectando a $url..." }
 
+                // Constante conn: valor inmutable que no cambia tras su asignación
                 val conn = url.openConnection() as HttpURLConnection
                 conn.connectTimeout = 10000
                 conn.readTimeout = 10000
                 conn.requestMethod = "GET"
                 conn.setRequestProperty("Accept", "application/json")
 
+                // Constante responseCode: valor inmutable que no cambia tras su asignación
                 val responseCode = conn.responseCode
 
                 runOnUiThread { debugMsg.value = "Response Code: $responseCode" }
 
+                // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                 if (responseCode == HttpURLConnection.HTTP_OK) {
+                    // Constante reader: valor inmutable que no cambia tras su asignación
                     val reader = BufferedReader(InputStreamReader(conn.inputStream))
+                    // Constante response: valor inmutable que no cambia tras su asignación
                     val response = StringBuilder()
+                    // Variable line: almacena el estado mutable de este componente
                     var line: String?
                     while (reader.readLine().also { line = it } != null) {
                         response.append(line)
                     }
                     reader.close()
 
+                    // Constante responseText: valor inmutable que no cambia tras su asignación
                     val responseText = response.toString()
                     runOnUiThread { debugMsg.value = "Respuesta: ${responseText.take(100)}..." }
 
                     // Parsear JSON
+                    // Constante jsonArray: valor inmutable que no cambia tras su asignación
                     val jsonArray = JSONArray(responseText)
+                    // Constante lista: valor inmutable que no cambia tras su asignación
                     val lista = mutableListOf<MascotaSeleccion>()
 
+                    // Itera sobre la colección para procesar cada elemento
                     for (i in 0 until jsonArray.length()) {
+                        // Constante obj: valor inmutable que no cambia tras su asignación
                         val obj = jsonArray.getJSONObject(i)
                         lista.add(
                             MascotaSeleccion(
@@ -250,6 +321,7 @@ class SelectionActivity : ComponentActivity() {
                         mascotasList.addAll(lista)
                         isLoading.value = false
                         debugMsg.value = "✅ ${lista.size} mascotas cargadas"
+                        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                         if (lista.isEmpty()) {
                             errorMsg.value = "No hay mascotas para este usuario"
                         } else {
@@ -257,8 +329,11 @@ class SelectionActivity : ComponentActivity() {
                         }
                     }
                 } else {
+                    // Constante errorReader: valor inmutable que no cambia tras su asignación
                     val errorReader = BufferedReader(InputStreamReader(conn.errorStream))
+                    // Constante errorResponse: valor inmutable que no cambia tras su asignación
                     val errorResponse = StringBuilder()
+                    // Variable line: almacena el estado mutable de este componente
                     var line: String?
                     while (errorReader.readLine().also { line = it } != null) {
                         errorResponse.append(line)
@@ -284,6 +359,7 @@ class SelectionActivity : ComponentActivity() {
     }
 
     companion object {
+        // Constante backendUrl: valor inmutable que no cambia tras su asignación
         private val backendUrl = BuildConfig.BACKEND_URL
     }
 }

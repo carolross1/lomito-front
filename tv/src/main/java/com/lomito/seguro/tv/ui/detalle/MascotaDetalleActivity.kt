@@ -1,73 +1,123 @@
+// Paquete: com.lomito.seguro.tv.ui.detalle
 package com.lomito.seguro.tv.ui.detalle
 
+// Importa la clase Intent para navegación entre componentes
 import android.content.Intent
+// Importa el contenedor de datos Bundle
 import android.os.Bundle
+// Importa la dependencia necesaria: ComponentActivity
 import androidx.activity.ComponentActivity
+// Importa componente de Jetpack Compose
 import androidx.activity.compose.setContent
+// Importa la dependencia necesaria: viewModels
 import androidx.activity.viewModels
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.background
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.Arrangement
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.Box
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.Column
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.Row
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.Spacer
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.fillMaxHeight
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.fillMaxSize
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.fillMaxWidth
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.height
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.padding
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.size
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.width
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.shape.RoundedCornerShape
+// Importa componente de Jetpack Compose
 import androidx.compose.runtime.Composable
+// Importa componente de Jetpack Compose
 import androidx.compose.runtime.LaunchedEffect
+// Importa componente de Jetpack Compose
 import androidx.compose.runtime.collectAsState
+// Importa componente de Jetpack Compose
 import androidx.compose.runtime.getValue
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.Alignment
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.Modifier
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.draw.clip
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.layout.ContentScale
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.text.font.FontWeight
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.dp
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.sp
+// Importa la dependencia necesaria: Button
 import androidx.tv.material3.Button
+// Importa la dependencia necesaria: MaterialTheme
 import androidx.tv.material3.MaterialTheme
+// Importa la dependencia necesaria: Surface
 import androidx.tv.material3.Surface
+// Importa la dependencia necesaria: SurfaceDefaults
 import androidx.tv.material3.SurfaceDefaults
+// Importa la dependencia necesaria: Text
 import androidx.tv.material3.Text
+// Importa componente de Jetpack Compose
 import coil.compose.AsyncImage
+// Importa la dependencia necesaria: Mascota
 import com.lomito.seguro.tv.data.model.Mascota
+// Importa la dependencia necesaria: ReporteVista
 import com.lomito.seguro.tv.data.model.ReporteVista
+// Importa la dependencia necesaria: MascotaPerfilActivity
 import com.lomito.seguro.tv.ui.perfil.MascotaPerfilActivity
+// Importa la dependencia necesaria: LomitoAlertRed
 import com.lomito.seguro.tv.ui.theme.LomitoAlertRed
+// Importa la dependencia necesaria: LomitoFoundGreen
 import com.lomito.seguro.tv.ui.theme.LomitoFoundGreen
+// Importa la dependencia necesaria: LomitoOrange
 import com.lomito.seguro.tv.ui.theme.LomitoOrange
+// Importa la dependencia necesaria: LomitoSurfaceAlt
 import com.lomito.seguro.tv.ui.theme.LomitoSurfaceAlt
+// Importa la dependencia necesaria: LomitoTvTheme
 import com.lomito.seguro.tv.ui.theme.LomitoTvTheme
+// Importa la dependencia necesaria: toAbsoluteUrl
 import com.lomito.seguro.tv.util.toAbsoluteUrl
 
 /**
- * Pantalla "Detalle de mascota" del diagrama de flujo: la comunidad ve la
- * ficha completa de una mascota reportada en el mural (foto, estado, última
- * ubicación vista) y puede confirmar que también la vio, o pasar al perfil
- * completo con su historial de reportes.
+ * [Actividad de Detalle de Mascota para Android TV]
  *
- * Antes de confirmar, se pide un número de contacto (con un teclado numérico
- * pensado para control remoto) para que el dueño pueda comunicarse con quien
- * reportó el avistamiento.
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Mostrar la información detallada de una mascota específica]
+ * - [Permitir confirmar avistamientos solicitando número de contacto]
  */
+// Activity MascotaDetalleActivity: pantalla principal que gestiona el ciclo de vida
 class MascotaDetalleActivity : ComponentActivity() {
 
     companion object {
+        // Constante EXTRA_MASCOTA_ID: valor fijo definido en tiempo de compilación
         const val EXTRA_MASCOTA_ID = "mascota_id"
     }
 
+    // Constante viewModel: valor inmutable que no cambia tras su asignación
     private val viewModel: MascotaDetalleViewModel by viewModels()
 
+    // Método del ciclo de vida: inicializa la actividad y configura la UI
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Invoca la implementación del método en la clase padre
         super.onCreate(savedInstanceState)
+        // Constante mascotaId: valor inmutable que no cambia tras su asignación
         val mascotaId = intent.getStringExtra(EXTRA_MASCOTA_ID).orEmpty()
 
+        // Define el árbol de UI con Jetpack Compose como contenido de la Activity
         setContent {
             LomitoTvTheme {
                 MascotaDetalleScreen(
@@ -85,13 +135,24 @@ class MascotaDetalleActivity : ComponentActivity() {
     }
 }
 
+/**
+ * [Pantalla componible de Detalle de Mascota]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - viewModel: [ViewModel que gestiona el estado y lógica del detalle]
+ * - mascotaId: [Identificador único de la mascota a mostrar]
+ * - onVerPerfilCompleto: [Callback para navegar al perfil completo]
+ */
+// Anotación que marca esta función como una función de composición de UI
 @Composable
+// Función MascotaDetalleScreen: define la lógica de esta operación
 fun MascotaDetalleScreen(
     viewModel: MascotaDetalleViewModel,
     mascotaId: String,
     onVerPerfilCompleto: () -> Unit
 ) {
     LaunchedEffect(mascotaId) { viewModel.cargar(mascotaId) }
+    // Constante state: valor inmutable que no cambia tras su asignación
     val state by viewModel.uiState.collectAsState()
 
     Box(
@@ -100,6 +161,7 @@ fun MascotaDetalleScreen(
             .background(MaterialTheme.colorScheme.background)
             .padding(48.dp)
     ) {
+        // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
         when {
             state.cargando -> Text(
                 text = "Cargando ficha…",
@@ -118,6 +180,7 @@ fun MascotaDetalleScreen(
             )
         }
 
+        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (state.mostrandoDialogoContacto) {
             DialogoContacto(
                 numero = state.numeroContacto,
@@ -128,6 +191,7 @@ fun MascotaDetalleScreen(
             )
         }
 
+        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (state.mostrandoConfirmacionEnvio || state.errorEnvio) {
             DialogoResultadoEnvio(
                 exito = state.mostrandoConfirmacionEnvio,
@@ -138,6 +202,7 @@ fun MascotaDetalleScreen(
     }
 }
 
+// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun MascotaDetalleContenido(
     mascota: Mascota,
@@ -146,6 +211,7 @@ private fun MascotaDetalleContenido(
     onAyudar: () -> Unit,
     onVerPerfilCompleto: () -> Unit
 ) {
+    // Constante perdida: valor inmutable que no cambia tras su asignación
     val perdida = mascota.estado.equals("PERDIDA", ignoreCase = true)
 
     Row(modifier = Modifier.fillMaxSize()) {
@@ -214,6 +280,7 @@ private fun MascotaDetalleContenido(
     }
 }
 
+// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun InfoRow(label: String, valor: String) {
     Column(modifier = Modifier.padding(top = 18.dp)) {
@@ -238,6 +305,7 @@ private fun InfoRow(label: String, valor: String) {
  * en vez de un campo de texto con teclado del sistema (mismo criterio que se
  * usó para el teclado del módulo wear).
  */
+// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun DialogoContacto(
     numero: String,
@@ -264,6 +332,7 @@ private fun DialogoContacto(
                 modifier = Modifier.padding(28.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                // Constante filas: valor inmutable que no cambia tras su asignación
                 val filas = listOf(
                     listOf("1", "2", "3"),
                     listOf("4", "5", "6"),
@@ -271,9 +340,12 @@ private fun DialogoContacto(
                     listOf("Borrar", "0", "")
                 )
                 Column {
+                    // Itera sobre cada elemento de la colección y ejecuta el bloque
                     filas.forEach { fila ->
                         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                            // Itera sobre cada elemento de la colección y ejecuta el bloque
                             fila.forEach { tecla ->
+                                // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                 if (tecla.isEmpty()) {
                                     Spacer(modifier = Modifier.size(56.dp))
                                 } else {
@@ -347,6 +419,7 @@ private fun DialogoContacto(
  * está frente a la TV si el aviso se mandó (y que el dueño fue notificado)
  * o si algo falló y debe intentar de nuevo.
  */
+// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun DialogoResultadoEnvio(
     exito: Boolean,

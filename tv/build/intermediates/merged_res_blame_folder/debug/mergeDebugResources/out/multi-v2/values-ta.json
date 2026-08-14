@@ -4,24 +4,7 @@
             "outputFile": "com.lomito.seguro.tv-mergeDebugResources-51:/values-ta/values-ta.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\carol\\.gradle\\caches\\transforms-4\\afc2c7eb83e31294754121cc06e72435\\transformed\\jetified-ui-release\\res\\values-ta\\values-ta.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "105,202,286,380,481,572,655,764,855,950,1030,1109,1191,1277,1367,1447,1516",
-                        "endColumns": "96,83,93,100,90,82,108,90,94,79,78,81,85,89,79,68,119",
-                        "endOffsets": "197,281,375,476,567,650,759,850,945,1025,1104,1186,1272,1362,1442,1511,1631"
-                    },
-                    "to": {
-                        "startLines": "26,27,28,29,30,82,83,122,123,124,125,127,128,129,131,132,133",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "1496,1593,1677,1771,1872,5970,6053,10569,10660,10755,10835,11002,11084,11170,11361,11441,11510",
-                        "endColumns": "96,83,93,100,90,82,108,90,94,79,78,81,85,89,79,68,119",
-                        "endOffsets": "1588,1672,1766,1867,1958,6048,6157,10655,10750,10830,10909,11079,11165,11255,11436,11505,11625"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\carol\\.gradle\\caches\\transforms-4\\53694cf05994dd081e33a01245821a79\\transformed\\jetified-media3-ui-1.2.0\\res\\values-ta\\values-ta.xml",
+                    "source": "C:\\Users\\ANDY\\.gradle\\caches\\transforms-4\\53694cf05994dd081e33a01245821a79\\transformed\\jetified-media3-ui-1.2.0\\res\\values-ta\\values-ta.xml",
                     "from": {
                         "startLines": "2,11,15,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -40,7 +23,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\carol\\.gradle\\caches\\transforms-4\\0773a3e5296f7d468868192c47a21968\\transformed\\jetified-foundation-release\\res\\values-ta\\values-ta.xml",
+                    "source": "C:\\Users\\ANDY\\.gradle\\caches\\transforms-4\\0773a3e5296f7d468868192c47a21968\\transformed\\jetified-foundation-release\\res\\values-ta\\values-ta.xml",
                     "from": {
                         "startLines": "2,3",
                         "startColumns": "4,4",
@@ -57,24 +40,41 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\carol\\.gradle\\caches\\transforms-4\\3611863fe91a427ad21ab78f9cad0532\\transformed\\core-1.13.1\\res\\values-ta\\values-ta.xml",
+                    "source": "C:\\Users\\ANDY\\.gradle\\caches\\transforms-4\\afc2c7eb83e31294754121cc06e72435\\transformed\\jetified-ui-release\\res\\values-ta\\values-ta.xml",
                     "from": {
-                        "startLines": "2,3,4,5,6,7,8,9",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,151,254,353,451,558,673,801",
-                        "endColumns": "95,102,98,97,106,114,127,100",
-                        "endOffsets": "146,249,348,446,553,668,796,897"
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "105,202,286,380,481,572,655,764,855,950,1030,1109,1191,1277,1367,1447,1516",
+                        "endColumns": "96,83,93,100,90,82,108,90,94,79,78,81,85,89,79,68,119",
+                        "endOffsets": "197,281,375,476,567,650,759,850,945,1025,1104,1186,1272,1362,1442,1511,1631"
                     },
                     "to": {
-                        "startLines": "19,20,21,22,23,24,25,130",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "750,846,949,1048,1146,1253,1368,11260",
-                        "endColumns": "95,102,98,97,106,114,127,100",
-                        "endOffsets": "841,944,1043,1141,1248,1363,1491,11356"
+                        "startLines": "26,27,28,29,30,82,83,122,123,124,125,127,128,129,131,132,133",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "1496,1593,1677,1771,1872,5970,6053,10569,10660,10755,10835,11002,11084,11170,11361,11441,11510",
+                        "endColumns": "96,83,93,100,90,82,108,90,94,79,78,81,85,89,79,68,119",
+                        "endOffsets": "1588,1672,1766,1867,1958,6048,6157,10655,10750,10830,10909,11079,11165,11255,11436,11505,11625"
                     }
                 },
                 {
-                    "source": "C:\\Users\\carol\\.gradle\\caches\\transforms-4\\e04aa56a63685775f0979e589978baa2\\transformed\\leanback-1.0.0\\res\\values-ta\\values-ta.xml",
+                    "source": "C:\\Users\\ANDY\\.gradle\\caches\\transforms-4\\2a10b2f2bf3361b6ec25a62bcbec8242\\transformed\\jetified-media3-exoplayer-1.2.0\\res\\values-ta\\values-ta.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10",
+                        "startColumns": "4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,124,197,266,336,418,499,596,681",
+                        "endColumns": "68,72,68,69,81,80,96,84,81",
+                        "endOffsets": "119,192,261,331,413,494,591,676,758"
+                    },
+                    "to": {
+                        "startLines": "55,56,57,58,59,60,61,62,63",
+                        "startColumns": "4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "4123,4192,4265,4334,4404,4486,4567,4664,4749",
+                        "endColumns": "68,72,68,69,81,80,96,84,81",
+                        "endOffsets": "4187,4260,4329,4399,4481,4562,4659,4744,4826"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\ANDY\\.gradle\\caches\\transforms-4\\e04aa56a63685775f0979e589978baa2\\transformed\\leanback-1.0.0\\res\\values-ta\\values-ta.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -91,20 +91,20 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\carol\\.gradle\\caches\\transforms-4\\2a10b2f2bf3361b6ec25a62bcbec8242\\transformed\\jetified-media3-exoplayer-1.2.0\\res\\values-ta\\values-ta.xml",
+                    "source": "C:\\Users\\ANDY\\.gradle\\caches\\transforms-4\\3611863fe91a427ad21ab78f9cad0532\\transformed\\core-1.13.1\\res\\values-ta\\values-ta.xml",
                     "from": {
-                        "startLines": "2,3,4,5,6,7,8,9,10",
-                        "startColumns": "4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,124,197,266,336,418,499,596,681",
-                        "endColumns": "68,72,68,69,81,80,96,84,81",
-                        "endOffsets": "119,192,261,331,413,494,591,676,758"
+                        "startLines": "2,3,4,5,6,7,8,9",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,151,254,353,451,558,673,801",
+                        "endColumns": "95,102,98,97,106,114,127,100",
+                        "endOffsets": "146,249,348,446,553,668,796,897"
                     },
                     "to": {
-                        "startLines": "55,56,57,58,59,60,61,62,63",
-                        "startColumns": "4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "4123,4192,4265,4334,4404,4486,4567,4664,4749",
-                        "endColumns": "68,72,68,69,81,80,96,84,81",
-                        "endOffsets": "4187,4260,4329,4399,4481,4562,4659,4744,4826"
+                        "startLines": "19,20,21,22,23,24,25,130",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "750,846,949,1048,1146,1253,1368,11260",
+                        "endColumns": "95,102,98,97,106,114,127,100",
+                        "endOffsets": "841,944,1043,1141,1248,1363,1491,11356"
                     }
                 }
             ]

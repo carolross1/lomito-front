@@ -1,21 +1,35 @@
+// Paquete: com.lomito.seguro.tv.data.api
 package com.lomito.seguro.tv.data.api
 
+// Importa la dependencia necesaria: Mascota
 import com.lomito.seguro.tv.data.model.Mascota
+// Importa la dependencia necesaria: Refugio
 import com.lomito.seguro.tv.data.model.Refugio
+// Importa la dependencia necesaria: ReporteVista
 import com.lomito.seguro.tv.data.model.ReporteVista
+// Importa la dependencia necesaria: Response
 import retrofit2.Response
+// Importa la dependencia necesaria: Body
 import retrofit2.http.Body
+// Importa la dependencia necesaria: GET
 import retrofit2.http.GET
+// Importa la dependencia necesaria: Path
 import retrofit2.http.Path
+// Importa la dependencia necesaria: PUT
 import retrofit2.http.PUT
+// Importa la dependencia necesaria: POST
 import retrofit2.http.POST
+// Importa la dependencia necesaria: Query
 import retrofit2.http.Query
 
 /**
- * Subconjunto de solo-lectura de la API de Lomito Seguro que necesita la
- * pantalla comunitaria de Smart TV: mural de mascotas perdidas/encontradas,
- * refugios locales y su historial de reportes/avistamientos.
+ * [Interfaz de red para la API de Lomito Seguro en TV]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Definir los endpoints necesarios para la app de TV]
+ * - [Proveer métodos de lectura de mascotas y creación de reportes]
  */
+// Interfaz LomitoTvApi: contrato que deben cumplir las implementaciones
 interface LomitoTvApi {
 
     @GET("mascotas/estado")

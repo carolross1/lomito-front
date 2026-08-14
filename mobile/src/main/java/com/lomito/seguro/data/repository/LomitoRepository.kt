@@ -1,10 +1,23 @@
+// Paquete: com.lomito.seguro.data.repository
 package com.lomito.seguro.data.repository
 
+// Importa el cliente Retrofit para peticiones HTTP
 import com.lomito.seguro.data.api.RetrofitClient
+// Importa la dependencia necesaria: *
 import com.lomito.seguro.data.model.*
+// Importa la dependencia necesaria: MultipartBody
 import okhttp3.MultipartBody
 
+/**
+ * [Repositorio de datos para abstraer las llamadas de red]
+ *
+ * Responsabilidades:
+ * - [Servir como intermediario entre los ViewModels y la API]
+ * - [Gestionar los métodos de login, mascotas, alertas y refugios]
+ */
+// Repositorio LomitoRepository: capa de datos que abstrae las fuentes de información
 class LomitoRepository {
+    // Constante api: valor inmutable que no cambia tras su asignación
     private val api = RetrofitClient.api
 
     suspend fun login(correo: String, contrasena: String) =

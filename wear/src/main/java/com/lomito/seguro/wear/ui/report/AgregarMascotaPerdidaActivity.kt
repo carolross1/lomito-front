@@ -1,62 +1,117 @@
+// Paquete: com.lomito.seguro.wear.ui.report
 package com.lomito.seguro.wear.ui.report
+// Importa la dependencia necesaria: BuildConfig
 import com.lomito.seguro.wear.BuildConfig
 
+// Importa la dependencia necesaria: RemoteInput
 import android.app.RemoteInput
+// Importa el contenedor de datos Bundle
 import android.os.Bundle
+// Importa la dependencia necesaria: ComponentActivity
 import androidx.activity.ComponentActivity
+// Importa componente de Jetpack Compose
 import androidx.activity.compose.setContent
+// Importa componente de Jetpack Compose
 import androidx.activity.compose.rememberLauncherForActivityResult
+// Importa la dependencia necesaria: ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.background
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.*
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.shape.CircleShape
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.shape.RoundedCornerShape
+// Importa componente de Jetpack Compose
 import androidx.compose.runtime.*
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.Alignment
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.Modifier
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.draw.clip
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.graphics.Color
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.text.font.FontWeight
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.text.style.TextAlign
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.dp
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.sp
+// Importa la clase Intent para navegación entre componentes
 import androidx.wear.input.RemoteInputIntentHelper
+// Importa componente de Jetpack Compose
 import androidx.wear.compose.material.*
+// Importa soporte para corrutinas de Kotlin
 import kotlinx.coroutines.*
+// Importa el parser JSON
 import org.json.JSONObject
+// Importa la dependencia necesaria: HttpURLConnection
 import java.net.HttpURLConnection
+// Importa la dependencia necesaria: URL
 import java.net.URL
 
+// Constante KEY_TEXTO: valor fijo definido en tiempo de compilación
 private const val KEY_TEXTO = "key_texto_input"
 
+// Declaración de la clase Paso
 enum class Paso { NOMBRE, ESPECIE, RAZA, COLOR, TELEFONO, CONFIRMAR }
 
+/**
+ * [Actividad para registrar una mascota que ha sido encontrada o perdida por otra persona]
+ *
+ * Responsabilidades (o parámetros en caso de funciones simples):
+ * - [Recopilar los datos de una mascota ajena mediante pasos (wizard)]
+ * - [Publicar el registro de la mascota como perdida en el backend]
+ */
+// Activity AgregarMascotaPerdidaActivity: pantalla principal que gestiona el ciclo de vida
 class AgregarMascotaPerdidaActivity : ComponentActivity() {
+    // Constante backendUrl: valor inmutable que no cambia tras su asignación
     private val backendUrl = BuildConfig.BACKEND_URL
 
+    // Método del ciclo de vida: inicializa la actividad y configura la UI
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Invoca la implementación del método en la clase padre
         super.onCreate(savedInstanceState)
 
+        // Define el árbol de UI con Jetpack Compose como contenido de la Activity
         setContent {
+            // Variable paso: almacena el estado mutable de este componente
             var paso by remember { mutableStateOf(Paso.NOMBRE) }
+            // Variable nombre: almacena el estado mutable de este componente
             var nombre by remember { mutableStateOf("") }
+            // Variable especie: almacena el estado mutable de este componente
             var especie by remember { mutableStateOf("PERRO") }
+            // Variable raza: almacena el estado mutable de este componente
             var raza by remember { mutableStateOf("") }
+            // Variable color: almacena el estado mutable de este componente
             var color by remember { mutableStateOf("") }
+            // Variable telefono: almacena el estado mutable de este componente
             var telefono by remember { mutableStateOf("") }
+            // Variable isSending: almacena el estado mutable de este componente
             var isSending by remember { mutableStateOf(false) }
+            // Variable isSuccess: almacena el estado mutable de este componente
             var isSuccess by remember { mutableStateOf(false) }
+            // Variable errorMessage: almacena el estado mutable de este componente
             var errorMessage by remember { mutableStateOf("") }
+            // Variable campoActivo: almacena el estado mutable de este componente
             var campoActivo by remember { mutableStateOf("") }
 
+            // Constante inputLauncher: valor inmutable que no cambia tras su asignación
             val inputLauncher = rememberLauncherForActivityResult(
                 ActivityResultContracts.StartActivityForResult()
             ) { result ->
+                // Constante texto: valor inmutable que no cambia tras su asignación
                 val texto = RemoteInput.getResultsFromIntent(result.data)
                     ?.getCharSequence(KEY_TEXTO)
                     ?.toString()
                     ?.trim()
+                // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                 if (!texto.isNullOrEmpty()) {
+                    // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
                     when (campoActivo) {
                         "nombre" -> { nombre = texto; paso = Paso.ESPECIE }
                         "raza" -> { raza = texto; paso = Paso.COLOR }
@@ -66,9 +121,12 @@ class AgregarMascotaPerdidaActivity : ComponentActivity() {
                 }
             }
 
+            // Función pedirInput: define la lógica de esta operación
             fun pedirInput(campo: String, label: String) {
                 campoActivo = campo
+                // Constante intent: valor inmutable que no cambia tras su asignación
                 val intent = RemoteInputIntentHelper.createActionRemoteInputIntent()
+                // Constante remoteInputs: valor inmutable que no cambia tras su asignación
                 val remoteInputs = listOf(RemoteInput.Builder(KEY_TEXTO).setLabel(label).build())
                 RemoteInputIntentHelper.putRemoteInputsExtra(intent, remoteInputs)
                 inputLauncher.launch(intent)
@@ -81,6 +139,7 @@ class AgregarMascotaPerdidaActivity : ComponentActivity() {
                     .background(Color(0xFF0D0B1A)),
                 contentAlignment = Alignment.Center
             ) {
+                // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
                 when {
                     isSuccess -> PantallaExito { finish() }
                     else -> Column(
@@ -95,12 +154,14 @@ class AgregarMascotaPerdidaActivity : ComponentActivity() {
                             horizontalArrangement = Arrangement.spacedBy(4.dp),
                             modifier = Modifier.padding(bottom = 12.dp)
                         ) {
+                            // Itera sobre cada elemento de la colección y ejecuta el bloque
                             Paso.entries.forEach { p ->
                                 Box(
                                     modifier = Modifier
                                         .size(if (p == paso) 8.dp else 5.dp)
                                         .clip(CircleShape)
                                         .background(
+                                            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                             if (p.ordinal <= paso.ordinal)
                                                 Color(0xFFE85D5D)
                                             else
@@ -111,6 +172,7 @@ class AgregarMascotaPerdidaActivity : ComponentActivity() {
                         }
 
                         // ✅ Contenido del paso
+                        // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
                         when (paso) {
                             Paso.NOMBRE -> PasoNombre(
                                 nombre = nombre,
@@ -157,6 +219,7 @@ class AgregarMascotaPerdidaActivity : ComponentActivity() {
                                 isSending = isSending,
                                 errorMessage = errorMessage,
                                 onGuardar = {
+                                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                     if (!isSending) {
                                         isSending = true
                                         errorMessage = ""
@@ -197,12 +260,18 @@ class AgregarMascotaPerdidaActivity : ComponentActivity() {
         onSuccess: () -> Unit,
         onError: (String) -> Unit
     ) {
+        // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
         CoroutineScope(Dispatchers.IO).launch {
+            // Bloque try-catch: maneja posibles excepciones en el código crítico
             try {
+                // Constante prefs: valor inmutable que no cambia tras su asignación
                 val prefs = getSharedPreferences("watch_prefs", MODE_PRIVATE)
+                // Constante userId: valor inmutable que no cambia tras su asignación
                 val userId = prefs.getString("user_id", "2") ?: "2"
 
+                // Constante url: valor inmutable que no cambia tras su asignación
                 val url = URL("$backendUrl/api/mascotas")
+                // Constante conn: valor inmutable que no cambia tras su asignación
                 val conn = url.openConnection() as HttpURLConnection
                 conn.requestMethod = "POST"
                 conn.connectTimeout = 5000
@@ -210,6 +279,7 @@ class AgregarMascotaPerdidaActivity : ComponentActivity() {
                 conn.setRequestProperty("Content-Type", "application/json")
                 conn.doOutput = true
 
+                // Constante json: valor inmutable que no cambia tras su asignación
                 val json = JSONObject().apply {
                     put("nombre", nombre)
                     put("especie", especie)
@@ -221,10 +291,13 @@ class AgregarMascotaPerdidaActivity : ComponentActivity() {
                 }
 
                 conn.outputStream.write(json.toString().toByteArray())
+                // Constante responseCode: valor inmutable que no cambia tras su asignación
                 val responseCode = conn.responseCode
                 conn.disconnect()
 
+                // Cambia el contexto de ejecución de la corrutina (ej. a IO para operaciones de red)
                 withContext(Dispatchers.Main) {
+                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     if (responseCode == 200 || responseCode == 201) {
                         onSuccess()
                     } else {
@@ -232,6 +305,7 @@ class AgregarMascotaPerdidaActivity : ComponentActivity() {
                     }
                 }
             } catch (e: Exception) {
+                // Cambia el contexto de ejecución de la corrutina (ej. a IO para operaciones de red)
                 withContext(Dispatchers.Main) {
                     onError(e.message ?: "Error desconocido")
                 }
@@ -241,26 +315,35 @@ class AgregarMascotaPerdidaActivity : ComponentActivity() {
 
     // ✅ Función para notificar al móvil
     private fun notificarNuevaMascotaPerdida(nombre: String) {
+        // Constante context: valor inmutable que no cambia tras su asignación
         val context = applicationContext
+        // Constante payload: valor inmutable que no cambia tras su asignación
         val payload = JSONObject().apply {
             put("tipo", "NUEVA_MASCOTA_PERDIDA")
             put("nombre", nombre)
         }.toString().toByteArray()
 
+        // Usa la API de Wearable para comunicación con dispositivos Wear OS
         com.google.android.gms.wearable.Wearable.getNodeClient(context).connectedNodes
             .addOnSuccessListener { nodes ->
+                // Itera sobre cada elemento de la colección y ejecuta el bloque
                 nodes.forEach { node ->
+                    // Usa la API de Wearable para comunicación con dispositivos Wear OS
                     com.google.android.gms.wearable.Wearable.getMessageClient(context)
+                        // Envía un mensaje al dispositivo Wear OS conectado
                         .sendMessage(node.id, "/mascota/perdida/nueva", payload)
                         .addOnSuccessListener {
+                            // Registro de evento en el log de Android para depuración
                             android.util.Log.d("MASCOTA_PERDIDA", "✅ Notificación enviada al móvil")
                         }
                         .addOnFailureListener { e ->
+                            // Registro de evento en el log de Android para depuración
                             android.util.Log.e("MASCOTA_PERDIDA", "❌ Error enviando: ${e.message}")
                         }
                 }
             }
             .addOnFailureListener { e ->
+                // Registro de evento en el log de Android para depuración
                 android.util.Log.e("MASCOTA_PERDIDA", "❌ Error obteniendo nodos: ${e.message}")
             }
     }
@@ -269,6 +352,7 @@ class AgregarMascotaPerdidaActivity : ComponentActivity() {
 // ==================== COMPONENTES UI ====================
 
 // ✅ Paso 1: Nombre
+// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun PasoNombre(
     nombre: String,
@@ -323,6 +407,7 @@ private fun PasoNombre(
 }
 
 // ✅ Paso 2: Especie
+// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun PasoEspecie(
     especie: String,
@@ -372,6 +457,7 @@ private fun PasoEspecie(
 }
 
 // ✅ Paso 3/4: Input opcional
+// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun PasoInput(
     titulo: String,
@@ -434,6 +520,7 @@ private fun PasoInput(
                 onClick = onSiguiente,
                 label = {
                     Text(
+                        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                         if (valor.isEmpty()) "Omitir" else "Siguiente",
                         fontSize = 9.sp,
                         color = Color.White
@@ -447,6 +534,7 @@ private fun PasoInput(
 }
 
 // ✅ Paso 5: Teléfono
+// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun PasoTelefono(
     telefono: String,
@@ -501,6 +589,7 @@ private fun PasoTelefono(
 }
 
 // ✅ Paso final: Confirmar
+// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun PasoConfirmar(
     nombre: String,
@@ -529,11 +618,13 @@ private fun PasoConfirmar(
         )
         Spacer(Modifier.height(4.dp))
 
+        // Constante detalles: valor inmutable que no cambia tras su asignación
         val detalles = listOfNotNull(
             raza.ifEmpty { null },
             color.ifEmpty { null },
             telefono.ifEmpty { null }
         )
+        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (detalles.isNotEmpty()) {
             Text(
                 text = detalles.joinToString(" • "),
@@ -545,6 +636,7 @@ private fun PasoConfirmar(
 
         Spacer(Modifier.height(10.dp))
 
+        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (errorMessage.isNotEmpty()) {
             Text(
                 text = "⚠️ $errorMessage",
@@ -554,6 +646,7 @@ private fun PasoConfirmar(
             )
         }
 
+        // Constante puedeGuardar: valor inmutable que no cambia tras su asignación
         val puedeGuardar = nombre.isNotBlank() && telefono.isNotBlank() && !isSending
 
         Button(
@@ -566,6 +659,7 @@ private fun PasoConfirmar(
             ),
             enabled = puedeGuardar
         ) {
+            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (isSending) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(16.dp),
@@ -589,6 +683,7 @@ private fun PasoConfirmar(
 }
 
 // ✅ Botón de especie
+// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun BotonEspecie(
     emoji: String,
@@ -607,6 +702,7 @@ private fun BotonEspecie(
             modifier = Modifier
                 .fillMaxSize()
                 .background(
+                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     if (selected) Color(0xFFE85D5D).copy(alpha = 0.3f)
                     else Color(0xFF2C2657)
                 ),
@@ -629,6 +725,7 @@ private fun BotonEspecie(
 }
 
 // ✅ Pantalla de éxito
+// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun PantallaExito(onBack: () -> Unit) {
     Column(

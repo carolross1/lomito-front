@@ -1,10 +1,23 @@
+// Paquete: com.lomito.seguro.data.api
 package com.lomito.seguro.data.api
 
+// Importa la dependencia necesaria: *
 import com.lomito.seguro.data.model.*
+// Importa la dependencia necesaria: MultipartBody
 import okhttp3.MultipartBody
+// Importa la dependencia necesaria: Response
 import retrofit2.Response
+// Importa la dependencia necesaria: *
 import retrofit2.http.*
 
+/**
+ * [Interfaz de red para comunicarse con el backend de Lomito]
+ *
+ * Responsabilidades:
+ * - [Definir los endpoints de la API REST]
+ * - [Gestionar peticiones de autenticación, mascotas, reportes y alertas]
+ */
+// Interfaz LomitoApi: contrato que deben cumplir las implementaciones
 interface LomitoApi {
 
     // FOTOS
