@@ -1,22 +1,41 @@
+// Paquete: com.lomito.seguro.wear.ui.mascota
 package com.lomito.seguro.wear.ui.mascota
+// Importa la dependencia necesaria: BuildConfig
 import com.lomito.seguro.wear.BuildConfig
 
+// Importa el contenedor de datos Bundle
 import android.os.Bundle
+// Importa la dependencia necesaria: ComponentActivity
 import androidx.activity.ComponentActivity
+// Importa componente de Jetpack Compose
 import androidx.activity.compose.setContent
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.background
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.*
+// Importa componente de Jetpack Compose
 import androidx.compose.runtime.*
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.Alignment
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.Modifier
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.graphics.Color
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.text.font.FontWeight
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.dp
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.sp
+// Importa componente de Jetpack Compose
 import androidx.wear.compose.material.*
+// Importa soporte para corrutinas de Kotlin
 import kotlinx.coroutines.*
+// Importa el parser JSON
 import org.json.JSONObject
+// Importa la dependencia necesaria: HttpURLConnection
 import java.net.HttpURLConnection
+// Importa la dependencia necesaria: URL
 import java.net.URL
 
 /**
@@ -26,15 +45,23 @@ import java.net.URL
  * - [Capturar nombre, especie y umbral]
  * - [Enviar la solicitud al backend para registrar la nueva mascota]
  */
+// Activity AddMascotaActivity: pantalla principal que gestiona el ciclo de vida
 class AddMascotaActivity : ComponentActivity() {
+    // Variable isSending: almacena el estado mutable de este componente
     private var isSending = false
+    // Variable isSuccess: almacena el estado mutable de este componente
     private var isSuccess = false
+    // Variable errorMessage: almacena el estado mutable de este componente
     private var errorMessage = ""
+    // Constante backendUrl: valor inmutable que no cambia tras su asignación
     private val backendUrl = BuildConfig.BACKEND_URL
 
+    // Método del ciclo de vida: inicializa la actividad y configura la UI
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Invoca la implementación del método en la clase padre
         super.onCreate(savedInstanceState)
 
+        // Define el árbol de UI con Jetpack Compose como contenido de la Activity
         setContent {
             AddMascotaScreen(
                 isSending = isSending,
@@ -49,20 +76,28 @@ class AddMascotaActivity : ComponentActivity() {
     }
 
     private fun crearMascota(nombre: String, especie: String, umbral: Int) {
+        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (isSending) return
         isSending = true
 
+        // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
         CoroutineScope(Dispatchers.IO).launch {
+            // Bloque try-catch: maneja posibles excepciones en el código crítico
             try {
+                // Constante prefs: valor inmutable que no cambia tras su asignación
                 val prefs = getSharedPreferences("watch_prefs", MODE_PRIVATE)
+                // Constante userId: valor inmutable que no cambia tras su asignación
                 val userId = prefs.getString("user_id", "2") ?: "2"
 
+                // Constante url: valor inmutable que no cambia tras su asignación
                 val url = URL("$backendUrl/api/mascotas")
+                // Constante conn: valor inmutable que no cambia tras su asignación
                 val conn = url.openConnection() as HttpURLConnection
                 conn.requestMethod = "POST"
                 conn.setRequestProperty("Content-Type", "application/json")
                 conn.doOutput = true
 
+                // Constante json: valor inmutable que no cambia tras su asignación
                 val json = JSONObject().apply {
                     put("nombre", nombre)
                     put("especie", especie)
@@ -71,11 +106,14 @@ class AddMascotaActivity : ComponentActivity() {
                 }
 
                 conn.outputStream.write(json.toString().toByteArray())
+                // Constante responseCode: valor inmutable que no cambia tras su asignación
                 val responseCode = conn.responseCode
                 conn.disconnect()
 
+                // Cambia el contexto de ejecución de la corrutina (ej. a IO para operaciones de red)
                 withContext(Dispatchers.Main) {
                     isSending = false
+                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     if (responseCode == 200 || responseCode == 201) {
                         isSuccess = true
                     } else {
@@ -83,6 +121,7 @@ class AddMascotaActivity : ComponentActivity() {
                     }
                 }
             } catch (e: Exception) {
+                // Cambia el contexto de ejecución de la corrutina (ej. a IO para operaciones de red)
                 withContext(Dispatchers.Main) {
                     isSending = false
                     errorMessage = e.message ?: "Error desconocido"
@@ -102,7 +141,9 @@ class AddMascotaActivity : ComponentActivity() {
  * - [onSave]: Acción al guardar los datos
  * - [onBack]: Acción para volver atrás
  */
+// Anotación que marca esta función como una función de composición de UI
 @Composable
+// Función AddMascotaScreen: define la lógica de esta operación
 fun AddMascotaScreen(
     isSending: Boolean,
     isSuccess: Boolean,
@@ -110,8 +151,11 @@ fun AddMascotaScreen(
     onSave: (String, String, Int) -> Unit,
     onBack: () -> Unit
 ) {
+    // Variable nombre: almacena el estado mutable de este componente
     var nombre by remember { mutableStateOf("") }
+    // Variable especie: almacena el estado mutable de este componente
     var especie by remember { mutableStateOf("PERRO") }
+    // Variable umbral: almacena el estado mutable de este componente
     var umbral by remember { mutableStateOf(50) }
 
     Scaffold(
@@ -148,6 +192,7 @@ fun AddMascotaScreen(
 
             Spacer(modifier = Modifier.height(4.dp))
 
+            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (isSuccess) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -252,6 +297,7 @@ fun AddMascotaScreen(
 
                 Spacer(modifier = Modifier.height(6.dp))
 
+                // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                 if (errorMessage.isNotEmpty()) {
                     Text(
                         text = errorMessage,
@@ -262,6 +308,7 @@ fun AddMascotaScreen(
 
                 CompactButton(
                     onClick = {
+                        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                         if (nombre.isNotEmpty()) {
                             onSave(nombre, especie, umbral)
                         }
@@ -272,6 +319,7 @@ fun AddMascotaScreen(
                     modifier = Modifier.fillMaxWidth(0.8f).height(32.dp)
                 ) {
                     Text(
+                        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                         if (isSending) "Creando..." else "Crear",
                         fontSize = 11.sp,
                         color = Color.White

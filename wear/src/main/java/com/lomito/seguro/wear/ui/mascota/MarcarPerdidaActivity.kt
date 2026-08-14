@@ -1,28 +1,53 @@
+// Paquete: com.lomito.seguro.wear.ui.mascota
 package com.lomito.seguro.wear.ui.mascota
+// Importa la dependencia necesaria: BuildConfig
 import com.lomito.seguro.wear.BuildConfig
 
+// Importa el contenedor de datos Bundle
 import android.os.Bundle
+// Importa la dependencia necesaria: ComponentActivity
 import androidx.activity.ComponentActivity
+// Importa componente de Jetpack Compose
 import androidx.activity.compose.setContent
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.background
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.*
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.lazy.LazyColumn
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.lazy.items
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.shape.CircleShape
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.shape.RoundedCornerShape
+// Importa componente de Jetpack Compose
 import androidx.compose.runtime.*
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.Alignment
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.Modifier
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.graphics.Brush
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.graphics.Color
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.text.font.FontWeight
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.dp
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.sp
+// Importa componente de Jetpack Compose
 import androidx.wear.compose.material.*
+// Importa soporte para corrutinas de Kotlin
 import kotlinx.coroutines.*
+// Importa el parser JSON
 import org.json.JSONArray
+// Importa el parser JSON
 import org.json.JSONObject
+// Importa la dependencia necesaria: HttpURLConnection
 import java.net.HttpURLConnection
+// Importa la dependencia necesaria: URL
 import java.net.URL
 
 /**
@@ -31,14 +56,23 @@ import java.net.URL
  * Responsabilidades (o parámetros en caso de funciones simples):
  * - [Mantener el estado e información básica de la mascota]
  */
+// Clase de datos MascotaParaPerder: modelo inmutable con propiedades de dominio
 data class MascotaParaPerder(
+    // Constante id: valor inmutable que no cambia tras su asignación
     val id: String,
+    // Constante nombre: valor inmutable que no cambia tras su asignación
     val nombre: String,
+    // Constante especie: valor inmutable que no cambia tras su asignación
     val especie: String,
+    // Constante raza: valor inmutable que no cambia tras su asignación
     val raza: String = "",
+    // Constante color: valor inmutable que no cambia tras su asignación
     val color: String = "",
+    // Constante fotoUrl: valor inmutable que no cambia tras su asignación
     val fotoUrl: String? = null,
+    // Constante distanciaAlerta: valor inmutable que no cambia tras su asignación
     val distanciaAlerta: Int = 50,
+    // Constante estado: valor inmutable que no cambia tras su asignación
     val estado: String = "EN_CASA"
 )
 
@@ -49,29 +83,44 @@ data class MascotaParaPerder(
  * - [Obtener la lista de mascotas del usuario actual]
  * - [Permitir al usuario cambiar el estado de una mascota a "PERDIDA"]
  */
+// Activity MarcarPerdidaActivity: pantalla principal que gestiona el ciclo de vida
 class MarcarPerdidaActivity : ComponentActivity() {
+    // Constante backendUrl: valor inmutable que no cambia tras su asignación
     private val backendUrl = BuildConfig.BACKEND_URL
 
+    // Método del ciclo de vida: inicializa la actividad y configura la UI
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Invoca la implementación del método en la clase padre
         super.onCreate(savedInstanceState)
 
+        // Constante prefs: valor inmutable que no cambia tras su asignación
         val prefs = getSharedPreferences("watch_prefs", MODE_PRIVATE)
+        // Variable userId: almacena el estado mutable de este componente
         var userId = prefs.getString("user_id", "") ?: ""
 
+        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (userId.isEmpty() || !userId.matches(Regex("^\\d+$"))) {
             userId = "2"
+            // Inicia el editor para modificar los SharedPreferences
             prefs.edit().putString("user_id", userId).apply()
         }
 
+        // Registro de evento en el log de Android para depuración
         android.util.Log.d("MARCAR_PERDIDA", "📱 userId: $userId")
 
+        // Define el árbol de UI con Jetpack Compose como contenido de la Activity
         setContent {
+            // Variable mascotas: almacena el estado mutable de este componente
             var mascotas by remember { mutableStateOf<List<MascotaParaPerder>>(emptyList()) }
+            // Variable isLoading: almacena el estado mutable de este componente
             var isLoading by remember { mutableStateOf(true) }
+            // Variable errorMessage: almacena el estado mutable de este componente
             var errorMessage by remember { mutableStateOf("") }
+            // Variable successMessage: almacena el estado mutable de este componente
             var successMessage by remember { mutableStateOf("") }
 
             LaunchedEffect(Unit) {
+                // Constante result: valor inmutable que no cambia tras su asignación
                 val result = withContext(Dispatchers.IO) {
                     cargarMascotas(userId)
                 }
@@ -86,15 +135,19 @@ class MarcarPerdidaActivity : ComponentActivity() {
                 errorMessage = errorMessage,
                 successMessage = successMessage,
                 onMarcarPerdida = { mascotaId ->
+                    // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
                     CoroutineScope(Dispatchers.Main).launch {
+                        // Constante result: valor inmutable que no cambia tras su asignación
                         val result = withContext(Dispatchers.IO) {
                             marcarComoPerdida(mascotaId, userId)
                         }
+                        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                         if (result.success) {
                             successMessage = "✅ Mascota marcada como PERDIDA"
                             errorMessage = ""
                             // Recargar lista
                             isLoading = true
+                            // Constante newResult: valor inmutable que no cambia tras su asignación
                             val newResult = withContext(Dispatchers.IO) {
                                 cargarMascotas(userId)
                             }
@@ -112,7 +165,9 @@ class MarcarPerdidaActivity : ComponentActivity() {
                     isLoading = true
                     errorMessage = ""
                     successMessage = ""
+                    // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
                     CoroutineScope(Dispatchers.Main).launch {
+                        // Constante result: valor inmutable que no cambia tras su asignación
                         val result = withContext(Dispatchers.IO) {
                             cargarMascotas(userId)
                         }
@@ -126,27 +181,41 @@ class MarcarPerdidaActivity : ComponentActivity() {
     }
 
     private suspend fun cargarMascotas(userId: String): CargaResult {
+        // Retorna el valor al llamador de la función
         return try {
+            // Registro de evento en el log de Android para depuración
             android.util.Log.d("MARCAR_PERDIDA", "📱 Cargando mascotas para usuario: $userId")
 
+            // Constante url: valor inmutable que no cambia tras su asignación
             val url = URL("$backendUrl/api/mascotas?ownerId=$userId")
+            // Constante conn: valor inmutable que no cambia tras su asignación
             val conn = url.openConnection() as HttpURLConnection
             conn.connectTimeout = 5000
             conn.readTimeout = 5000
             conn.requestMethod = "GET"
 
+            // Constante responseCode: valor inmutable que no cambia tras su asignación
             val responseCode = conn.responseCode
+            // Registro de evento en el log de Android para depuración
             android.util.Log.d("MARCAR_PERDIDA", "📡 Response Code: $responseCode")
 
+            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (responseCode == HttpURLConnection.HTTP_OK) {
+                // Constante response: valor inmutable que no cambia tras su asignación
                 val response = conn.inputStream.bufferedReader().readText()
+                // Registro de evento en el log de Android para depuración
                 android.util.Log.d("MARCAR_PERDIDA", "📥 Respuesta: $response")
 
+                // Constante jsonArray: valor inmutable que no cambia tras su asignación
                 val jsonArray = JSONArray(response)
+                // Registro de evento en el log de Android para depuración
                 android.util.Log.d("MARCAR_PERDIDA", "📊 JSON Array Length: ${jsonArray.length()}")
 
+                // Constante lista: valor inmutable que no cambia tras su asignación
                 val lista = mutableListOf<MascotaParaPerder>()
+                // Itera sobre la colección para procesar cada elemento
                 for (i in 0 until jsonArray.length()) {
+                    // Constante obj: valor inmutable que no cambia tras su asignación
                     val obj = jsonArray.getJSONObject(i)
                     lista.add(
                         MascotaParaPerder(
@@ -175,6 +244,7 @@ class MarcarPerdidaActivity : ComponentActivity() {
                 )
             }
         } catch (e: Exception) {
+            // Registro de evento en el log de Android para depuración
             android.util.Log.e("MARCAR_PERDIDA", "❌ Error: ${e.message}", e)
             CargaResult(
                 mascotas = emptyList(),
@@ -184,10 +254,14 @@ class MarcarPerdidaActivity : ComponentActivity() {
     }
 
     private suspend fun marcarComoPerdida(mascotaId: String, userId: String): OperacionResult {
+        // Retorna el valor al llamador de la función
         return try {
+            // Registro de evento en el log de Android para depuración
             android.util.Log.d("MARCAR_PERDIDA", "🔴 Marcando mascota $mascotaId como PERDIDA")
 
+            // Constante url: valor inmutable que no cambia tras su asignación
             val url = URL("$backendUrl/api/mascotas/$mascotaId")
+            // Constante conn: valor inmutable que no cambia tras su asignación
             val conn = url.openConnection() as HttpURLConnection
             conn.requestMethod = "PUT"
             conn.connectTimeout = 5000
@@ -195,45 +269,63 @@ class MarcarPerdidaActivity : ComponentActivity() {
             conn.setRequestProperty("Content-Type", "application/json")
             conn.doOutput = true
 
+            // Constante json: valor inmutable que no cambia tras su asignación
             val json = JSONObject().apply {
                 put("estado", "PERDIDA")
             }
 
             conn.outputStream.write(json.toString().toByteArray())
+            // Constante responseCode: valor inmutable que no cambia tras su asignación
             val responseCode = conn.responseCode
             conn.disconnect()
 
+            // Registro de evento en el log de Android para depuración
             android.util.Log.d("MARCAR_PERDIDA", "📡 Response Code: $responseCode")
 
+            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (responseCode == 200 || responseCode == 201) {
                 OperacionResult(success = true, errorMessage = "")
             } else {
                 OperacionResult(success = false, errorMessage = "Error al marcar como perdida (HTTP $responseCode)")
             }
         } catch (e: Exception) {
+            // Registro de evento en el log de Android para depuración
             android.util.Log.e("MARCAR_PERDIDA", "❌ Error: ${e.message}", e)
             OperacionResult(success = false, errorMessage = "Error: ${e.message}")
         }
     }
 
+    // Clase de datos CargaResult: modelo inmutable con propiedades de dominio
     data class CargaResult(
+        // Constante mascotas: valor inmutable que no cambia tras su asignación
         val mascotas: List<MascotaParaPerder>,
+        // Constante errorMessage: valor inmutable que no cambia tras su asignación
         val errorMessage: String
     )
 
+    // Clase de datos OperacionResult: modelo inmutable con propiedades de dominio
     data class OperacionResult(
+        // Constante success: valor inmutable que no cambia tras su asignación
         val success: Boolean,
+        // Constante errorMessage: valor inmutable que no cambia tras su asignación
         val errorMessage: String
     )
 }
 
 // 🎨 Paleta temática "mascotas perdidas" (consistente con el resto de la app)
+// Constante BgTop: valor inmutable que no cambia tras su asignación
 private val BgTop = Color(0xFF1B1430)
+// Constante BgBottom: valor inmutable que no cambia tras su asignación
 private val BgBottom = Color(0xFF0D0B1A)
+// Constante CardBg: valor inmutable que no cambia tras su asignación
 private val CardBg = Color(0xFF252044)
+// Constante AccentRed: valor inmutable que no cambia tras su asignación
 private val AccentRed = Color(0xFFE85D5D)
+// Constante AccentGreen: valor inmutable que no cambia tras su asignación
 private val AccentGreen = Color(0xFF4CD97B)
+// Constante AccentOrange: valor inmutable que no cambia tras su asignación
 private val AccentOrange = Color(0xFFFFA94D)
+// Constante AccentBlue: valor inmutable que no cambia tras su asignación
 private val AccentBlue = Color(0xFF4D9FFF)
 
 /**
@@ -248,7 +340,9 @@ private val AccentBlue = Color(0xFF4D9FFF)
  * - [onBack]: Acción para volver atrás
  * - [onRetry]: Acción para reintentar la carga
  */
+// Anotación que marca esta función como una función de composición de UI
 @Composable
+// Función MarcarPerdidaScreen: define la lógica de esta operación
 fun MarcarPerdidaScreen(
     mascotas: List<MascotaParaPerder>,
     isLoading: Boolean,
@@ -266,6 +360,7 @@ fun MarcarPerdidaScreen(
                 .fillMaxSize()
                 .background(Brush.verticalGradient(listOf(BgTop, BgBottom)))
         ) {
+            // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
             when {
                 isLoading -> {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -294,6 +389,7 @@ fun MarcarPerdidaScreen(
                                 color = Color.White.copy(alpha = 0.6f),
                                 fontSize = 11.sp
                             )
+                            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                             if (errorMessage.isNotEmpty()) {
                                 Text(
                                     text = errorMessage,
@@ -338,6 +434,7 @@ fun MarcarPerdidaScreen(
                             Spacer(Modifier.height(6.dp))
                         }
 
+                        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                         if (successMessage.isNotEmpty()) {
                             item {
                                 Text(
@@ -351,6 +448,7 @@ fun MarcarPerdidaScreen(
                             }
                         }
 
+                        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                         if (errorMessage.isNotEmpty()) {
                             item {
                                 Text(
@@ -375,6 +473,7 @@ fun MarcarPerdidaScreen(
                             MascotaMarcarPerdidaCard(
                                 mascota = mascota,
                                 onMarcarPerdida = {
+                                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                     if (mascota.estado != "PERDIDA") {
                                         onMarcarPerdida(mascota.id)
                                     }
@@ -399,13 +498,18 @@ fun MarcarPerdidaScreen(
     }
 }
 
+// Anotación que marca esta función como una función de composición de UI
 @Composable
+// Función MascotaMarcarPerdidaCard: define la lógica de esta operación
 fun MascotaMarcarPerdidaCard(
     mascota: MascotaParaPerder,
     onMarcarPerdida: () -> Unit
 ) {
+    // Constante isPerdida: valor inmutable que no cambia tras su asignación
     val isPerdida = mascota.estado == "PERDIDA"
+    // Constante estadoColor: valor inmutable que no cambia tras su asignación
     val estadoColor = if (isPerdida) AccentRed else AccentGreen
+    // Constante estadoTexto: valor inmutable que no cambia tras su asignación
     val estadoTexto = if (isPerdida) "PERDIDA" else "EN CASA"
 
     Card(
@@ -470,6 +574,7 @@ fun MascotaMarcarPerdidaCard(
 
                     Spacer(Modifier.height(6.dp))
 
+                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                     if (isPerdida) {
                         Text(
                             text = "⚠️ Ya está perdida",

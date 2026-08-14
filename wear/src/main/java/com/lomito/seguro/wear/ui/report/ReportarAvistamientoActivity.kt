@@ -1,35 +1,67 @@
+// Paquete: com.lomito.seguro.wear.ui.report
 package com.lomito.seguro.wear.ui.report
+// Importa la dependencia necesaria: BuildConfig
 import com.lomito.seguro.wear.BuildConfig
 
+// Importa la dependencia necesaria: Manifest
 import android.Manifest
+// Importa la dependencia necesaria: PackageManager
 import android.content.pm.PackageManager
+// Importa el contenedor de datos Bundle
 import android.os.Bundle
+// Importa la dependencia necesaria: ComponentActivity
 import androidx.activity.ComponentActivity
+// Importa componente de Jetpack Compose
 import androidx.activity.compose.setContent
+// Importa la dependencia necesaria: ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.background
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.clickable
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.layout.*
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.shape.CircleShape
+// Importa componente de Jetpack Compose
 import androidx.compose.foundation.shape.RoundedCornerShape
+// Importa componente de Jetpack Compose
 import androidx.compose.runtime.*
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.Alignment
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.Modifier
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.draw.clip
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.graphics.Brush
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.graphics.Color
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.text.font.FontWeight
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.text.style.TextAlign
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.dp
+// Importa componente de Jetpack Compose
 import androidx.compose.ui.unit.sp
+// Importa el contexto de Android
 import androidx.core.content.ContextCompat
+// Importa componente de Jetpack Compose
 import androidx.wear.compose.material.*
+// Importa la dependencia necesaria: LocationServices
 import com.google.android.gms.location.LocationServices
+// Importa la API de comunicación con Wear OS
 import com.google.android.gms.wearable.Wearable
+// Importa soporte para corrutinas de Kotlin
 import kotlinx.coroutines.*
+// Importa el parser JSON
 import org.json.JSONArray
+// Importa el parser JSON
 import org.json.JSONObject
+// Importa la dependencia necesaria: HttpURLConnection
 import java.net.HttpURLConnection
+// Importa la dependencia necesaria: URL
 import java.net.URL
 
 /**
@@ -38,19 +70,33 @@ import java.net.URL
  * Responsabilidades (o parámetros en caso de funciones simples):
  * - [Almacenar los datos de la mascota a buscar, incluyendo dueño e ubicación]
  */
+// Clase de datos MascotaPerdida: modelo inmutable con propiedades de dominio
 data class MascotaPerdida(
+    // Constante id: valor inmutable que no cambia tras su asignación
     val id: String,
+    // Constante nombre: valor inmutable que no cambia tras su asignación
     val nombre: String,
+    // Constante especie: valor inmutable que no cambia tras su asignación
     val especie: String,
+    // Constante raza: valor inmutable que no cambia tras su asignación
     val raza: String = "",
+    // Constante color: valor inmutable que no cambia tras su asignación
     val color: String = "",
+    // Constante fotoUrl: valor inmutable que no cambia tras su asignación
     val fotoUrl: String? = null,
+    // Constante distanciaAlerta: valor inmutable que no cambia tras su asignación
     val distanciaAlerta: Int = 50,
+    // Constante estado: valor inmutable que no cambia tras su asignación
     val estado: String = "PERDIDA",
+    // Constante ownerId: valor inmutable que no cambia tras su asignación
     val ownerId: String = "",
+    // Constante duenoNombre: valor inmutable que no cambia tras su asignación
     val duenoNombre: String = "",
+    // Constante duenoTelefono: valor inmutable que no cambia tras su asignación
     val duenoTelefono: String = "",
+    // Constante ultimaUbicacionLat: valor inmutable que no cambia tras su asignación
     val ultimaUbicacionLat: Double? = null,
+    // Constante ultimaUbicacionLng: valor inmutable que no cambia tras su asignación
     val ultimaUbicacionLng: Double? = null
 )
 
@@ -62,37 +108,55 @@ data class MascotaPerdida(
  * - [Permitir agregar nuevas mascotas al mural de perdidas]
  * - [Permitir reportar el avistamiento de una mascota con la ubicación GPS]
  */
+// Activity ReportarAvistamientoActivity: pantalla principal que gestiona el ciclo de vida
 class ReportarAvistamientoActivity : ComponentActivity() {
+    // Constante backendUrl: valor inmutable que no cambia tras su asignación
     private val backendUrl = BuildConfig.BACKEND_URL
+    // Variable ubicacionLat: almacena el estado mutable de este componente
     private var ubicacionLat = 0.0
+    // Variable ubicacionLng: almacena el estado mutable de este componente
     private var ubicacionLng = 0.0
+    // Variable ubicacionTexto: almacena el estado mutable de este componente
     private var ubicacionTexto = "Obteniendo ubicacion..."
+    // Variable ubicacionValida: almacena el estado mutable de este componente
     private var ubicacionValida = false
 
+    // Constante locationPermissionRequest: valor inmutable que no cambia tras su asignación
     private val locationPermissionRequest = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
+        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (isGranted) {
+            // Registro de evento en el log de Android para depuración
             android.util.Log.d("AVISTAMIENTO", "Permiso de ubicacion concedido")
             obtenerUbicacion()
         } else {
+            // Registro de evento en el log de Android para depuración
             android.util.Log.d("AVISTAMIENTO", "Permiso de ubicacion denegado")
             ubicacionValida = false
             ubicacionTexto = "Sin permiso de ubicacion"
         }
     }
 
+    // Método del ciclo de vida: inicializa la actividad y configura la UI
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Invoca la implementación del método en la clase padre
         super.onCreate(savedInstanceState)
+        // Registro de evento en el log de Android para depuración
         android.util.Log.d("AVISTAMIENTO", "INICIANDO")
 
+        // Constante prefs: valor inmutable que no cambia tras su asignación
         val prefs = getSharedPreferences("watch_prefs", MODE_PRIVATE)
+        // Variable userId: almacena el estado mutable de este componente
         var userId = prefs.getString("user_id", "") ?: ""
+        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (userId.isEmpty() || !userId.matches(Regex("^\\d+$"))) {
             userId = "2"
+            // Inicia el editor para modificar los SharedPreferences
             prefs.edit().putString("user_id", userId).apply()
         }
 
+        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -103,34 +167,53 @@ class ReportarAvistamientoActivity : ComponentActivity() {
             obtenerUbicacion()
         }
 
+        // Define el árbol de UI con Jetpack Compose como contenido de la Activity
         setContent {
+            // Variable mascotasPerdidas: almacena el estado mutable de este componente
             var mascotasPerdidas by remember { mutableStateOf<List<MascotaPerdida>>(emptyList()) }
+            // Variable isLoading: almacena el estado mutable de este componente
             var isLoading by remember { mutableStateOf(true) }
+            // Variable errorMessage: almacena el estado mutable de este componente
             var errorMessage by remember { mutableStateOf("") }
+            // Variable successMessage: almacena el estado mutable de este componente
             var successMessage by remember { mutableStateOf("") }
+            // Variable mostrarFormulario: almacena el estado mutable de este componente
             var mostrarFormulario by remember { mutableStateOf(false) }
+            // Variable mostrarDetalles: almacena el estado mutable de este componente
             var mostrarDetalles by remember { mutableStateOf(false) }
+            // Variable mascotaSeleccionada: almacena el estado mutable de este componente
             var mascotaSeleccionada by remember { mutableStateOf<MascotaPerdida?>(null) }
+            // Variable isSendingReport: almacena el estado mutable de este componente
             var isSendingReport by remember { mutableStateOf(false) }
+            // Variable isCreating: almacena el estado mutable de este componente
             var isCreating by remember { mutableStateOf(false) }
 
+            // Variable paso: almacena el estado mutable de este componente
             var paso by remember { mutableStateOf(0) }
+            // Variable nombre: almacena el estado mutable de este componente
             var nombre by remember { mutableStateOf("") }
+            // Variable especie: almacena el estado mutable de este componente
             var especie by remember { mutableStateOf("PERRO") }
+            // Variable raza: almacena el estado mutable de este componente
             var raza by remember { mutableStateOf("") }
+            // Variable color: almacena el estado mutable de este componente
             var color by remember { mutableStateOf("") }
+            // Variable telefono: almacena el estado mutable de este componente
             var telefono by remember { mutableStateOf("") }
 
             LaunchedEffect(Unit) {
+                // Constante result: valor inmutable que no cambia tras su asignación
                 val result = withContext(Dispatchers.IO) {
                     cargarMascotasPerdidas()
                 }
                 mascotasPerdidas = result.mascotas
                 isLoading = false
                 errorMessage = result.errorMessage
+                // Registro de evento en el log de Android para depuración
                 android.util.Log.d("AVISTAMIENTO", "Mascotas cargadas: ${result.mascotas.size}")
             }
 
+            // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
             when {
                 mostrarDetalles && mascotaSeleccionada != null -> {
                     MascotaPerdidaDetailScreen(
@@ -140,9 +223,12 @@ class ReportarAvistamientoActivity : ComponentActivity() {
                             mascotaSeleccionada = null
                         },
                         onReportar = {
+                            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                             if (ubicacionValida) {
                                 isSendingReport = true
+                                // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
                                 CoroutineScope(Dispatchers.Main).launch {
+                                    // Constante result: valor inmutable que no cambia tras su asignación
                                     val result = withContext(Dispatchers.IO) {
                                         reportarAvistamiento(
                                             mascotaId = mascotaSeleccionada!!.id,
@@ -152,12 +238,14 @@ class ReportarAvistamientoActivity : ComponentActivity() {
                                         )
                                     }
                                     isSendingReport = false
+                                    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                     if (result.success) {
                                         successMessage = "Reporte enviado"
                                         errorMessage = ""
                                         mostrarDetalles = false
                                         mascotaSeleccionada = null
                                         isLoading = true
+                                        // Constante newResult: valor inmutable que no cambia tras su asignación
                                         val newResult = withContext(Dispatchers.IO) {
                                             cargarMascotasPerdidas()
                                         }
@@ -191,13 +279,17 @@ class ReportarAvistamientoActivity : ComponentActivity() {
                             onTelefonoChange = { telefono = it },
                             onPasoChange = { paso = it },
                             onSave = {
+                                // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                 if (nombre.isNotEmpty() && telefono.isNotEmpty()) {
                                     isCreating = true
+                                    // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
                                     CoroutineScope(Dispatchers.Main).launch {
+                                        // Constante result: valor inmutable que no cambia tras su asignación
                                         val result = withContext(Dispatchers.IO) {
                                             crearMascotaPerdida(nombre, especie, raza, color, telefono)
                                         }
                                         isCreating = false
+                                        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                         if (result.success) {
                                             successMessage = "Mascota publicada en el mural"
                                             errorMessage = ""
@@ -208,6 +300,7 @@ class ReportarAvistamientoActivity : ComponentActivity() {
                                             color = ""
                                             telefono = ""
                                             isLoading = true
+                                            // Constante newResult: valor inmutable que no cambia tras su asignación
                                             val newResult = withContext(Dispatchers.IO) {
                                                 cargarMascotasPerdidas()
                                             }
@@ -245,6 +338,7 @@ class ReportarAvistamientoActivity : ComponentActivity() {
                             mostrarDetalles = true
                         },
                         onAgregarClick = {
+                            // Registro de evento en el log de Android para depuración
                             android.util.Log.d("AVISTAMIENTO", "Boton + presionado")
                             mostrarFormulario = true
                             paso = 0
@@ -258,7 +352,9 @@ class ReportarAvistamientoActivity : ComponentActivity() {
                             isLoading = true
                             errorMessage = ""
                             successMessage = ""
+                            // Lanza una nueva corrutina en el scope actual para ejecutar código asíncrono
                             CoroutineScope(Dispatchers.Main).launch {
+                                // Constante result: valor inmutable que no cambia tras su asignación
                                 val result = withContext(Dispatchers.IO) {
                                     cargarMascotasPerdidas()
                                 }
@@ -274,6 +370,7 @@ class ReportarAvistamientoActivity : ComponentActivity() {
     }
 
     private fun obtenerUbicacion() {
+        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -281,16 +378,20 @@ class ReportarAvistamientoActivity : ComponentActivity() {
         ) {
             ubicacionValida = false
             ubicacionTexto = "Sin permiso de ubicacion"
+            // Retorna el valor al llamador de la función
             return
         }
 
+        // Constante fusedClient: valor inmutable que no cambia tras su asignación
         val fusedClient = LocationServices.getFusedLocationProviderClient(this)
         fusedClient.lastLocation.addOnSuccessListener { location ->
+            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (location != null) {
                 ubicacionLat = location.latitude
                 ubicacionLng = location.longitude
                 ubicacionTexto = "Lat: ${String.format("%.4f", location.latitude)}, Lng: ${String.format("%.4f", location.longitude)}"
                 ubicacionValida = true
+                // Registro de evento en el log de Android para depuración
                 android.util.Log.d("AVISTAMIENTO", "Ubicacion obtenida: $ubicacionTexto")
             } else {
                 ubicacionTexto = "Ubicacion no disponible"
@@ -303,27 +404,41 @@ class ReportarAvistamientoActivity : ComponentActivity() {
     }
 
     private suspend fun cargarMascotasPerdidas(): CargaResult {
+        // Retorna el valor al llamador de la función
         return try {
+            // Registro de evento en el log de Android para depuración
             android.util.Log.d("AVISTAMIENTO", "Cargando mascotas del mural...")
 
+            // Constante url: valor inmutable que no cambia tras su asignación
             val url = URL("$backendUrl/api/mascotas/mural")
+            // Constante conn: valor inmutable que no cambia tras su asignación
             val conn = url.openConnection() as HttpURLConnection
             conn.connectTimeout = 5000
             conn.readTimeout = 5000
             conn.requestMethod = "GET"
+            // Constante responseCode: valor inmutable que no cambia tras su asignación
             val responseCode = conn.responseCode
 
+            // Registro de evento en el log de Android para depuración
             android.util.Log.d("AVISTAMIENTO", "Response Code: $responseCode")
 
+            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (responseCode == HttpURLConnection.HTTP_OK) {
+                // Constante response: valor inmutable que no cambia tras su asignación
                 val response = conn.inputStream.bufferedReader().readText()
+                // Registro de evento en el log de Android para depuración
                 android.util.Log.d("AVISTAMIENTO", "Respuesta: $response")
 
+                // Constante jsonArray: valor inmutable que no cambia tras su asignación
                 val jsonArray = JSONArray(response)
+                // Constante lista: valor inmutable que no cambia tras su asignación
                 val lista = mutableListOf<MascotaPerdida>()
 
+                // Itera sobre la colección para procesar cada elemento
                 for (i in 0 until jsonArray.length()) {
+                    // Constante obj: valor inmutable que no cambia tras su asignación
                     val obj = jsonArray.getJSONObject(i)
+                    // Constante ownerId: valor inmutable que no cambia tras su asignación
                     val ownerId = obj.optString("owner_id", "")
                     lista.add(
                         MascotaPerdida(
@@ -342,15 +457,19 @@ class ReportarAvistamientoActivity : ComponentActivity() {
                     )
                 }
                 conn.disconnect()
+                // Registro de evento en el log de Android para depuración
                 android.util.Log.d("AVISTAMIENTO", "${lista.size} mascotas cargadas")
                 CargaResult(lista, if (lista.isEmpty()) "No hay mascotas perdidas en el mural" else "")
             } else {
+                // Constante errorBody: valor inmutable que no cambia tras su asignación
                 val errorBody = conn.errorStream?.bufferedReader()?.readText()
                 conn.disconnect()
+                // Registro de evento en el log de Android para depuración
                 android.util.Log.e("AVISTAMIENTO", "Error HTTP $responseCode: $errorBody")
                 CargaResult(emptyList(), "Error al cargar (HTTP $responseCode)")
             }
         } catch (e: Exception) {
+            // Registro de evento en el log de Android para depuración
             android.util.Log.e("AVISTAMIENTO", "Error: ${e.message}", e)
             CargaResult(emptyList(), "Error: ${e.message}")
         }
@@ -362,14 +481,21 @@ class ReportarAvistamientoActivity : ComponentActivity() {
         lng: Double,
         direccion: String
     ): OperacionResult {
+        // Retorna el valor al llamador de la función
         return try {
+            // Constante prefs: valor inmutable que no cambia tras su asignación
             val prefs = getSharedPreferences("watch_prefs", MODE_PRIVATE)
+            // Constante userIdStr: valor inmutable que no cambia tras su asignación
             val userIdStr = prefs.getString("user_id", "2") ?: "2"
+            // Constante reportadoPorId: valor inmutable que no cambia tras su asignación
             val reportadoPorId = userIdStr.toIntOrNull() ?: 2
 
+            // Registro de evento en el log de Android para depuración
             android.util.Log.d("AVISTAMIENTO", "Reportando: $mascotaId en $lat, $lng")
 
+            // Constante url: valor inmutable que no cambia tras su asignación
             val url = URL("$backendUrl/api/reportes")
+            // Constante conn: valor inmutable que no cambia tras su asignación
             val conn = url.openConnection() as HttpURLConnection
             conn.requestMethod = "POST"
             conn.connectTimeout = 5000
@@ -377,6 +503,7 @@ class ReportarAvistamientoActivity : ComponentActivity() {
             conn.setRequestProperty("Content-Type", "application/json")
             conn.doOutput = true
 
+            // Constante json: valor inmutable que no cambia tras su asignación
             val json = JSONObject().apply {
                 put("mascota_id", mascotaId)
                 put("latitud", lat)
@@ -386,9 +513,11 @@ class ReportarAvistamientoActivity : ComponentActivity() {
             }
 
             conn.outputStream.write(json.toString().toByteArray())
+            // Constante responseCode: valor inmutable que no cambia tras su asignación
             val responseCode = conn.responseCode
             conn.disconnect()
 
+            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (responseCode == 200 || responseCode == 201) {
                 enviarNotificacionAlMovil(mascotaId, lat, lng, direccion)
                 OperacionResult(true, "")
@@ -407,10 +536,14 @@ class ReportarAvistamientoActivity : ComponentActivity() {
         color: String,
         telefono: String
     ): OperacionResult {
+        // Retorna el valor al llamador de la función
         return try {
+            // Registro de evento en el log de Android para depuración
             android.util.Log.d("AVISTAMIENTO", "Creando mascota perdida para el mural: $nombre")
 
+            // Constante url: valor inmutable que no cambia tras su asignación
             val url = URL("$backendUrl/api/mascotas/mural")
+            // Constante conn: valor inmutable que no cambia tras su asignación
             val conn = url.openConnection() as HttpURLConnection
             conn.requestMethod = "POST"
             conn.connectTimeout = 5000
@@ -418,6 +551,7 @@ class ReportarAvistamientoActivity : ComponentActivity() {
             conn.setRequestProperty("Content-Type", "application/json")
             conn.doOutput = true
 
+            // Constante json: valor inmutable que no cambia tras su asignación
             val json = JSONObject().apply {
                 put("nombre", nombre)
                 put("especie", especie)
@@ -426,10 +560,13 @@ class ReportarAvistamientoActivity : ComponentActivity() {
                 put("telefono", telefono)
             }
 
+            // Registro de evento en el log de Android para depuración
             android.util.Log.d("AVISTAMIENTO", "JSON enviado: $json")
 
             conn.outputStream.write(json.toString().toByteArray())
+            // Constante responseCode: valor inmutable que no cambia tras su asignación
             val responseCode = conn.responseCode
+            // Constante responseBody: valor inmutable que no cambia tras su asignación
             val responseBody = if (responseCode == 200 || responseCode == 201) {
                 conn.inputStream.bufferedReader().readText()
             } else {
@@ -437,22 +574,28 @@ class ReportarAvistamientoActivity : ComponentActivity() {
             }
             conn.disconnect()
 
+            // Registro de evento en el log de Android para depuración
             android.util.Log.d("AVISTAMIENTO", "Response Code: $responseCode")
+            // Registro de evento en el log de Android para depuración
             android.util.Log.d("AVISTAMIENTO", "Response: $responseBody")
 
+            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (responseCode == 200 || responseCode == 201) {
                 OperacionResult(true, "")
             } else {
                 OperacionResult(false, "Error al crear (HTTP $responseCode): $responseBody")
             }
         } catch (e: Exception) {
+            // Registro de evento en el log de Android para depuración
             android.util.Log.e("AVISTAMIENTO", "Error: ${e.message}", e)
             OperacionResult(false, "Error: ${e.message}")
         }
     }
 
     private fun enviarNotificacionAlMovil(mascotaId: String, lat: Double, lng: Double, direccion: String) {
+        // Constante context: valor inmutable que no cambia tras su asignación
         val context = applicationContext
+        // Constante payload: valor inmutable que no cambia tras su asignación
         val payload = JSONObject().apply {
             put("tipo", "AVISTAMIENTO_REPORTADO")
             put("mascota_id", mascotaId)
@@ -461,12 +604,17 @@ class ReportarAvistamientoActivity : ComponentActivity() {
             put("direccion", direccion)
         }.toString().toByteArray()
 
+        // Usa la API de Wearable para comunicación con dispositivos Wear OS
         Wearable.getNodeClient(context).connectedNodes
             .addOnSuccessListener { nodes ->
+                // Itera sobre cada elemento de la colección y ejecuta el bloque
                 nodes.forEach { node ->
+                    // Usa la API de Wearable para comunicación con dispositivos Wear OS
                     Wearable.getMessageClient(context)
+                        // Envía un mensaje al dispositivo Wear OS conectado
                         .sendMessage(node.id, "/watch/avistamiento", payload)
                         .addOnSuccessListener {
+                            // Registro de evento en el log de Android para depuración
                             android.util.Log.d("AVISTAMIENTO", "Notificacion enviada al movil")
                         }
                 }
@@ -474,42 +622,62 @@ class ReportarAvistamientoActivity : ComponentActivity() {
     }
 
     private fun notificarNuevaMascotaPerdida(nombre: String) {
+        // Constante context: valor inmutable que no cambia tras su asignación
         val context = applicationContext
+        // Constante payload: valor inmutable que no cambia tras su asignación
         val payload = JSONObject().apply {
             put("tipo", "NUEVA_MASCOTA_PERDIDA")
             put("nombre", nombre)
         }.toString().toByteArray()
 
+        // Usa la API de Wearable para comunicación con dispositivos Wear OS
         Wearable.getNodeClient(context).connectedNodes
             .addOnSuccessListener { nodes ->
+                // Itera sobre cada elemento de la colección y ejecuta el bloque
                 nodes.forEach { node ->
+                    // Usa la API de Wearable para comunicación con dispositivos Wear OS
                     Wearable.getMessageClient(context)
+                        // Envía un mensaje al dispositivo Wear OS conectado
                         .sendMessage(node.id, "/mascota/perdida/nueva", payload)
                         .addOnSuccessListener {
+                            // Registro de evento en el log de Android para depuración
                             android.util.Log.d("AVISTAMIENTO", "Notificacion de nueva mascota enviada")
                         }
                 }
             }
     }
 
+    // Clase de datos CargaResult: modelo inmutable con propiedades de dominio
     data class CargaResult(
+        // Constante mascotas: valor inmutable que no cambia tras su asignación
         val mascotas: List<MascotaPerdida>,
+        // Constante errorMessage: valor inmutable que no cambia tras su asignación
         val errorMessage: String
     )
 
+    // Clase de datos OperacionResult: modelo inmutable con propiedades de dominio
     data class OperacionResult(
+        // Constante success: valor inmutable que no cambia tras su asignación
         val success: Boolean,
+        // Constante errorMessage: valor inmutable que no cambia tras su asignación
         val errorMessage: String
     )
 }
 
 // 🎨 Paleta temática "mascotas perdidas"
+// Constante BgTop: valor inmutable que no cambia tras su asignación
 private val BgTop = Color(0xFF1B1430)
+// Constante BgBottom: valor inmutable que no cambia tras su asignación
 private val BgBottom = Color(0xFF0D0B1A)
+// Constante CardBg: valor inmutable que no cambia tras su asignación
 private val CardBg = Color(0xFF2C2C3E)
+// Constante FieldBg: valor inmutable que no cambia tras su asignación
 private val FieldBg = Color(0xFF2C2657)
+// Constante AccentRed: valor inmutable que no cambia tras su asignación
 private val AccentRed = Color(0xFFE85D5D)
+// Constante AccentGreen: valor inmutable que no cambia tras su asignación
 private val AccentGreen = Color(0xFF4CD97B)
+// Constante AccentBlue: valor inmutable que no cambia tras su asignación
 private val AccentBlue = Color(0xFF4D9FFF)
 
 // ============================================================
@@ -531,7 +699,9 @@ private val AccentBlue = Color(0xFF4D9FFF)
  * - [onAgregarClick]: Acción al presionar el botón de agregar
  * - [onRetry]: Acción para recargar el mural
  */
+// Anotación que marca esta función como una función de composición de UI
 @Composable
+// Función MainScreenGrid: define la lógica de esta operación
 fun MainScreenGrid(
     mascotas: List<MascotaPerdida>,
     isLoading: Boolean,
@@ -544,6 +714,7 @@ fun MainScreenGrid(
     onAgregarClick: () -> Unit,
     onRetry: () -> Unit
 ) {
+    // Constante listState: valor inmutable que no cambia tras su asignación
     val listState = rememberScalingLazyListState()
 
     Scaffold(
@@ -590,6 +761,7 @@ fun MainScreenGrid(
             }
 
             // ✅ Mensaje de éxito
+            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (successMessage.isNotEmpty()) {
                 item {
                     Box(
@@ -612,6 +784,7 @@ fun MainScreenGrid(
             }
 
             // ✅ Mensaje de error
+            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (errorMessage.isNotEmpty() && !isLoading) {
                 item {
                     Box(
@@ -633,6 +806,7 @@ fun MainScreenGrid(
             }
 
             // ✅ Estado de envío
+            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (isSendingReport) {
                 item {
                     Row(
@@ -655,6 +829,7 @@ fun MainScreenGrid(
             }
 
             // ✅ CONTENIDO PRINCIPAL
+            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (isLoading) {
                 item {
                     Box(
@@ -706,6 +881,7 @@ fun MainScreenGrid(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
+                        // Itera sobre cada elemento de la colección y ejecuta el bloque
                         pair.forEach { mascota ->
                             MascotaGridItemCompacto(
                                 mascota = mascota,
@@ -714,6 +890,7 @@ fun MainScreenGrid(
                             )
                         }
                         // Si es impar, agregar un espacio vacío
+                        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                         if (pair.size == 1) {
                             Spacer(modifier = Modifier.weight(1f))
                         }
@@ -730,7 +907,9 @@ fun MainScreenGrid(
 }
 
 // ✅ ITEM DE MASCOTA MÁS COMPACTO
+// Anotación que marca esta función como una función de composición de UI
 @Composable
+// Función MascotaGridItemCompacto: define la lógica de esta operación
 fun MascotaGridItemCompacto(
     mascota: MascotaPerdida,
     onClick: () -> Unit,
@@ -785,12 +964,15 @@ fun MascotaGridItemCompacto(
 // ✅ PANTALLA DE DETALLES - COMPLETA Y SIN CORTES
 // ============================================================
 
+// Anotación que marca esta función como una función de composición de UI
 @Composable
+// Función MascotaPerdidaDetailScreen: define la lógica de esta operación
 fun MascotaPerdidaDetailScreen(
     mascota: MascotaPerdida,
     onBack: () -> Unit,
     onReportar: () -> Unit
 ) {
+    // Constante listState: valor inmutable que no cambia tras su asignación
     val listState = rememberScalingLazyListState()
 
     Scaffold(
@@ -890,6 +1072,7 @@ fun MascotaPerdidaDetailScreen(
                             InfoRowCompacta("Color", if (mascota.color.isNotEmpty()) mascota.color.take(6) else "-")
                             InfoRowCompacta("Dueño", mascota.duenoNombre.take(8))
                         }
+                        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                         if (mascota.duenoTelefono.isNotEmpty()) {
                             Spacer(modifier = Modifier.height(2.dp))
                             Row(
@@ -941,7 +1124,9 @@ fun MascotaPerdidaDetailScreen(
 }
 
 // ✅ InfoRow más compacta
+// Anotación que marca esta función como una función de composición de UI
 @Composable
+// Función InfoRowCompacta: define la lógica de esta operación
 fun InfoRowCompacta(label: String, value: String, color: Color = Color.White) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(2.dp),
@@ -966,7 +1151,9 @@ fun InfoRowCompacta(label: String, value: String, color: Color = Color.White) {
 // ✅ FORMULARIO - MANTENIDO INTACTO
 // ============================================================
 
+// Anotación que marca esta función como una función de composición de UI
 @Composable
+// Función FormularioScreenSimplificado: define la lógica de esta operación
 fun FormularioScreenSimplificado(
     paso: Int,
     nombre: String,
@@ -984,6 +1171,7 @@ fun FormularioScreenSimplificado(
     onSave: () -> Unit,
     onBack: () -> Unit
 ) {
+    // Variable mostrarTeclado: almacena el estado mutable de este componente
     var mostrarTeclado by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -1002,12 +1190,14 @@ fun FormularioScreenSimplificado(
                 horizontalArrangement = Arrangement.spacedBy(3.dp),
                 modifier = Modifier.padding(bottom = 4.dp)
             ) {
+                // Itera sobre cada elemento de la colección y ejecuta el bloque
                 (0..5).forEach { i ->
                     Box(
                         modifier = Modifier
                             .size(if (i == paso) 6.dp else 4.dp)
                             .clip(CircleShape)
                             .background(
+                                // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                                 if (i <= paso) AccentRed
                                 else Color.White.copy(alpha = 0.15f)
                             )
@@ -1015,6 +1205,7 @@ fun FormularioScreenSimplificado(
                 }
             }
 
+            // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
             when (paso) {
                 0 -> PasoNombreForm(
                     nombre = nombre,
@@ -1070,7 +1261,9 @@ fun FormularioScreenSimplificado(
         }
     }
 
+    // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
     if (mostrarTeclado) {
+        // Constante valorActual: valor inmutable que no cambia tras su asignación
         val valorActual = when (paso) {
             0 -> nombre
             2 -> raza
@@ -1079,9 +1272,12 @@ fun FormularioScreenSimplificado(
             else -> ""
         }
 
+        // Constante esNumerico: valor inmutable que no cambia tras su asignación
         val esNumerico = paso == 4
 
+        // Constante onLetraClick: valor inmutable que no cambia tras su asignación
         val onLetraClick: (String) -> Unit = { letra ->
+            // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
             when (paso) {
                 0 -> onNombreChange(nombre + letra)
                 2 -> onRazaChange(raza + letra)
@@ -1090,7 +1286,9 @@ fun FormularioScreenSimplificado(
             }
         }
 
+        // Constante onBorrarClick: valor inmutable que no cambia tras su asignación
         val onBorrarClick: () -> Unit = {
+            // Expresión when: evalúa múltiples condiciones de forma concisa (equivalente a switch)
             when (paso) {
                 0 -> { if (nombre.isNotEmpty()) onNombreChange(nombre.dropLast(1)) }
                 2 -> { if (raza.isNotEmpty()) onRazaChange(raza.dropLast(1)) }
@@ -1122,7 +1320,9 @@ fun FormularioScreenSimplificado(
     }
 }
 
+// Anotación que marca esta función como una función de composición de UI
 @Composable
+// Función PasoNombreForm: define la lógica de esta operación
 fun PasoNombreForm(
     nombre: String,
     onNombreChange: (String) -> Unit,
@@ -1192,7 +1392,9 @@ fun PasoNombreForm(
     }
 }
 
+// Anotación que marca esta función como una función de composición de UI
 @Composable
+// Función PasoOpcionalForm: define la lógica de esta operación
 fun PasoOpcionalForm(
     titulo: String,
     valor: String,
@@ -1261,7 +1463,9 @@ fun PasoOpcionalForm(
     }
 }
 
+// Anotación que marca esta función como una función de composición de UI
 @Composable
+// Función PasoTelefonoForm: define la lógica de esta operación
 fun PasoTelefonoForm(
     telefono: String,
     onTelefonoChange: (String) -> Unit,
@@ -1331,7 +1535,9 @@ fun PasoTelefonoForm(
     }
 }
 
+// Anotación que marca esta función como una función de composición de UI
 @Composable
+// Función PasoEspecieForm: define la lógica de esta operación
 fun PasoEspecieForm(
     especie: String,
     onSelect: (String) -> Unit,
@@ -1364,6 +1570,7 @@ fun PasoEspecieForm(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(
+                            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                             if (especie == "PERRO") AccentRed.copy(alpha = 0.3f)
                             else FieldBg
                         ),
@@ -1391,6 +1598,7 @@ fun PasoEspecieForm(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(
+                            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
                             if (especie == "GATO") AccentRed.copy(alpha = 0.3f)
                             else FieldBg
                         ),
@@ -1420,7 +1628,9 @@ fun PasoEspecieForm(
     }
 }
 
+// Anotación que marca esta función como una función de composición de UI
 @Composable
+// Función PasoConfirmarForm: define la lógica de esta operación
 fun PasoConfirmarForm(
     nombre: String,
     especie: String,
@@ -1448,11 +1658,13 @@ fun PasoConfirmarForm(
         )
         Spacer(Modifier.height(2.dp))
 
+        // Constante detalles: valor inmutable que no cambia tras su asignación
         val detalles = listOfNotNull(
             raza.ifEmpty { null },
             color.ifEmpty { null },
             telefono.ifEmpty { null }
         )
+        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (detalles.isNotEmpty()) {
             Text(
                 text = detalles.joinToString(" - "),
@@ -1464,6 +1676,7 @@ fun PasoConfirmarForm(
 
         Spacer(Modifier.height(10.dp))
 
+        // Constante puedeGuardar: valor inmutable que no cambia tras su asignación
         val puedeGuardar = nombre.isNotBlank() && telefono.isNotBlank() && !isCreating
 
         Button(
@@ -1476,6 +1689,7 @@ fun PasoConfirmarForm(
             ),
             enabled = puedeGuardar
         ) {
+            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (isCreating) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(14.dp),
@@ -1507,7 +1721,9 @@ fun PasoConfirmarForm(
 // ✅ TECLADO REDISEÑADO - COMPLETO Y SIN CORTES
 // ============================================================
 
+// Anotación que marca esta función como una función de composición de UI
 @Composable
+// Función TecladoSimple: define la lógica de esta operación
 fun TecladoSimple(
     valor: String,
     esNumerico: Boolean,
@@ -1515,10 +1731,15 @@ fun TecladoSimple(
     onBorrarClick: () -> Unit,
     onCerrar: () -> Unit
 ) {
+    // Constante keyBg: valor inmutable que no cambia tras su asignación
     val keyBg = Color(0xFF3A3360)
+    // Constante displayBg: valor inmutable que no cambia tras su asignación
     val displayBg = Color(0xFF252044)
+    // Constante accentRed: valor inmutable que no cambia tras su asignación
     val accentRed = Color(0xFFE85D5D)
+    // Constante accentGreen: valor inmutable que no cambia tras su asignación
     val accentGreen = Color(0xFF4CD97B)
+    // Constante accentBlue: valor inmutable que no cambia tras su asignación
     val accentBlue = Color(0xFF4D9FFF)
 
     Card(
@@ -1574,17 +1795,21 @@ fun TecladoSimple(
 
             Spacer(Modifier.height(3.dp))
 
+            // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
             if (esNumerico) {
+                // Constante filas: valor inmutable que no cambia tras su asignación
                 val filas = listOf(
                     listOf("1", "2", "3"),
                     listOf("4", "5", "6"),
                     listOf("7", "8", "9")
                 )
+                // Itera sobre cada elemento de la colección y ejecuta el bloque
                 filas.forEach { fila ->
                     Row(
                         modifier = Modifier.fillMaxWidth(0.8f),
                         horizontalArrangement = Arrangement.spacedBy(3.dp)
                     ) {
+                        // Itera sobre cada elemento de la colección y ejecuta el bloque
                         fila.forEach { num ->
                             TeclaRedondaCompacta(num, keyBg, modifier = Modifier.weight(1f)) { onLetraClick(num) }
                         }
@@ -1600,8 +1825,11 @@ fun TecladoSimple(
                     TeclaAccionCompacta("✓", accentGreen, modifier = Modifier.weight(1f), onClick = onCerrar)
                 }
             } else {
+                // Constante filaQ: valor inmutable que no cambia tras su asignación
                 val filaQ = listOf("Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P")
+                // Constante filaA: valor inmutable que no cambia tras su asignación
                 val filaA = listOf("A", "S", "D", "F", "G", "H", "J", "K", "L")
+                // Constante filaZ: valor inmutable que no cambia tras su asignación
                 val filaZ = listOf("Z", "X", "C", "V", "B", "N", "M")
 
                 TecladoFilaCompacta(filaQ, keyBg, onLetraClick)
@@ -1613,6 +1841,7 @@ fun TecladoSimple(
                     horizontalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
                     Box(modifier = Modifier.weight(1f))
+                    // Itera sobre cada elemento de la colección y ejecuta el bloque
                     filaZ.forEach { letra ->
                         TeclaPequeñaCompacta(letra, keyBg, modifier = Modifier.weight(1f)) { onLetraClick(letra) }
                     }
@@ -1634,6 +1863,7 @@ fun TecladoSimple(
     }
 }
 
+// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun TecladoFilaCompacta(
     letras: List<String>,
@@ -1645,14 +1875,18 @@ private fun TecladoFilaCompacta(
         modifier = Modifier.fillMaxWidth(0.92f),
         horizontalArrangement = Arrangement.spacedBy(2.dp)
     ) {
+        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (indentFraction > 0f) Box(modifier = Modifier.weight(indentFraction))
+        // Itera sobre cada elemento de la colección y ejecuta el bloque
         letras.forEach { letra ->
             TeclaPequeñaCompacta(letra, keyBg, modifier = Modifier.weight(1f)) { onLetraClick(letra) }
         }
+        // Condición: evalúa si se cumplen los requisitos para ejecutar el bloque
         if (indentFraction > 0f) Box(modifier = Modifier.weight(indentFraction))
     }
 }
 
+// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun TeclaPequeñaCompacta(
     letra: String,
@@ -1672,6 +1906,7 @@ private fun TeclaPequeñaCompacta(
     }
 }
 
+// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun TeclaRedondaCompacta(
     numero: String,
@@ -1691,6 +1926,7 @@ private fun TeclaRedondaCompacta(
     }
 }
 
+// Anotación que marca esta función como una función de composición de UI
 @Composable
 private fun TeclaAccionCompacta(
     label: String,
