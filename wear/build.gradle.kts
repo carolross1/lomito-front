@@ -15,7 +15,7 @@ android {
         versionName = "1.0"
 
         // ✅ Toma la IP del backend desde gradle.properties (una sola fuente)
-        buildConfigField("String", "BACKEND_URL", "\"${project.findProperty("LOMITO_BACKEND_URL") ?: "http://192.168.100.12:3000"}\"")
+        buildConfigField("String", "BACKEND_URL", "\"${project.findProperty("LOMITO_BACKEND_URL") ?: "http://10.31.0.55:3000"}\"")
     }
 
     buildFeatures {

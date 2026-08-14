@@ -1,4 +1,4 @@
-#Sun Aug 09 16:25:14 CST 2026
+#Thu Aug 13 16:43:21 CST 2026
 base.0=C\:\\Users\\carol\\Downloads\\lomito-front-completo\\lomito-front\\tv\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
 base.1=C\:\\Users\\carol\\Downloads\\lomito-front-completo\\lomito-front\\tv\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex
 base.2=C\:\\Users\\carol\\Downloads\\lomito-front-completo\\lomito-front\\tv\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\10\\classes.dex

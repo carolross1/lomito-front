@@ -15,10 +15,10 @@
       </SelectionState>
       <SelectionState runConfigName="tv">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2026-08-09T22:27:25.552390200Z">
+        <DropdownSelection timestamp="2026-08-13T22:43:03.773213400Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\carol\.android\avd\Wear_OS_Large_Round_API_36.avd" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\carol\.android\avd\Television_1080p_API_36.avd" />
             </handle>
           </Target>
         </DropdownSelection>
@@ -26,7 +26,7 @@
       </SelectionState>
       <SelectionState runConfigName="mobile">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2026-08-10T03:07:00.831573500Z">
+        <DropdownSelection timestamp="2026-08-13T22:50:36.247286200Z">
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\carol\.android\avd\Pixel_8a_API_35_2.avd" />

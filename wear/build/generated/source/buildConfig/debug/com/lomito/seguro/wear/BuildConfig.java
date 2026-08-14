@@ -10,5 +10,5 @@ public final class BuildConfig {
   public static final int VERSION_CODE = 1;
   public static final String VERSION_NAME = "1.0";
   // Field from default config.
-  public static final String BACKEND_URL = "http://192.168.100.12:3000";
+  public static final String BACKEND_URL = "http://10.31.0.55:3000";
 }
