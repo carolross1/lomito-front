@@ -19,6 +19,7 @@
 > 📺 El módulo de **Smart TV** está contemplado en el diseño original del ecosistema pero **aún no se ha desarrollado**, ya que hasta el momento la entrega solicitada abarca únicamente los módulos móvil y wear.
 
 ---
+## Guía Paso a paso
 
 | 📱 Guía Paso a Paso Smartphone | 📺 Guía Paso a Paso Smart TV | ⌚ Guía Paso a Paso Wear OS |
 | :---: | :---: | :---: |
@@ -72,7 +73,7 @@
 
 ## Validación del Proyecto y aprobación del beneficiario (video)
 
-Link del video: https://drive.google.com/file/d/1bBsdhZP3Ac88JmY6P5wFixVLnhpm_m3E/view?usp=drive_link 
+Link del video: https://drive.google.com/file/d/12MK9Q0-uAtsBH5sn02wxOafk_oxKOYMt/view?usp=sharing
 
 ## Carta de validación del proyecto y aprobación del beneficiario
 
