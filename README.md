@@ -20,6 +20,12 @@
 
 ---
 
+| 📱 Guía Paso a Paso Smartphone | 📺 Guía Paso a Paso Smart TV | ⌚ Guía Paso a Paso Wear OS |
+| :---: | :---: | :---: |
+| [**`README_MOBILE.md`**](documentacion/README_MOBILE.md) | [**`README_TV.md`**](documentacion/README_TV.md) | [**`README_WEAR.md`**](documentacion/README_WEAR.md) |
+
+
+
 ## 🚀 Funcionalidades Principales
 
 ### 📱 Aplicación Móvil (Android — módulo `mobile`)
@@ -72,13 +78,13 @@ Link del video: https://drive.google.com/file/d/1bBsdhZP3Ac88JmY6P5wFixVLnhpm_m3
 
 <table>
    <tr>
-      <td><img width="1204" height="1600" alt="imagen1" src="https://github.com/user-attachments/assets/1d1686ca-62dd-4dac-af31-deb5358d8f67" /></td>
+      <td><img width="1204" height="1600" alt="imagen1" src="https://github.com/user-attachments/assets/c94d712e-87eb-4d93-8e57-2e50936dacb5" /></td>
    </tr>
    <tr>
-      <td><img width="1204" height="1600" alt="imagen2" src="https://github.com/user-attachments/assets/07781686-5761-474b-a9e8-977eedf25ef4" /></td>
+      <td><<img width="1204" height="1600" alt="imagen2" src="https://github.com/user-attachments/assets/0a4845e1-be04-4d09-8b75-c187ff2a1a24" /></td>
    </tr>
    <tr>
-      <td><img width="1204" height="1600" alt="imagen3" src="https://github.com/user-attachments/assets/8fb817a7-b0c1-4d7f-ac03-68c05ab729ab" /></td>
+      <td><img width="1204" height="1600" alt="imagen3" src="https://github.com/user-attachments/assets/7278cbee-efa8-4017-a5e0-d1d49896b895" /></td>
    </tr>
 </table>
 
@@ -188,7 +194,19 @@ lomito-front/
 │       │       ├── selection/
 │       │       └── settings/
 │       └── res/                    # values, network_security_config.xml
-│
+├── tv/
+│       ├── LomitoTvApp.kt        # Application class
+│       ├── data/
+│             ├── api/              # Interfaz Retrofit + Cliente HTTP
+│             ├── model/            # Data classes del dominio TV
+│             └── repository/       # Repositorio de datos TV
+│       ├── ui/
+│             ├── dashboard/        # Pantalla principal con lista de mascotas
+│             ├── detalle/          # Vista de detalle de mascota
+│             ├── perfil/           # Perfil de mascota en pantalla grande
+│             ├── refugio/          # Difusión en vivo del refugio (ExoPlayer)
+│             └── theme/            # Tema visual Material Design para TV
+│       └── util/                 # Utilidades y extensiones
 └── README.md
 ```
 
@@ -255,6 +273,11 @@ El backend expone endpoints REST consumidos por Retrofit desde la app móvil y, 
     <td><img width="260" alt="image3" src="https://github.com/user-attachments/assets/46217ccf-a21a-4ba5-82ab-a541f0bc16bb" /></td>
   </tr>
 </table>
+<table>
+   <tr>
+      <td><img width="1528" alt="imagennueva" src="https://github.com/user-attachments/assets/f99b8b4e-72b6-403f-ab2c-93684a3c17fa" /></td>
+   </tr>
+</table>
 
 ### Capturas de pantalla — watch
 
@@ -289,6 +312,9 @@ El backend expone endpoints REST consumidos por Retrofit desde la app móvil y, 
    <tr>
       <td><img width="1189" height="649" alt="image16" src="https://github.com/user-attachments/assets/ac858cbd-8b07-48e8-a472-0aaf1aa50fe6" /></td>
       <td><img width="1195" height="670" alt="image17" src="https://github.com/user-attachments/assets/08e7034b-1f39-4ad3-8bb9-1e3f63fcb236" /></td>
+   </tr>
+   <tr>
+      <td><img width="1458" height="820" alt="image18" src="https://github.com/user-attachments/assets/8514e322-309a-4686-9c35-ddfd703136d2" /></td>
    </tr>
 </table>
 
